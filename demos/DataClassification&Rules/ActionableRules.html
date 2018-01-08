@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Blockly Demo: Toolbox</title>
+    <script src="../../blockly_compressed.js"></script>
+    <script src="../../blocks_compressed.js"></script>
+    <script src="../../javascript_compressed.js"></script>
+    <script src="./actionablerules.js"></script>
+    <script src="../../msg/js/en.js"></script>
+    <script src="./aneesh.js"></script>
+    <style>
+        body {
+            background-color: #fff;
+            font-family: sans-serif;
+        }
+        
+        h1 {
+            font-weight: normal;
+            font-size: 140%;
+        }
+    </style>
+</head>
+
+<body>
+    <form action=""> Rule Name:
+        <input type="text" name="rulename" value="">
+        <br> Rule Description:
+        <input type="text" name="ruledescription" value="">
+        <br> </form>
+    <div id="blocklyDiv" style="height: 600px; width: 1400px;"></div>
+    <xml id="toolbox" style="display: none">
+        <category name="Conditions">
+            <block id="or" type="or"></block>
+            <block id="asset" type="asset"></block>
+        </category>
+        <category name="Actions">
+            <block id="automaticallybinddataruledefinition" type="automaticallybinddataruledefinition"></block>
+            <block id="disabledataqualitydimension" type="disabledataqualitydimension"></block>
+            <block id="disablealldataqualitydimensions" type="disablealldataqualitydimensions"></block>
+            <block id="enabledataqualitydimension" type="enabledataqualitydimension"></block>
+            <block id="enablealldataqualitydimensions" type="enablealldataqualitydimensions"></block>
+            <block id="setdataqualitythreshold" type="setdataqualitythreshold"></block>
+        </category>
+    </xml>
+    <script>
+        var workspace = Blockly.inject('blocklyDiv', {
+            media: '../../media/'
+            , collapse: true
+            , comments: false
+            , disable: false
+            , maxBlocks: Infinity
+            , trashcan: true
+            , horizontalLayout: false
+            , toolboxPosition: 'start'
+            , css: true
+            , media: 'https://blockly-demo.appspot.com/static/media/'
+            , rtl: false
+            , scrollbars: true
+            , sounds: true
+            , oneBasedIndex: true
+            , zoom: {
+                controls: true
+                , wheel: true
+                , startScale: 1
+                , maxScale: 3
+                , minScale: 0.3
+                , scaleSpeed: 1.2
+            }
+            , toolbox: document.getElementById('toolbox')
+        });
+        var xml = Blockly.Xml.textToDom('<xml xmlns="http://www.w3.org/1999/xhtml"><variables></variables><block type="ifthen" id="Ry{3=B/2LJqhJS(9V?CN" x="33" y="22"><value name="condition"><block type="asset" id="Yl(2~so+o0b`8JrtA=(n"><field name="terms">term1</field></block></value></block></xml>');
+        Blockly.Xml.domToWorkspace(xml, workspace);
+        
+        var disableddataqualitydimensionlistString = [
+                "DataClassViolation",
+                "DataTypeViolation",
+                "UniquenessViolation",
+                "Format Violations","FormatViolation",
+                "NonStandardMissingValue",
+                "CaseViolation",
+                "MissingValue",
+                "RuleViolation",
+                "SuspectValues",
+                "SuspectClassifiedValue",
+                "SuspectCorrelatedValue",
+                "ValueRangeViolation"
+                ];
+        
+        function updateDataQualityDimensionListRemove(usedDimension) {
+                    disabledataqualitydimensionlist.splice(disableddataqualitydimensionlistString.indexOf(usedDimension),1);
+                    disableddataqualitydimensionlistString.splice(disableddataqualitydimensionlistString.indexOf(usedDimension),1);
+                    Blockly.Blocks['disabledataqualitydimension'] = {
+                        init: function () {
+                            this.appendDummyInput().appendField("Disable Data Quality Dimension").appendField(new Blockly.FieldDropdown(disabledataqualitydimensionlist), "dataquality");
+                            this.setPreviousStatement(true, null);
+                            this.setNextStatement(true, null);
+                            this.setColour(186);
+                            this.setTooltip("");
+                            this.setHelpUrl("");
+                        }
+                   };
+                }
+
+        function onBlockMove(event) {
+            var xml = Blockly.Xml.workspaceToDom(workspace);
+                var xml_text = Blockly.Xml.domToText(xml);
+                if (window.DOMParser) {
+                    parser = new DOMParser();
+                    xmlDoc = parser.parseFromString(xml_text, "text/xml");
+                }
+                else { // Internet Explorer
+                    xmlDoc = new ActiveXObject("Microsoft.XMLDOM");
+                    xmlDoc.async = false;
+                    xmlDoc.loadXML(xml_text);
+                }
+                var x = xmlDoc.getElementsByTagName('block');
+                Array.prototype.forEach.call(x, function (el) {
+                });
+            
+            if (event.type == Blockly.Events.BLOCK_MOVE || event.type == Blockly.Events.BLOCK_DELETE) {
+                
+                
+                
+                
+                [].forEach.call(x, function (arrayElement) {
+                    var block_type = arrayElement.getAttribute('type');
+                    if (block_type == "disablealldataqualitydimensions") { //Block in the Palette
+                        document.getElementById("disabledataqualitydimension").setAttribute("disabled", "true");
+                        document.getElementById("disablealldataqualitydimensions").setAttribute("disabled", "true");
+                        document.getElementById("enablealldataqualitydimensions").setAttribute("disabled", "true");
+                    }
+                    else {
+                        document.getElementById("disabledataqualitydimension").setAttribute("disabled", "false");
+                        document.getElementById("disablealldataqualitydimensions").setAttribute("disabled", "false");
+                        document.getElementById("enablealldataqualitydimensions").setAttribute("disabled", "false");
+                    }
+                    if (block_type == "disabledataqualitydimension") { //Block in the Palette
+                       
+                       if(xmlDoc.lastElementChild.getElementsByTagName("block")[xmlDoc.lastElementChild.getElementsByTagName("block").length-1].getElementsByTagName("field")[0].childNodes[0].nodeValue=="DataClassViolation"){
+                         
+                       } 
+                        updateDataQualityDimensionListRemove(xmlDoc.lastElementChild.getElementsByTagName("block")[xmlDoc.lastElementChild.getElementsByTagName("block").length-1].getElementsByTagName("field")[0].childNodes[0].nodeValue);  
+                        
+                    }
+                });
+                
+  
+            }else if(event.type == Blockly.Events.BLOCK_CHANGE){
+                
+                     
+                [].forEach.call(x, function (arrayElement) {
+                    var block_type = arrayElement.getAttribute('type');
+                    if (block_type == "disabledataqualitydimension") { //Block in the Palette
+                       
+                       if(xmlDoc.lastElementChild.getElementsByTagName("block")[xmlDoc.lastElementChild.getElementsByTagName("block").length-1].getAttribute("id")=="disabledataqualitydimension"){
+                           updateDataQualityDimensionListRemove(xmlDoc.lastElementChild.getElementsByTagName("block")[xmlDoc.lastElementChild.getElementsByTagName("block").length-1].getElementsByTagName("field")[0].childNodes[0].nodeValue);
+                       } 
+                        
+                    }
+                });
+                
+                
+
+                
+            }
+        }
+        workspace.addChangeListener(onBlockMove);
+
+        function showCode() {
+            // Generate JavaScript code and display it.
+            Blockly.JavaScript.INFINITE_LOOP_TRAP = null;
+            var code = Blockly.JavaScript.workspaceToCode(workspace);
+            if (code.substring(code.length - 1, code.length) == ",") code = code.substring(0, code.length - 1);
+            code += ']}';
+            alert(code);
+            var dl = document.createElement('a');
+            dl.setAttribute('href', 'data:text/csv;charset=utf-8,' + encodeURIComponent(code));
+            dl.setAttribute('download', 'ActionableRuleJSON.txt');
+            dl.click();
+            var xml = Blockly.Xml.workspaceToDom(workspace);
+            var xml_text = Blockly.Xml.domToText(xml);
+            alert(xml_text);
+            var dl = document.createElement('a');
+            dl.setAttribute('href', 'data:text/csv;charset=utf-8,' + encodeURIComponent(xml_text));
+            dl.setAttribute('download', 'ActionableRuleBlocks.txt');
+            dl.click();
+        }
+    </script>
+    <button onClick="showCode()">Save</button>
+    <button onClick="">Cancel</button>
+    <input type="file" id="fileinput" />
+    <script type="text/javascript">
+        function readSingleFile(evt) {
+            //Retrieve the first (and only!) File from the FileList object
+            var f = evt.target.files[0];
+            if (f) {
+                var r = new FileReader();
+                r.onload = function (e) {
+                    var contents = e.target.result;
+                    alert(contents);
+                    var blockCode = '';
+                    blockCode += '<xml xmlns="http://www.w3.org/1999/xhtml"><variables></variables><block type="ifthen" id="Ry{3=B/2LJqhJS(9V?CN" deletable="false" x="33" y="22"><value name="condition">';
+                    var getFieldName;
+                    var trailingblocktags = '';
+                    var actions = false;
+                    for (var i = 0; i < contents.length; i++) {
+                        if (contents.substring(i, i + 14) == 'TermAssignment') {
+                            blockCode += '<block type="asset" id="Yl(2~so+o0b`8JrtA=(n"><field name="NAME">'
+                            getFieldName = contents.substring(i + 26);
+                            blockCode += getFieldName.substring(0, getFieldName.indexOf('"'));
+                            blockCode += '</field></block></value><statement name="action">'
+                        }
+                        if (contents.substring(i, i + 10) == '"actions_"') {
+                            actions = true;
+                        }
+                        if (actions == true && contents.substring(i, i + 9) == '"type_":"') {
+                            getFieldName = contents.substring(i + 9);
+                            blockCode += '<block type="';
+                            if (getFieldName.substring(0, getFieldName.indexOf('"')) == 'BindDataRule') {
+                                blockCode += 'automaticallybinddataruledefinition" id=",rrdnr]iq|H$(9c8jl//"><field name="rules">';
+                                getFieldName = getFieldName.substring(getFieldName.indexOf('"value_":"') + 10);
+                                blockCode += getFieldName.substring(0, getFieldName.indexOf('"')) + '</field><next>';
+                            }
+                            else if (getFieldName.substring(0, getFieldName.indexOf('"')) == 'SetDQThreshold') {
+                                blockCode += 'setdataqualitythreshold" id="$P4Tt|^U4vx`(sW_No@x"><field name="NAME">';
+                                getFieldName = getFieldName.substring(getFieldName.indexOf('"value_":"') + 10);
+                                blockCode += getFieldName.substring(0, getFieldName.indexOf('"')) + '</field><next>';
+                            }
+                            else if (getFieldName.substring(0, getFieldName.indexOf('"')) == 'DisableDQDimension') {
+                                blockCode += 'disabledataqualitydimension" id="NE/n$9#m{-ki]PxV}Ouj"><field name="dataquality">';
+                                getFieldName = getFieldName.substring(getFieldName.indexOf('"value_":"') + 10);
+                                blockCode += getFieldName.substring(0, getFieldName.indexOf('"')) + '</field><next>';
+                            }
+                            else if (getFieldName.substring(0, getFieldName.indexOf('"')) == 'DisableAllDataQualityDimensions') {
+                                blockCode += 'disablealldataqualitydimensions" id="baBgxX:^LOAe/)cD;|Of"><next>';
+                            }
+                            else if (getFieldName.substring(0, getFieldName.indexOf('"')) == 'EnableDQDimension') {
+                                blockCode += 'enabledataqualitydimension" id="yg8FhwepYtY*{[pq0P26"><field name="dataquality">';
+                                getFieldName = getFieldName.substring(getFieldName.indexOf('"value_":"') + 10);
+                                blockCode += getFieldName.substring(0, getFieldName.indexOf('"')) + '</field><next>';
+                            }
+                            else if (getFieldName.substring(0, getFieldName.indexOf('"')) == 'EnableAllDataQualityDmensions') {
+                                blockCode += 'enablealldataqualitydimensions" id="3IStTQUg$=/|Cz@fabL9"><next>';
+                            }
+                            trailingblocktags += '</block></next>';
+                            alert(blockCode);
+                        }
+                    }
+                    blockCode = blockCode.substring(0, blockCode.length - 6);
+                    alert(blockCode);
+                    blockCode += trailingblocktags;
+                    blockCode = blockCode.substring(0, blockCode.length - 7);
+                    alert(blockCode);
+                    blockCode += '</statement></block></xml>';
+                    alert(blockCode);
+                    Blockly.mainWorkspace.clear();
+                    var xml = Blockly.Xml.textToDom(blockCode);
+                    Blockly.Xml.domToWorkspace(xml, workspace);
+                }
+                r.readAsText(f);
+            }
+            else {
+                alert("Failed to load file");
+            }
+        }
+        document.getElementById('fileinput').addEventListener('change', readSingleFile, false);
+    </script>
+    <!--
+    <button onClick="showCode()">Generate Javascript</button>
+    <button onClick="downloadXML()">Export the Blocks</button>
+     <input type="file" id="fileinput" />
+    <script type="text/javascript">
+    function readSingleFile(evt) {
+    //Retrieve the first (and only!) File from the FileList object
+    var f = evt.target.files[0]; 
+
+    if (f) {
+      var r = new FileReader();
+      r.onload = function(e) { 
+	    var contents = e.target.result;
+        alert(contents); 
+        var xml = Blockly.Xml.textToDom(contents);
+        Blockly.Xml.domToWorkspace(xml, workspace);
+      }
+      r.readAsText(f);
+      
+      
+    } else { 
+      alert("Failed to load file");
+    }
+    }
+
+    document.getElementById('fileinput').addEventListener('change', readSingleFile, false);
+    </script>-->
+</body>
+
+</html>

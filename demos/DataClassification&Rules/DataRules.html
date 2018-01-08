@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Blockly Demo: Toolbox</title>
+    <script src="../../blockly_compressed.js"></script>
+    <script src="../../blocks_compressed.js"></script>
+    <script src="../../javascript_compressed.js"></script>
+    <script src="./datarules.js"></script>
+    <script src="../../msg/js/en.js"></script>
+    <style>
+        body {
+            background-color: #fff;
+            font-family: sans-serif;
+        }
+        
+        h1 {
+            font-weight: normal;
+            font-size: 140%;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="blocklyDiv" style="height: 600px; width: 1400px;"></div>
+    <xml id="toolbox" style="display: none">
+        <category name="General Functions"></category>
+        <category name="Date/Time Functions"></category>
+        <category name="Math Functions"></category>
+        <category name="String Functions"></category>
+        <category name="Tests"></category>
+        <category name="Operations">
+            <block id="addition" type="addition"></block>
+            <block id="subtraction" type="subtraction"></block>
+            <block id="multiplication" type="multiplication"></block>
+            <block id="division" type="division"></block>
+            <block id="power" type="power"></block>
+            <block id="modulo" type="modulo"></block>
+        </category>
+        <category name="Variables and Literals">
+            <block id="variable" type="variable"></block>
+            <block id="numericliteral" type="numericliteral"></block>
+            <block id="stringliteral" type="stringliteral"></block>
+        </category>
+        <category name="Boolean">
+            <block id="ifthen" type="ifthen"></block>
+            <block id="ifthenelse" type="ifthenelse"></block>
+            <block id="and" type="and"></block>
+            <block id="or" type="or"></block>
+            <block id="not" type="not"></block>
+        </category>
+    </xml>
+    <script>
+        var workspace = Blockly.inject('blocklyDiv', {
+            media: '../../media/'
+            , toolbox: document.getElementById('toolbox')
+        });
+
+        function myUpdateFunction(event) {
+            var code = Blockly.JavaScript.workspaceToCode(workspace);
+            if (code.substring(code.length - 2, code.length - 1) == ";"){
+                code = code.substring(0, code.length - 2);
+            }
+        }
+        workspace.addChangeListener(myUpdateFunction);
+
+        function showCode() {
+            // Generate JavaScript code and display it.
+            Blockly.JavaScript.INFINITE_LOOP_TRAP = null;
+            var code = Blockly.JavaScript.workspaceToCode(workspace);
+            if (code.substring(code.length - 2, code.length - 1) == ";") code = code.substring(0, code.length - 2);
+            alert(code);
+        }
+
+        function downloadXML() {
+            var xml = Blockly.Xml.workspaceToDom(workspace);
+            var xml_text = Blockly.Xml.domToText(xml);
+            alert(xml_text);
+            var dl = document.createElement('a');
+            dl.setAttribute('href', 'data:text/csv;charset=utf-8,' + encodeURIComponent(xml_text));
+            dl.setAttribute('download', 'DataClassificationBlocks.txt');
+            dl.click();
+        }
+    </script>
+    <button onClick="showCode()">Generate Rule</button>
+    <button onClick="downloadXML()">Export the Blocks</button>
+    <input type="file" id="fileinput" />
+    <script type="text/javascript">
+        function readSingleFile(evt) {
+            //Retrieve the first (and only!) File from the FileList object
+            var f = evt.target.files[0];
+            if (f) {
+                var r = new FileReader();
+                r.onload = function (e) {
+                    var contents = e.target.result;
+                    alert(contents);
+                    var xml = Blockly.Xml.textToDom(contents);
+                    Blockly.Xml.domToWorkspace(xml, workspace);
+                }
+                r.readAsText(f);
+            } else {
+                alert("Failed to load file");
+            }
+        }
+        document.getElementById('fileinput').addEventListener('change', readSingleFile, false);
+    </script> Load Palette
+    <input type="file" id="loadpalette" />
+    <script type="text/javascript">
+        function readSingleFile(evt) {
+            //Retrieve the first (and only!) File from the FileList object
+            var f = evt.target.files[0];
+            if (f) {
+                var r = new FileReader();
+                r.onload = function (e) {
+                    var contents = e.target.result;
+                    if (window.DOMParser) {
+                        parser = new DOMParser();
+                        xmlDoc = parser.parseFromString(contents, "text/xml");
+                    } else // Internet Explorer
+                    {
+                        xmlDoc = new ActiveXObject("Microsoft.XMLDOM");
+                        xmlDoc.async = false;
+                        xmlDoc.loadXML(contents);
+                    }
+                    var x = xmlDoc.getElementsByTagName('DataRuleFunction'); // get all the data rule functions tags
+                    var general_functions, datetime_functions, math_functions, string_functions, datarule_tests;
+
+                    /*
+                      Gather all the category tags for blocks for the functions
+                    */
+                    for (var j = 0; j < document.getElementsByTagName('category').length; j++) {
+                        if (document.getElementsByTagName('category')[j].getAttribute("name") == "General Functions") {
+                            general_functions = document.getElementsByTagName('category')[j];
+                        }
+                        if (document.getElementsByTagName('category')[j].getAttribute("name") == "Date/Time Functions") {
+                            datetime_functions = document.getElementsByTagName('category')[j];
+                        }
+                        if (document.getElementsByTagName('category')[j].getAttribute("name") == "Math Functions") {
+                            math_functions = document.getElementsByTagName('category')[j];
+                        }
+                        if (document.getElementsByTagName('category')[j].getAttribute("name") == "String Functions") {
+                            string_functions = document.getElementsByTagName('category')[j];
+                        }
+                    }
+                    /*
+                 
+                    Create Blocks by parsing the tags
+                    */
+                    [].forEach.call(x, function (arrayElement) {
+                        var function_name = arrayElement.getAttribute('name');
+                        var blocks = document.createElement('block'); // create a block tag
+                        blocks.id = function_name; // give the block id to be the function name
+                        blocks.setAttribute("type", function_name); // set the type attribute of the tag
+
+                        /*
+                            Block Definition using function_name variable
+                        */
+                        Blockly.Blocks[function_name] = {
+                            init: function () {
+                                this.appendValueInput("input")
+                                    .setCheck(null)
+                                    .appendField(function_name + "(");
+                                this.appendDummyInput()
+                                    .appendField(")");
+                                this.setInputsInline(true);
+                                this.setOutput(true, null);
+                                this.setColour(218);
+                                this.setTooltip("");
+                                this.setHelpUrl("");
+                            }
+                        };
+
+                        /*
+                            Block Generation using function_name variable
+                        */
+                        Blockly.JavaScript[function_name] = function (block) {
+                            var value_input = Blockly.JavaScript.valueToCode(block, 'input', Blockly.JavaScript.ORDER_ATOMIC);
+                            var code = function_name + '(' + value_input + ')';
+                            return [code, Blockly.JavaScript.ORDER_ATOMIC];
+                        };
+                        // Append the block tag into the xml toolbox categories
+                        if (arrayElement.getAttribute('categoryID') == 'general') {
+                            general_functions.appendChild(blocks);
+                        } else if (arrayElement.getAttribute('categoryID') == 'date/time') {
+                            datetime_functions.appendChild(blocks);
+                        } else if (arrayElement.getAttribute('categoryID') == 'math') {
+                            math_functions.appendChild(blocks);
+                        } else if (arrayElement.getAttribute('categoryID') == 'string') {
+                            string_functions.appendChild(blocks);
+                        }
+                    });
+                    x = xmlDoc.getElementsByTagName('DataRuleTest');
+                    for (var k = 0; k < document.getElementsByTagName('category').length; k++) {
+                        if (document.getElementsByTagName('category')[k].getAttribute("name") == "Tests") {
+                            datarule_tests = document.getElementsByTagName('category')[k];
+                        }
+                    }
+                    var test_names = '';
+                    [].forEach.call(x, function (arrayElement) {
+                        var function_name = arrayElement.getAttribute('name');
+                        if (arrayElement.getElementsByTagName("TestOperand")[1].getElementsByTagName("TestOperandConstraint").length > 0 && arrayElement.getElementsByTagName("TestOperand")[1].getElementsByTagName("TestOperandConstraint")[0].getAttribute("type") == "mustBeEmpty") {
+                            Blockly.Blocks[function_name] = {
+                                init: function () {
+                                    this.appendValueInput("Operand1").setCheck(null);
+                                    this.appendDummyInput().appendField(function_name);
+                                    this.setInputsInline(true);
+                                    this.setOutput(true, null);
+                                    this.setColour(186);
+                                    this.setTooltip("");
+                                    this.setHelpUrl("");
+                                }
+                            };
+                            Blockly.JavaScript[function_name] = function (block) {
+                                var value_name1 = Blockly.JavaScript.valueToCode(block, 'Operand1', Blockly.JavaScript.ORDER_ATOMIC);
+                                var code = value_name1 + ' ' + function_name + ' ';
+                                return [code, Blockly.JavaScript.ORDER_ATOMIC];
+                            };
+                        } else {
+                            Blockly.Blocks[function_name] = {
+                                init: function () {
+                                    this.appendValueInput("Operand1").setCheck(null);
+                                    this.appendValueInput("Operand2").setCheck(null).appendField(function_name);
+                                    this.setInputsInline(true);
+                                    this.setOutput(true, null);
+                                    this.setColour(186);
+                                    this.setTooltip("");
+                                    this.setHelpUrl("");
+                                }
+                            };
+                            Blockly.JavaScript[function_name] = function (block) {
+                                var value_name1 = Blockly.JavaScript.valueToCode(block, 'Operand1', Blockly.JavaScript.ORDER_ATOMIC);
+                                var value_name2 = Blockly.JavaScript.valueToCode(block, 'Operand2', Blockly.JavaScript.ORDER_ATOMIC);
+                                var code = value_name1 + ' ' + function_name + ' ' + value_name2;
+                                return [code, Blockly.JavaScript.ORDER_ATOMIC];
+                            };
+                        }
+                        var blocks = document.createElement('block');
+                        blocks.id = function_name;
+                        blocks.setAttribute("type", function_name);
+                        datarule_tests.appendChild(blocks);
+                    });
+                    workspace.updateToolbox(document.getElementById('toolbox'));
+                }
+                r.readAsText(f);
+            } else {
+                alert("Failed to load file");
+            }
+        }
+        document.getElementById('loadpalette').addEventListener('change', readSingleFile, false);
+    </script>
+</body>
+
+</html>
