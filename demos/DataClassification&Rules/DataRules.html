@@ -62,6 +62,8 @@
             if (code.substring(code.length - 2, code.length - 1) == ";"){
                 code = code.substring(0, code.length - 2);
             }
+            document.getElementById("generatedCode").innerHTML = code;
+            
         }
         workspace.addChangeListener(myUpdateFunction);
 
@@ -152,7 +154,7 @@
                         var blocks = document.createElement('block'); // create a block tag
                         blocks.id = function_name; // give the block id to be the function name
                         blocks.setAttribute("type", function_name); // set the type attribute of the tag
-
+                        arrayElement.getElementsByTagName("description")[0].innerHTML;
                         /*
                             Block Definition using function_name variable
                         */
@@ -249,6 +251,8 @@
         }
         document.getElementById('loadpalette').addEventListener('change', readSingleFile, false);
     </script>
+    <br><br>
+    <div id="generatedCode">A Basic Panel</div>
 </body>
 
 </html>
