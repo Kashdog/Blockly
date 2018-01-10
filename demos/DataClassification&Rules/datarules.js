@@ -19,14 +19,14 @@
  */
 
 /**
- * @fileoverview Generating JavaScript for text blocks.
+ * @fileoverview Generating DataRule for text blocks.
  * @author fraser@google.com (Neil Fraser)
  */
 'use strict';
 
-goog.provide('Blockly.JavaScript.texts');
+goog.provide('Blockly.DataRule.texts');
 
-goog.require('Blockly.JavaScript');
+goog.require('Blockly.DataRule');
 
 goog.provide('Blockly.Blocks.texts'); // Deprecated
 goog.provide('Blockly.Constants.Text');
@@ -45,7 +45,7 @@ Blockly.Blocks.texts.HUE = Blockly.Constants.Text.HUE;
 Blockly.Blocks['variable'] = {
   init: function() {
     this.appendDummyInput()
-        .appendField(new Blockly.FieldTextInput("variabl4"), "variable");
+        .appendField(new Blockly.FieldTextInput("variable"), "variable");
     this.setOutput(true, null);
     this.setColour(230);
  this.setTooltip("");
@@ -57,10 +57,10 @@ Blockly.Blocks['variable'] = {
 Blockly.Blocks['ifthen'] = {
   init: function() {
     this.appendValueInput("Condition")
-        .setCheck(null)
+        .setCheck("Boolean")
         .appendField("IF");
     this.appendValueInput("Action")
-        .setCheck(null)
+        .setCheck("Boolean")
         .appendField("THEN");
     this.setColour(202);
  this.setTooltip("");
@@ -71,13 +71,13 @@ Blockly.Blocks['ifthen'] = {
 Blockly.Blocks['ifthenelse'] = {
   init: function() {
     this.appendValueInput("Condition")
-        .setCheck(null)
+        .setCheck("Boolean")
         .appendField("IF");
     this.appendValueInput("Action")
-        .setCheck(null)
+        .setCheck("Boolean")
         .appendField("THEN");
     this.appendValueInput("AlternateAction")
-        .setCheck(null)
+        .setCheck("Boolean")
         .appendField("ELSE");
     this.setColour(202);
  this.setTooltip("");
@@ -88,11 +88,11 @@ Blockly.Blocks['ifthenelse'] = {
 Blockly.Blocks['and'] = {
   init: function() {
     this.appendValueInput("Condition1")
-        .setCheck(null);
+        .setCheck("Boolean");
     this.appendValueInput("Condition2")
-        .setCheck(null)
+        .setCheck("Boolean")
         .appendField("AND");
-    this.setOutput(true, null);
+    this.setOutput(true, "Boolean");
     this.setColour(202);
     this.setTooltip("");
     this.setHelpUrl("");
@@ -102,11 +102,11 @@ Blockly.Blocks['and'] = {
 Blockly.Blocks['or'] = {
   init: function() {
     this.appendValueInput("Condition1")
-        .setCheck(null);
+        .setCheck("Boolean");
     this.appendValueInput("Condition2")
-        .setCheck(null)
+        .setCheck("Boolean")
         .appendField("OR");
-    this.setOutput(true, null);
+    this.setOutput(true, "Boolean");
     this.setColour(202);
     this.setTooltip("");
     this.setHelpUrl("");
@@ -116,9 +116,9 @@ Blockly.Blocks['or'] = {
 Blockly.Blocks['not'] = {
   init: function() {
     this.appendValueInput("NAME")
-        .setCheck(null)
+        .setCheck("Boolean")
         .appendField("NOT");
-    this.setOutput(true, null);
+    this.setOutput(true, "Boolean");
     this.setColour(202);
  this.setTooltip("");
  this.setHelpUrl("");
@@ -130,9 +130,10 @@ Blockly.Blocks['stringliteral'] = {
     this.appendDummyInput()
         .appendField("'");
     this.appendDummyInput()
-        .appendField(new Blockly.FieldTextInput("val"), "NAME")
+        .appendField(new Blockly.FieldTextInput("val"), "stringInput")
         .appendField("'");
     this.setInputsInline(true);
+    this.setOutput(true, "stringliteral");
     this.setColour(160);
     this.setTooltip("");
     this.setHelpUrl("");
@@ -143,7 +144,7 @@ Blockly.Blocks['numericliteral'] = {
   init: function() {
     this.appendDummyInput()
         .appendField(new Blockly.FieldNumber(0), "numericInput");
-    this.setOutput(true, null);
+    this.setOutput(true, "numericliteral");
     this.setColour(160);
     this.setTooltip("");
     this.setHelpUrl("");
@@ -153,9 +154,9 @@ Blockly.Blocks['numericliteral'] = {
 Blockly.Blocks['addition'] = {
   init: function() {
     this.appendValueInput("operand1")
-        .setCheck(null);
+        .setCheck(["numericliteral","function"]);
     this.appendValueInput("operand2")
-        .setCheck(null)
+        .setCheck(["numericliteral","function"])
         .appendField("+");
     this.setInputsInline(true);
     this.setOutput(true, null);
@@ -168,9 +169,9 @@ Blockly.Blocks['addition'] = {
 Blockly.Blocks['subtraction'] = {
   init: function() {
     this.appendValueInput("operand1")
-        .setCheck(null);
+        .setCheck(["numericliteral","function"]);
     this.appendValueInput("operand2")
-        .setCheck(null)
+        .setCheck(["numericliteral","function"])
         .appendField("-");
     this.setInputsInline(true);
     this.setOutput(true, null);
@@ -183,9 +184,9 @@ Blockly.Blocks['subtraction'] = {
 Blockly.Blocks['multiplication'] = {
   init: function() {
     this.appendValueInput("operand1")
-        .setCheck(null);
+        .setCheck(["numericliteral","function"]);
     this.appendValueInput("operand2")
-        .setCheck(null)
+        .setCheck(["numericliteral","function"])
         .appendField("*");
     this.setInputsInline(true);
     this.setOutput(true, null);
@@ -198,9 +199,9 @@ Blockly.Blocks['multiplication'] = {
 Blockly.Blocks['division'] = {
   init: function() {
     this.appendValueInput("operand1")
-        .setCheck(null);
+        .setCheck(["numericliteral","function"]);
     this.appendValueInput("operand2")
-        .setCheck(null)
+        .setCheck(["numericliteral","function"])
         .appendField("/");
     this.setInputsInline(true);
     this.setOutput(true, null);
@@ -213,9 +214,9 @@ Blockly.Blocks['division'] = {
 Blockly.Blocks['power'] = {
   init: function() {
     this.appendValueInput("operand1")
-        .setCheck(null);
+        .setCheck(["numericliteral","function"]);
     this.appendValueInput("operand2")
-        .setCheck(null)
+        .setCheck(["numericliteral","function"])
         .appendField("^");
     this.setInputsInline(true);
     this.setOutput(true, null);
@@ -228,9 +229,9 @@ Blockly.Blocks['power'] = {
 Blockly.Blocks['modulo'] = {
   init: function() {
     this.appendValueInput("operand1")
-        .setCheck(null);
+        .setCheck(["numericliteral","function"]);
     this.appendValueInput("operand2")
-        .setCheck(null)
+        .setCheck(["numericliteral","function"])
         .appendField("modulo");
     this.setInputsInline(true);
     this.setOutput(true, null);
@@ -248,101 +249,101 @@ Blockly.Blocks['modulo'] = {
 		##################################################
 */
 
-Blockly.JavaScript['variable'] = function(block) {
+Blockly.DataRule['variable'] = function(block) {
   var text_variable = block.getFieldValue('variable');
   var code = text_variable;
-  return [code, Blockly.JavaScript.ORDER_ATOMIC];
+  return [code, Blockly.DataRule.ORDER_ATOMIC];
 };
 
-Blockly.JavaScript['ifthen'] = function(block) {
-  var condition = Blockly.JavaScript.valueToCode(block, 'Condition', Blockly.JavaScript.ORDER_ATOMIC);
-  var action = Blockly.JavaScript.valueToCode(block, 'Action', Blockly.JavaScript.ORDER_ATOMIC);
+Blockly.DataRule['ifthen'] = function(block) {
+  var condition = Blockly.DataRule.valueToCode(block, 'Condition', Blockly.DataRule.ORDER_ATOMIC);
+  var action = Blockly.DataRule.valueToCode(block, 'Action', Blockly.DataRule.ORDER_ATOMIC);
   var code = 'IF ' + condition + ' THEN ' + action;
   return code;
 };
 
-Blockly.JavaScript['ifthenelse'] = function(block) {
-  var condition = Blockly.JavaScript.valueToCode(block, 'Condition', Blockly.JavaScript.ORDER_ATOMIC);
-  var action = Blockly.JavaScript.valueToCode(block, 'Action', Blockly.JavaScript.ORDER_ATOMIC);
-  var alternate_action = Blockly.JavaScript.valueToCode(block, 'AlternateAction', Blockly.JavaScript.ORDER_ATOMIC);
+Blockly.DataRule['ifthenelse'] = function(block) {
+  var condition = Blockly.DataRule.valueToCode(block, 'Condition', Blockly.DataRule.ORDER_ATOMIC);
+  var action = Blockly.DataRule.valueToCode(block, 'Action', Blockly.DataRule.ORDER_ATOMIC);
+  var alternate_action = Blockly.DataRule.valueToCode(block, 'AlternateAction', Blockly.DataRule.ORDER_ATOMIC);
   var code = 'IF ' + condition + ' THEN ' + action + 'ELSE' + alternate_action;
   return code;
 };
 
-Blockly.JavaScript['and'] = function(block) {
-  var value_name1 = Blockly.JavaScript.valueToCode(block, 'Condition1', Blockly.JavaScript.ORDER_ATOMIC);
-  var value_name2 = Blockly.JavaScript.valueToCode(block, 'Condition2', Blockly.JavaScript.ORDER_ATOMIC);
+Blockly.DataRule['and'] = function(block) {
+  var value_name1 = Blockly.DataRule.valueToCode(block, 'Condition1', Blockly.DataRule.ORDER_ATOMIC);
+  var value_name2 = Blockly.DataRule.valueToCode(block, 'Condition2', Blockly.DataRule.ORDER_ATOMIC);
   var code = value_name1 + ' AND ' + value_name2;
-  return [code, Blockly.JavaScript.ORDER_ATOMIC];
+  return [code, Blockly.DataRule.ORDER_ATOMIC];
 };
 
-Blockly.JavaScript['or'] = function(block) {
-  var value_name1 = Blockly.JavaScript.valueToCode(block, 'Condition1', Blockly.JavaScript.ORDER_ATOMIC);
-  var value_name2 = Blockly.JavaScript.valueToCode(block, 'Condition2', Blockly.JavaScript.ORDER_ATOMIC);
+Blockly.DataRule['or'] = function(block) {
+  var value_name1 = Blockly.DataRule.valueToCode(block, 'Condition1', Blockly.DataRule.ORDER_ATOMIC);
+  var value_name2 = Blockly.DataRule.valueToCode(block, 'Condition2', Blockly.DataRule.ORDER_ATOMIC);
   var code = value_name1 + ' OR ' + value_name2;
-  return [code, Blockly.JavaScript.ORDER_ATOMIC];
+  return [code, Blockly.DataRule.ORDER_ATOMIC];
 };
 
-Blockly.JavaScript['not'] = function(block) {
-  var value_name = Blockly.JavaScript.valueToCode(block, 'NAME', Blockly.JavaScript.ORDER_ATOMIC);
+Blockly.DataRule['not'] = function(block) {
+  var value_name = Blockly.DataRule.valueToCode(block, 'NAME', Blockly.DataRule.ORDER_ATOMIC);
   var code = 'NOT ' + value_name + ' ';
-  return [code, Blockly.JavaScript.ORDER_NONE];
+  return [code, Blockly.DataRule.ORDER_NONE];
 };
 
-Blockly.JavaScript['stringliteral'] = function(block) {
+Blockly.DataRule['stringliteral'] = function(block) {
   var text_stringinput = block.getFieldValue('stringInput');
-  // TODO: Assemble JavaScript into code variable.
+  // TODO: Assemble DataRule into code variable.
   var code = "'" + text_stringinput + "'";
-  return [code, Blockly.JavaScript.ORDER_ATOMIC];
+  return [code, Blockly.DataRule.ORDER_ATOMIC];
 };
 
-Blockly.JavaScript['numericliteral'] = function(block) {
+Blockly.DataRule['numericliteral'] = function(block) {
   var number_numericinput = block.getFieldValue('numericInput');
-  // TODO: Assemble JavaScript into code variable.
+  // TODO: Assemble DataRule into code variable.
   var code = number_numericinput;
-  return [code, Blockly.JavaScript.ORDER_ATOMIC];
+  return [code, Blockly.DataRule.ORDER_ATOMIC];
 };
 
-Blockly.JavaScript['addition'] = function(block) {
-  var value_operand1 = Blockly.JavaScript.valueToCode(block, 'operand1', Blockly.JavaScript.ORDER_ATOMIC);
-  var value_operand2 = Blockly.JavaScript.valueToCode(block, 'operand2', Blockly.JavaScript.ORDER_ATOMIC);
+Blockly.DataRule['addition'] = function(block) {
+  var value_operand1 = Blockly.DataRule.valueToCode(block, 'operand1', Blockly.DataRule.ORDER_ATOMIC);
+  var value_operand2 = Blockly.DataRule.valueToCode(block, 'operand2', Blockly.DataRule.ORDER_ATOMIC);
   var code = value_operand1 + ' + ' + value_operand2;
-  return [code, Blockly.JavaScript.ORDER_NONE];
+  return [code, Blockly.DataRule.ORDER_NONE];
 };
 
-Blockly.JavaScript['subtraction'] = function(block) {
-  var value_operand1 = Blockly.JavaScript.valueToCode(block, 'operand1', Blockly.JavaScript.ORDER_ATOMIC);
-  var value_operand2 = Blockly.JavaScript.valueToCode(block, 'operand2', Blockly.JavaScript.ORDER_ATOMIC);
+Blockly.DataRule['subtraction'] = function(block) {
+  var value_operand1 = Blockly.DataRule.valueToCode(block, 'operand1', Blockly.DataRule.ORDER_ATOMIC);
+  var value_operand2 = Blockly.DataRule.valueToCode(block, 'operand2', Blockly.DataRule.ORDER_ATOMIC);
   var code = value_operand1 + ' - ' + value_operand2;
-  return [code, Blockly.JavaScript.ORDER_NONE];
+  return [code, Blockly.DataRule.ORDER_NONE];
 };
 
-Blockly.JavaScript['multiplication'] = function(block) {
-  var value_operand1 = Blockly.JavaScript.valueToCode(block, 'operand1', Blockly.JavaScript.ORDER_ATOMIC);
-  var value_operand2 = Blockly.JavaScript.valueToCode(block, 'operand2', Blockly.JavaScript.ORDER_ATOMIC);
+Blockly.DataRule['multiplication'] = function(block) {
+  var value_operand1 = Blockly.DataRule.valueToCode(block, 'operand1', Blockly.DataRule.ORDER_ATOMIC);
+  var value_operand2 = Blockly.DataRule.valueToCode(block, 'operand2', Blockly.DataRule.ORDER_ATOMIC);
   var code = value_operand1 + ' * ' + value_operand2;
-  return [code, Blockly.JavaScript.ORDER_NONE];
+  return [code, Blockly.DataRule.ORDER_NONE];
 };
 
-Blockly.JavaScript['division'] = function(block) {
-  var value_operand1 = Blockly.JavaScript.valueToCode(block, 'operand1', Blockly.JavaScript.ORDER_ATOMIC);
-  var value_operand2 = Blockly.JavaScript.valueToCode(block, 'operand2', Blockly.JavaScript.ORDER_ATOMIC);
+Blockly.DataRule['division'] = function(block) {
+  var value_operand1 = Blockly.DataRule.valueToCode(block, 'operand1', Blockly.DataRule.ORDER_ATOMIC);
+  var value_operand2 = Blockly.DataRule.valueToCode(block, 'operand2', Blockly.DataRule.ORDER_ATOMIC);
   var code = value_operand1 + ' / ' + value_operand2;
-  return [code, Blockly.JavaScript.ORDER_NONE];
+  return [code, Blockly.DataRule.ORDER_NONE];
 };
 
-Blockly.JavaScript['power'] = function(block) {
-  var value_operand1 = Blockly.JavaScript.valueToCode(block, 'operand1', Blockly.JavaScript.ORDER_ATOMIC);
-  var value_operand2 = Blockly.JavaScript.valueToCode(block, 'operand2', Blockly.JavaScript.ORDER_ATOMIC);
+Blockly.DataRule['power'] = function(block) {
+  var value_operand1 = Blockly.DataRule.valueToCode(block, 'operand1', Blockly.DataRule.ORDER_ATOMIC);
+  var value_operand2 = Blockly.DataRule.valueToCode(block, 'operand2', Blockly.DataRule.ORDER_ATOMIC);
   var code = value_operand1 + ' ^ ' + value_operand2;
-  return [code, Blockly.JavaScript.ORDER_NONE];
+  return [code, Blockly.DataRule.ORDER_NONE];
 };
 
-Blockly.JavaScript['modulo'] = function(block) {
-  var value_operand1 = Blockly.JavaScript.valueToCode(block, 'operand1', Blockly.JavaScript.ORDER_ATOMIC);
-  var value_operand2 = Blockly.JavaScript.valueToCode(block, 'operand2', Blockly.JavaScript.ORDER_ATOMIC);
+Blockly.DataRule['modulo'] = function(block) {
+  var value_operand1 = Blockly.DataRule.valueToCode(block, 'operand1', Blockly.DataRule.ORDER_ATOMIC);
+  var value_operand2 = Blockly.DataRule.valueToCode(block, 'operand2', Blockly.DataRule.ORDER_ATOMIC);
   var code = value_operand1 + ' % ' + value_operand2;
-  return [code, Blockly.JavaScript.ORDER_NONE];
+  return [code, Blockly.DataRule.ORDER_NONE];
 };
 
 

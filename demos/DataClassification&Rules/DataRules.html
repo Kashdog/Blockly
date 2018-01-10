@@ -6,7 +6,7 @@
     <title>Blockly Demo: Toolbox</title>
     <script src="../../blockly_compressed.js"></script>
     <script src="../../blocks_compressed.js"></script>
-    <script src="../../javascript_compressed.js"></script>
+    <script src="../../datarulegeneration_compressed.js"></script>
     <script src="./datarules.js"></script>
     <script src="../../msg/js/en.js"></script>
     <style>
@@ -56,22 +56,24 @@
             media: '../../media/'
             , toolbox: document.getElementById('toolbox')
         });
+        
+        var xml = Blockly.Xml.textToDom('<xml xmlns="http://www.w3.org/1999/xhtml"><variables></variables></xml>');
+        Blockly.Xml.domToWorkspace(xml, workspace);
 
         function myUpdateFunction(event) {
-            var code = Blockly.JavaScript.workspaceToCode(workspace);
-            if (code.substring(code.length - 2, code.length - 1) == ";"){
+            var code = Blockly.DataRule.workspaceToCode(workspace);
+            /*if (code.substring(code.length - 2, code.length - 1) == ";"){
                 code = code.substring(0, code.length - 2);
-            }
-            document.getElementById("generatedCode").innerHTML = code;
-            
+            }*/
+            document.getElementById("generatedCode").innerHTML = "Generated Code: " + code;
+
         }
         workspace.addChangeListener(myUpdateFunction);
 
         function showCode() {
             // Generate JavaScript code and display it.
-            Blockly.JavaScript.INFINITE_LOOP_TRAP = null;
-            var code = Blockly.JavaScript.workspaceToCode(workspace);
-            if (code.substring(code.length - 2, code.length - 1) == ";") code = code.substring(0, code.length - 2);
+            Blockly.DataRule.INFINITE_LOOP_TRAP = null;
+            var code = Blockly.DataRule.workspaceToCode(workspace);
             alert(code);
         }
 
@@ -151,22 +153,28 @@
                     */
                     [].forEach.call(x, function (arrayElement) {
                         var function_name = arrayElement.getAttribute('name');
+                        var display_name = arrayElement.getAttribute('displayName');
+                        var description;
                         var blocks = document.createElement('block'); // create a block tag
                         blocks.id = function_name; // give the block id to be the function name
                         blocks.setAttribute("type", function_name); // set the type attribute of the tag
-                        arrayElement.getElementsByTagName("description")[0].innerHTML;
-                        /*
+                        arrayElement.getElementsByTagName("description")[0].innerHTML;//childNodes[0].nodeValue
+                        
+                        
+                        // Append the block tag into the xml toolbox categories
+                        if (arrayElement.getAttribute('categoryID') == 'general') {
+                            /*
                             Block Definition using function_name variable
                         */
                         Blockly.Blocks[function_name] = {
                             init: function () {
                                 this.appendValueInput("input")
-                                    .setCheck(null)
+                                    .setCheck(["numericliteral","stringliteral"])
                                     .appendField(function_name + "(");
                                 this.appendDummyInput()
                                     .appendField(")");
                                 this.setInputsInline(true);
-                                this.setOutput(true, null);
+                                this.setOutput(true, "function");
                                 this.setColour(218);
                                 this.setTooltip("");
                                 this.setHelpUrl("");
@@ -176,21 +184,83 @@
                         /*
                             Block Generation using function_name variable
                         */
-                        Blockly.JavaScript[function_name] = function (block) {
-                            var value_input = Blockly.JavaScript.valueToCode(block, 'input', Blockly.JavaScript.ORDER_ATOMIC);
-                            var code = function_name + '(' + value_input + ')';
-                            return [code, Blockly.JavaScript.ORDER_ATOMIC];
-                        };
-                        // Append the block tag into the xml toolbox categories
-                        if (arrayElement.getAttribute('categoryID') == 'general') {
+                        
                             general_functions.appendChild(blocks);
                         } else if (arrayElement.getAttribute('categoryID') == 'date/time') {
+                                /*
+                            Block Definition using function_name variable
+                        */
+                        Blockly.Blocks[function_name] = {
+                            init: function () {
+                                this.appendValueInput("input")
+                                    .setCheck(["dateliteral","timeliteral"])
+                                    .appendField(function_name + "(");
+                                this.appendDummyInput()
+                                    .appendField(")");
+                                this.setInputsInline(true);
+                                this.setOutput(true, "function");
+                                this.setColour(218);
+                                this.setTooltip("");
+                                this.setHelpUrl("");
+                            }
+                        };
+
+                        /*
+                            Block Generation using function_name variable
+                        */
                             datetime_functions.appendChild(blocks);
                         } else if (arrayElement.getAttribute('categoryID') == 'math') {
+                                /*
+                            Block Definition using function_name variable
+                        */
+                        Blockly.Blocks[function_name] = {
+                            init: function () {
+                                this.appendValueInput("input")
+                                    .setCheck(["numericliteral"])
+                                    .appendField(function_name + "(");
+                                this.appendDummyInput()
+                                    .appendField(")");
+                                this.setInputsInline(true);
+                                this.setOutput(true, "function");
+                                this.setColour(218);
+                                this.setTooltip("");
+                                this.setHelpUrl("");
+                            }
+                        };
+
+                        /*
+                            Block Generation using function_name variable
+                        */
                             math_functions.appendChild(blocks);
                         } else if (arrayElement.getAttribute('categoryID') == 'string') {
+                                /*
+                            Block Definition using function_name variable
+                        */
+                        Blockly.Blocks[function_name] = {
+                            init: function () {
+                                this.appendValueInput("input")
+                                    .setCheck(["stringliteral"])
+                                    .appendField(function_name + "(");
+                                this.appendDummyInput()
+                                    .appendField(")");
+                                this.setInputsInline(true);
+                                this.setOutput(true, "function");
+                                this.setColour(218);
+                                this.setTooltip("");
+                                this.setHelpUrl("");
+                            }
+                        };
+
+                        /*
+                            Block Generation using function_name variable
+                        */
                             string_functions.appendChild(blocks);
                         }
+                        Blockly.DataRule[function_name] = function (block) {
+                            var value_input = Blockly.DataRule.valueToCode(block, 'input', Blockly.DataRule.ORDER_ATOMIC);
+                            var code = function_name + '(' + value_input + ')';
+                            return [code, Blockly.DataRule.ORDER_ATOMIC];
+                        };
                     });
                     x = xmlDoc.getElementsByTagName('DataRuleTest');
                     for (var k = 0; k < document.getElementsByTagName('category').length; k++) {
@@ -207,16 +277,16 @@
                                     this.appendValueInput("Operand1").setCheck(null);
                                     this.appendDummyInput().appendField(function_name);
                                     this.setInputsInline(true);
-                                    this.setOutput(true, null);
+                                    this.setOutput(true, "Boolean");
                                     this.setColour(186);
                                     this.setTooltip("");
                                     this.setHelpUrl("");
                                 }
                             };
-                            Blockly.JavaScript[function_name] = function (block) {
-                                var value_name1 = Blockly.JavaScript.valueToCode(block, 'Operand1', Blockly.JavaScript.ORDER_ATOMIC);
+                            Blockly.DataRule[function_name] = function (block) {
+                                var value_name1 = Blockly.DataRule.valueToCode(block, 'Operand1', Blockly.DataRule.ORDER_ATOMIC);
                                 var code = value_name1 + ' ' + function_name + ' ';
-                                return [code, Blockly.JavaScript.ORDER_ATOMIC];
+                                return [code, Blockly.DataRule.ORDER_ATOMIC];
                             };
                         } else {
                             Blockly.Blocks[function_name] = {
@@ -224,17 +294,17 @@
                                     this.appendValueInput("Operand1").setCheck(null);
                                     this.appendValueInput("Operand2").setCheck(null).appendField(function_name);
                                     this.setInputsInline(true);
-                                    this.setOutput(true, null);
+                                    this.setOutput(true, "Boolean");
                                     this.setColour(186);
                                     this.setTooltip("");
                                     this.setHelpUrl("");
                                 }
                             };
-                            Blockly.JavaScript[function_name] = function (block) {
-                                var value_name1 = Blockly.JavaScript.valueToCode(block, 'Operand1', Blockly.JavaScript.ORDER_ATOMIC);
-                                var value_name2 = Blockly.JavaScript.valueToCode(block, 'Operand2', Blockly.JavaScript.ORDER_ATOMIC);
+                            Blockly.DataRule[function_name] = function (block) {
+                                var value_name1 = Blockly.DataRule.valueToCode(block, 'Operand1', Blockly.DataRule.ORDER_ATOMIC);
+                                var value_name2 = Blockly.DataRule.valueToCode(block, 'Operand2', Blockly.DataRule.ORDER_ATOMIC);
                                 var code = value_name1 + ' ' + function_name + ' ' + value_name2;
-                                return [code, Blockly.JavaScript.ORDER_ATOMIC];
+                                return [code, Blockly.DataRule.ORDER_ATOMIC];
                             };
                         }
                         var blocks = document.createElement('block');
@@ -251,8 +321,9 @@
         }
         document.getElementById('loadpalette').addEventListener('change', readSingleFile, false);
     </script>
-    <br><br>
-    <div id="generatedCode">A Basic Panel</div>
+    <br>
+    <br>
+    <div id="generatedCode">Generated Code: </div>
 </body>
 
 </html>

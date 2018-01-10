@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema targetNamespace="http://www.ibm.com/infosphere/dataquality/datarulefunctionslibrary" xmlns="http://www.ibm.com/infosphere/dataquality/datarulefunctionslibrary" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+
+
+   	<xsd:simpleType name="datatype">
+   		<xsd:restriction base="xsd:string">
+   			<xsd:enumeration value="numeric" />
+   			<xsd:enumeration value="double" />
+   			<xsd:enumeration value="int" />
+   			<xsd:enumeration value="float" />
+   			<xsd:enumeration value="string" />
+   			<xsd:enumeration value="date" />
+   			<xsd:enumeration value="time" />
+   			<xsd:enumeration value="timestamp" />
+   			<xsd:enumeration value="list" />
+   			<xsd:enumeration value="any" />
+   			<xsd:enumeration value="unknown"></xsd:enumeration>
+   		</xsd:restriction>
+   	</xsd:simpleType>
+
+   	<xsd:simpleType name="executiontype">
+   		<xsd:restriction base="xsd:string">
+   			<xsd:enumeration value="normal" />
+   			<xsd:enumeration value="precomputedAggregation" />
+   			<xsd:enumeration value="computedFromMultipleAggregations"></xsd:enumeration>
+   		</xsd:restriction>
+   	</xsd:simpleType>
+
+   	<xsd:simpleType name="operandConstraintType">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="isOptional" />
+			<xsd:enumeration value="mustBeEmpty" />
+			<xsd:enumeration value="mustBeColumn" />
+			<xsd:enumeration value="isReferenceColumn" />
+			<xsd:enumeration value="mustMatchRegex" />
+			<xsd:enumeration value="minValue" />
+			<xsd:enumeration value="sameDataTypeAsOtherOperand" />
+		</xsd:restriction>
+	</xsd:simpleType>
+
+   	<xsd:complexType name="Parameter">
+   		<xsd:sequence>
+   			<xsd:element name="description" type="xsd:string"
+   				minOccurs="0" maxOccurs="1">
+   			</xsd:element>
+   		</xsd:sequence>
+   		<xsd:attribute name="type" type="datatype" use="required" />
+   		<xsd:attribute name="name" type="xsd:string" use="optional" />
+   		<xsd:attribute name="column" type="xsd:boolean"
+   			use="optional" default="false" />
+   		<xsd:attribute name="refcolumn" type="xsd:boolean"
+   			use="optional" default="false" />
+   		<xsd:attribute name="optional" type="xsd:boolean"
+   			use="optional" default="false" />
+   	</xsd:complexType>
+
+   	<xsd:complexType name="Category">
+		<xsd:sequence>
+			<xsd:element name="description" type="xsd:string" minOccurs="0" maxOccurs="1">
+			</xsd:element>
+		</xsd:sequence>
+		<xsd:attribute name="id" type="xsd:string" use="required" />
+		<xsd:attribute name="name" type="xsd:string" use="required"></xsd:attribute>
+	</xsd:complexType>
+
+	<xsd:complexType name="Categories">
+		<xsd:sequence>
+			<xsd:element name="Category" type="Category" minOccurs="0" maxOccurs="unbounded"></xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:complexType name="DataRuleFunctions">
+		<xsd:sequence>
+			<xsd:element name="DataRuleFunction" type="DataRuleFunction" minOccurs="0" maxOccurs="unbounded"></xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:complexType name="DataRuleFunction">
+		<xsd:sequence>
+			<xsd:element name="description" type="xsd:string"
+				minOccurs="0" maxOccurs="1">
+			</xsd:element>
+			<xsd:element name="Parameter" type="Parameter" minOccurs="0"
+				maxOccurs="unbounded">
+			</xsd:element>
+			<xsd:element name="RequiredAggregation"
+				type="RequiredAggregation" minOccurs="0" maxOccurs="unbounded">
+			</xsd:element>
+		</xsd:sequence>
+		<xsd:attribute name="returnType" type="datatype" use="required" />
+		<xsd:attribute name="name" type="xsd:string" use="required" />
+		<xsd:attribute name="displayName" type="xsd:string" use="optional"></xsd:attribute>
+		<xsd:attribute name="categoryID" type="xsd:string"
+			use="optional" />
+		<xsd:attribute name="className" type="xsd:string"
+			use="required">
+		</xsd:attribute>
+		<xsd:attribute name="executionType" type="executiontype"
+			use="optional" default="normal">
+		</xsd:attribute>
+	</xsd:complexType>
+
+	<xsd:complexType name="RequiredAggregation">
+    	<xsd:attribute name="name" type="xsd:string" use="required"></xsd:attribute>
+    </xsd:complexType>
+
+	<xsd:complexType name="DataRuleTest">
+		<xsd:sequence>
+			<xsd:element name="description" type="xsd:string"
+				minOccurs="0" maxOccurs="1">
+			</xsd:element>
+			<xsd:element name="TestOperand" type="TestOperand"
+				minOccurs="2" maxOccurs="2">
+			</xsd:element>
+		</xsd:sequence>
+		<xsd:attribute name="name" type="xsd:string" use="required" />
+		<xsd:attribute name="displayName" type="xsd:string" use="optional"></xsd:attribute>
+		<xsd:attribute name="categoryID" type="xsd:string"
+			use="optional" />
+		<xsd:attribute default="normal" name="executionType"
+			type="executiontype" use="optional" />
+		<xsd:attribute name="className" type="xsd:string"
+			use="required" />
+	</xsd:complexType>
+
+	<xsd:complexType name="TestOperand">
+    	<xsd:sequence>
+    		<xsd:element name="description" type="xsd:string" minOccurs="0" maxOccurs="1">
+    		</xsd:element>
+    		<xsd:element name="TestOperandConstraint" type="TestOperandConstraint" minOccurs="0" maxOccurs="unbounded"></xsd:element>
+    	</xsd:sequence>
+    	<xsd:attribute name="type" type="datatype" use="required" />
+    </xsd:complexType>
+
+    <xsd:complexType name="TestOperandConstraint">
+       	<xsd:attribute name="type" type="operandConstraintType" use="required" />
+       	<xsd:attribute name="stringValue" type="xsd:string" use="optional" />
+       	<xsd:attribute name="numericValue" type="xsd:double" use="optional" />
+    </xsd:complexType>
+
+    <xsd:complexType name="DataRuleTests">
+    	<xsd:sequence>
+    		<xsd:element name="DataRuleTest" type="DataRuleTest" minOccurs="0" maxOccurs="unbounded"></xsd:element>
+    	</xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="DataRuleFunctionsLibrary">
+    	<xsd:sequence>
+    		<xsd:element name="description" type="xsd:string"
+    			minOccurs="0" maxOccurs="1">
+    		</xsd:element>
+    		<xsd:element name="Categories" type="Categories"
+    			minOccurs="0" maxOccurs="1">
+    		</xsd:element>
+    		<xsd:element name="DataRuleFunctions"
+    			type="DataRuleFunctions" minOccurs="0" maxOccurs="1">
+    		</xsd:element>
+    		<xsd:element name="DataRuleTests" type="DataRuleTests"
+    			minOccurs="0" maxOccurs="1">
+    		</xsd:element>
+    	</xsd:sequence>
+    	<xsd:attribute name="name" type="xsd:string" use="optional" />
+    	<xsd:attribute name="provider" type="xsd:string"
+    		use="optional">
+    	</xsd:attribute>
+    	<xsd:attribute name="version" type="xsd:string" use="optional"></xsd:attribute>
+    </xsd:complexType>
+
+    <xsd:element name="DataRuleFunctionsLibrary" type="DataRuleFunctionsLibrary"></xsd:element>
+</xsd:schema>

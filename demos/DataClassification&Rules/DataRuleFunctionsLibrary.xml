@@ -5,7 +5,7 @@
 	xsi:schemaLocation="http://www.ibm.com/infosphere/dataquality/datarulefunctionslibrary ../xsd/DataRuleFunctionsLibrary.xsd "
 	name="Built in functions library"
 	provider="IBM"
-	version="1.6.0">
+	version="1.10.0">
 	
 	<description>Built in data quality rules functions and tests.</description>
 	
@@ -36,7 +36,7 @@
 	-->
 	<DataRuleFunctions>
 			<!-- *************** General Functions ******************** -->
-		<DataRuleFunction name="coalesce" returnType="any" className="com.ibm.infosphere.dataquality.ruleengine.functions.Coalesce"	categoryID="general">
+		<DataRuleFunction name="coalesce" displayName="%function.coalesce.displayName" returnType="any" className="com.ibm.infosphere.dataquality.ruleengine.functions.Coalesce"	categoryID="general">
 			<description>%function.coalesce.desc</description>
 			<Parameter type="any" name="value">
 				<description>%function.coalesce.param1.desc</description>
@@ -46,7 +46,7 @@
 			</Parameter>
 		</DataRuleFunction>
 
- 		<DataRuleFunction name="count" returnType="numeric" className="com.ibm.infosphere.dataquality.ruleengine.functions.Count" executionType="precomputedAggregation" categoryID="general">
+ 		<DataRuleFunction name="count" displayName="%function.count.displayName" returnType="numeric" className="com.ibm.infosphere.dataquality.ruleengine.functions.Count" executionType="precomputedAggregation" categoryID="general">
 			<description>%function.count.desc</description>
 			<Parameter type="any" name="column" column="true">
 				<description>%function.count.param1.desc</description>
@@ -56,7 +56,7 @@
 			</Parameter>
 		</DataRuleFunction>
 
-		<DataRuleFunction name="count_not_null" returnType="numeric" className="com.ibm.infosphere.dataquality.ruleengine.functions.CountNotNull" executionType="precomputedAggregation" categoryID="general">
+		<DataRuleFunction name="count_not_null" displayName="%function.count_non_null.displayName" returnType="numeric" className="com.ibm.infosphere.dataquality.ruleengine.functions.CountNotNull" executionType="precomputedAggregation" categoryID="general">
 			<description>%function.count_non_null.desc</description>
 			<Parameter type="any" name="column" column="true">
 				<description>%function.count_non_null.param1.desc</description>
@@ -66,7 +66,14 @@
 			</Parameter>
 		</DataRuleFunction>
 
-		<DataRuleFunction name="lookup" returnType="any" className="com.ibm.infosphere.dataquality.ruleengine.functions.Lookup" executionType="precomputedAggregation" categoryID="general">
+		<DataRuleFunction name="dataclassesof" displayName="%function.dataclassesof.displayName" returnType="list" className="com.ibm.infosphere.dataquality.ruleengine.functions.DataClassesOf" categoryID="general">
+			<description>%function.dataclassesof.desc</description>
+			<Parameter type="any" name="value">
+				<description>%function.dataclassesof.param1.desc</description>
+			</Parameter>
+		</DataRuleFunction>
+
+		<DataRuleFunction name="lookup" displayName="%function.lookup.displayName" returnType="any" className="com.ibm.infosphere.dataquality.ruleengine.functions.Lookup" executionType="precomputedAggregation" categoryID="general">
 			<description>%function.lookup.desc</description>
 			<Parameter type="any" name="value">
 				<description>%function.lookup.param1.desc</description>
@@ -79,7 +86,7 @@
 			</Parameter>
 		</DataRuleFunction>
 
- 		<DataRuleFunction name="occurrences" returnType="numeric" className="com.ibm.infosphere.dataquality.ruleengine.functions.Occurrences" executionType="precomputedAggregation" categoryID="general">
+ 		<DataRuleFunction name="occurrences" displayName="%function.occurrences.displayName" returnType="numeric" className="com.ibm.infosphere.dataquality.ruleengine.functions.Occurrences" executionType="precomputedAggregation" categoryID="general">
 			<description>%function.occurrences.desc</description>
 			<Parameter type="any" name="column" column="true">
 				<description>%function.occurrences.param1.desc</description>
@@ -90,11 +97,11 @@
  		</DataRuleFunction>
 
 		<!-- *************** Date/Time Functions ******************** -->
-		<DataRuleFunction name="date" returnType="date" className="com.ibm.infosphere.dataquality.ruleengine.functions.Date" categoryID="date/time">
+		<DataRuleFunction name="date" displayName="%function.date.displayName" returnType="date" className="com.ibm.infosphere.dataquality.ruleengine.functions.Date" categoryID="date/time">
 			<description>%function.date.desc</description>
 		</DataRuleFunction>
 
-		<DataRuleFunction name="datevalue" returnType="date" className="com.ibm.infosphere.dataquality.ruleengine.functions.DateValue" categoryID="date/time">
+		<DataRuleFunction name="datevalue" displayName="%function.datevalue.displayName" returnType="date" className="com.ibm.infosphere.dataquality.ruleengine.functions.DateValue" categoryID="date/time">
 			<description>%function.datevalue.desc</description>
 			<Parameter type="string" name="string">
 				<description>%function.datevalue.param1.desc</description>
@@ -104,21 +111,21 @@
 			</Parameter>
 		</DataRuleFunction>
 
-		<DataRuleFunction name="day" returnType="numeric" className="com.ibm.infosphere.dataquality.ruleengine.functions.Day" categoryID="date/time">
+		<DataRuleFunction name="day" displayName="%function.day.displayName" returnType="numeric" className="com.ibm.infosphere.dataquality.ruleengine.functions.Day" categoryID="date/time">
 			<description>%function.day.desc</description>
 			<Parameter type="date" name="date">
 				<description>%function.day.param1.desc</description>
 			</Parameter>
 		</DataRuleFunction>
 
-		<DataRuleFunction name="month" returnType="numeric" className="com.ibm.infosphere.dataquality.ruleengine.functions.Month" categoryID="date/time">
+		<DataRuleFunction name="month" displayName="%function.month.displayName" returnType="numeric" className="com.ibm.infosphere.dataquality.ruleengine.functions.Month" categoryID="date/time">
 			<description>%function.month.desc</description>
 			<Parameter type="date" name="date">
 				<description>%function.month.param1.desc</description>
 			</Parameter>
 		</DataRuleFunction>
 
-		<DataRuleFunction name="round_date" returnType="date" className="com.ibm.infosphere.dataquality.ruleengine.functions.RoundDate" categoryID="date/time">
+		<DataRuleFunction name="round_date" displayName="%function.round_date.displayName" returnType="date" className="com.ibm.infosphere.dataquality.ruleengine.functions.RoundDate" categoryID="date/time">
 			<description>%function.round_date.desc</description>
 			<Parameter type="date" name="value">
 				<description>%function.round_date.param1.desc</description>
@@ -128,7 +135,7 @@
 			</Parameter>
 		</DataRuleFunction>
 
-		<DataRuleFunction name="round_time" returnType="time" className="com.ibm.infosphere.dataquality.ruleengine.functions.RoundTime" categoryID="date/time">
+		<DataRuleFunction name="round_time" displayName="%function.round_time.displayName" returnType="time" className="com.ibm.infosphere.dataquality.ruleengine.functions.RoundTime" categoryID="date/time">
 			<description>%function.round_time.desc</description>
 			<Parameter type="time" name="value">
 				<description>%function.round_time.param1.desc</description>
@@ -138,7 +145,7 @@
 			</Parameter>
 		</DataRuleFunction>
 
-		<DataRuleFunction name="round_timestamp" returnType="timestamp" className="com.ibm.infosphere.dataquality.ruleengine.functions.RoundTimeStamp" categoryID="date/time">
+		<DataRuleFunction name="round_timestamp" displayName="%function.round_timestamp.displayName" returnType="timestamp" className="com.ibm.infosphere.dataquality.ruleengine.functions.RoundTimeStamp" categoryID="date/time">
 			<description>%function.round_time.desc</description>
 			<Parameter type="timestamp" name="value">
 				<description>%function.round_timestamp.param1.desc</description>
@@ -148,7 +155,7 @@
 			</Parameter>
 		</DataRuleFunction>
 
-		<DataRuleFunction name="trunc_date" returnType="date" className="com.ibm.infosphere.dataquality.ruleengine.functions.TruncDate" categoryID="date/time">
+		<DataRuleFunction name="trunc_date" displayName="%function.trunc_date.displayName" returnType="date" className="com.ibm.infosphere.dataquality.ruleengine.functions.TruncDate" categoryID="date/time">
 			<description>%function.trunc_date.desc</description>
 			<Parameter type="date" name="value">
 				<description>%function.trunc_date.param1.desc</description>
@@ -158,7 +165,7 @@
 			</Parameter>
 		</DataRuleFunction>
 
-		<DataRuleFunction name="trunc_time" returnType="time" className="com.ibm.infosphere.dataquality.ruleengine.functions.TruncTime" categoryID="date/time">
+		<DataRuleFunction name="trunc_time" displayName="%function.trunc_time.displayName" returnType="time" className="com.ibm.infosphere.dataquality.ruleengine.functions.TruncTime" categoryID="date/time">
 			<description>%function.trunc_time.desc</description>
 			<Parameter type="time" name="value">
 				<description>%function.trunc_time.param1.desc</description>
@@ -168,7 +175,7 @@
 			</Parameter>
 		</DataRuleFunction>
 
-		<DataRuleFunction name="trunc_timestamp" returnType="timestamp" className="com.ibm.infosphere.dataquality.ruleengine.functions.TruncTimeStamp" categoryID="date/time">
+		<DataRuleFunction name="trunc_timestamp" displayName="%function.trunc_timestamp.displayName" returnType="timestamp" className="com.ibm.infosphere.dataquality.ruleengine.functions.TruncTimeStamp" categoryID="date/time">
 			<description>%function.trunc_timestamp.desc</description>
 			<Parameter type="timestamp" name="value">
 				<description>%function.trunc_timestamp.param1.desc</description>
@@ -178,25 +185,25 @@
 			</Parameter>
 		</DataRuleFunction>
 
-		<DataRuleFunction name="weekday" returnType="numeric" className="com.ibm.infosphere.dataquality.ruleengine.functions.WeekDay" categoryID="date/time">
+		<DataRuleFunction name="weekday" displayName="%function.weekday.displayName" returnType="numeric" className="com.ibm.infosphere.dataquality.ruleengine.functions.WeekDay" categoryID="date/time">
 			<description>%function.weekday.desc</description>
 			<Parameter type="date" name="date">
 				<description>%function.weekday.param1.desc</description>
 			</Parameter>
 		</DataRuleFunction>
 
-		<DataRuleFunction name="year" returnType="numeric" className="com.ibm.infosphere.dataquality.ruleengine.functions.Year" categoryID="date/time">
+		<DataRuleFunction name="year" displayName="%function.year.displayName" returnType="numeric" className="com.ibm.infosphere.dataquality.ruleengine.functions.Year" categoryID="date/time">
 			<description>%function.year.desc</description>
 			<Parameter type="date" name="date">
 				<description>%function.year.param1.desc</description>
 			</Parameter>
 		</DataRuleFunction>
 
-		<DataRuleFunction name="time" returnType="time" className="com.ibm.infosphere.dataquality.ruleengine.functions.Time" categoryID="date/time">
+		<DataRuleFunction name="time" displayName="%function.time.displayName" returnType="time" className="com.ibm.infosphere.dataquality.ruleengine.functions.Time" categoryID="date/time">
 			<description>%function.time.desc</description>
 		</DataRuleFunction>
 
-		<DataRuleFunction name="timevalue" returnType="time" className="com.ibm.infosphere.dataquality.ruleengine.functions.TimeValue" categoryID="date/time">
+		<DataRuleFunction name="timevalue" displayName="%function.timevalue.displayName" returnType="time" className="com.ibm.infosphere.dataquality.ruleengine.functions.TimeValue" categoryID="date/time">
 			<description>%function.timevalue.desc</description>
 			<Parameter type="string" name="string">
 				<description>%function.timevalue.param1.desc</description>
@@ -206,11 +213,11 @@
 			</Parameter>
 		</DataRuleFunction>
 
-		<DataRuleFunction name="timestamp" returnType="timestamp" className="com.ibm.infosphere.dataquality.ruleengine.functions.Timestamp" categoryID="date/time">
+		<DataRuleFunction name="timestamp" displayName="%function.timestamp.displayName" returnType="timestamp" className="com.ibm.infosphere.dataquality.ruleengine.functions.Timestamp" categoryID="date/time">
 			<description>%function.timestamp.desc</description>
 		</DataRuleFunction>
 		
-		<DataRuleFunction name="timestampvalue" returnType="timestamp" className="com.ibm.infosphere.dataquality.ruleengine.functions.TimestampValue" categoryID="date/time">
+		<DataRuleFunction name="timestampvalue" displayName="%function.timestampvalue.displayName" returnType="timestamp" className="com.ibm.infosphere.dataquality.ruleengine.functions.TimestampValue" categoryID="date/time">
 			<description>%function.timestampvalue.desc</description>
 			<Parameter type="string" name="string">
 				<description>%function.timestampvalue.param1.desc</description>
@@ -220,28 +227,28 @@
 			</Parameter>
 		</DataRuleFunction>
 
-		<DataRuleFunction name="hours" returnType="numeric" className="com.ibm.infosphere.dataquality.ruleengine.functions.Hours" categoryID="date/time">
+		<DataRuleFunction name="hours" displayName="%function.hours.displayName" returnType="numeric" className="com.ibm.infosphere.dataquality.ruleengine.functions.Hours" categoryID="date/time">
 			<description>%function.hours.desc</description>
 			<Parameter type="time" name="time">
 				<description>%function.hours.param1.desc</description>
 			</Parameter>
 		</DataRuleFunction>
 
-		<DataRuleFunction name="minutes" returnType="numeric" className="com.ibm.infosphere.dataquality.ruleengine.functions.Minutes" categoryID="date/time">
+		<DataRuleFunction name="minutes" displayName="%function.minutes.displayName" returnType="numeric" className="com.ibm.infosphere.dataquality.ruleengine.functions.Minutes" categoryID="date/time">
 			<description>%function.minutes.desc</description>
 			<Parameter type="time" name="time">
 				<description>%function.minutes.param1.desc</description>
 			</Parameter>
 		</DataRuleFunction>
 
-		<DataRuleFunction name="seconds" returnType="numeric" className="com.ibm.infosphere.dataquality.ruleengine.functions.Seconds" categoryID="date/time">
+		<DataRuleFunction name="seconds" displayName="%function.seconds.displayName" returnType="numeric" className="com.ibm.infosphere.dataquality.ruleengine.functions.Seconds" categoryID="date/time">
 			<description>%function.seconds.desc</description>
 			<Parameter type="time" name="time">
 				<description>%function.seconds.param1.desc</description>
 			</Parameter>
 		</DataRuleFunction>
 
-		<DataRuleFunction name="datediff" returnType="numeric" className="com.ibm.infosphere.dataquality.ruleengine.functions.DateDiff" categoryID="date/time">
+		<DataRuleFunction name="datediff" displayName="%function.datediff.displayName" returnType="numeric" className="com.ibm.infosphere.dataquality.ruleengine.functions.DateDiff" categoryID="date/time">
 			<description>%function.datediff.desc</description>
 			<Parameter type="date" name="date1">
 				<description>%function.datediff.param1.desc</description>
@@ -251,7 +258,7 @@
 			</Parameter>
 		</DataRuleFunction>
 
-		<DataRuleFunction name="timediff" returnType="time" className="com.ibm.infosphere.dataquality.ruleengine.functions.TimeDiff" categoryID="date/time">
+		<DataRuleFunction name="timediff" displayName="%function.timediff.displayName" returnType="time" className="com.ibm.infosphere.dataquality.ruleengine.functions.TimeDiff" categoryID="date/time">
 			<description>%function.timediff.desc</description>
 			<Parameter type="time" name="time1">
 				<description>%function.timediff.param1.desc</description>
@@ -261,7 +268,7 @@
 			</Parameter>
 		</DataRuleFunction>
 		
-		<DataRuleFunction name="addmonthstimestamp" returnType="timestamp" className="com.ibm.infosphere.dataquality.ruleengine.functions.AddMonthsTimeStamp" categoryID="date/time">
+		<DataRuleFunction name="addmonthstimestamp" displayName="%function.addmonthstimestamp.displayName" returnType="timestamp" className="com.ibm.infosphere.dataquality.ruleengine.functions.AddMonthsTimeStamp" categoryID="date/time">
 			<description>%function.addmonthstimestamp.desc</description>
 			<Parameter type="timestamp" name="timestamp">
 				<description>%function.addmonthstimestamp.param1.desc</description>
@@ -271,7 +278,7 @@
 			</Parameter>
 		</DataRuleFunction>
 		
-		<DataRuleFunction name="addmonthsdate" returnType="date" className="com.ibm.infosphere.dataquality.ruleengine.functions.AddMonthsDate" categoryID="date/time">
+		<DataRuleFunction name="addmonthsdate" displayName="%function.addmonthsdate.displayName" returnType="date" className="com.ibm.infosphere.dataquality.ruleengine.functions.AddMonthsDate" categoryID="date/time">
 			<description>%function.addmonthsdate.desc</description>
 			<Parameter type="date" name="date">
 				<description>%function.addmonthsdate.param1.desc</description>
@@ -283,14 +290,14 @@
 
 		<!-- *************** Mathematical Functions ******************** -->
 
-		<DataRuleFunction name="abs" returnType="numeric" className="com.ibm.infosphere.dataquality.ruleengine.functions.Abs" categoryID="math">
+		<DataRuleFunction name="abs" displayName="%function.abs.displayName" returnType="numeric" className="com.ibm.infosphere.dataquality.ruleengine.functions.Abs" categoryID="math">
 			<description>%function.abs.desc</description>
 			<Parameter type="numeric" name="value">
 				<description>%function.abs.param1.desc</description>
 			</Parameter>
 		</DataRuleFunction>
 
- 		<DataRuleFunction name="avg" returnType="numeric" className="com.ibm.infosphere.dataquality.ruleengine.functions.Avg" executionType="precomputedAggregation" categoryID="math">
+ 		<DataRuleFunction name="avg" displayName="%function.avg.displayName" returnType="numeric" className="com.ibm.infosphere.dataquality.ruleengine.functions.Avg" executionType="precomputedAggregation" categoryID="math">
 			<description>%function.avg.desc</description>
 			<Parameter type="numeric" name="value" column="true">
 				<description>%function.avg.param1.desc</description>
@@ -300,14 +307,14 @@
 			</Parameter>
 		</DataRuleFunction>
 
-		<DataRuleFunction name="exp" returnType="numeric" className="com.ibm.infosphere.dataquality.ruleengine.functions.Exp" categoryID="math">
+		<DataRuleFunction name="exp" displayName="%function.exp.displayName" returnType="numeric" className="com.ibm.infosphere.dataquality.ruleengine.functions.Exp" categoryID="math">
 			<description>%function.exp.desc</description>
 			<Parameter type="numeric" name="value">
 				<description>%function.exp.param1.desc</description>
 			</Parameter>
 		</DataRuleFunction>
 
- 		<DataRuleFunction name="max" returnType="numeric" className="com.ibm.infosphere.dataquality.ruleengine.functions.Max" executionType="precomputedAggregation" categoryID="math">
+ 		<DataRuleFunction name="max" displayName="%function.max.displayName" returnType="numeric" className="com.ibm.infosphere.dataquality.ruleengine.functions.Max" executionType="precomputedAggregation" categoryID="math">
 			<description>%function.max.desc</description>
 			<Parameter type="numeric" name="value" column="true">
 				<description>%function.max.param1.desc</description>
@@ -317,7 +324,7 @@
 			</Parameter>
 		</DataRuleFunction>
 
-		<DataRuleFunction name="min" returnType="numeric" className="com.ibm.infosphere.dataquality.ruleengine.functions.Min" executionType="precomputedAggregation" categoryID="math">
+		<DataRuleFunction name="min" displayName="%function.min.displayName" returnType="numeric" className="com.ibm.infosphere.dataquality.ruleengine.functions.Min" executionType="precomputedAggregation" categoryID="math">
 			<description>%function.min.desc</description>
 			<Parameter type="numeric" name="value" column="true">
 				<description>%function.min.param1.desc</description>
@@ -327,7 +334,7 @@
 			</Parameter>
 		</DataRuleFunction>
 
-		<DataRuleFunction name="round" returnType="numeric" className="com.ibm.infosphere.dataquality.ruleengine.functions.Round" categoryID="math">
+		<DataRuleFunction name="round" displayName="%function.round.displayName" returnType="numeric" className="com.ibm.infosphere.dataquality.ruleengine.functions.Round" categoryID="math">
 			<description>%function.round.desc</description>
 			<Parameter type="numeric" name="value">
 				<description>%function.round.param1.desc</description>
@@ -337,7 +344,7 @@
 			</Parameter>
 		</DataRuleFunction>
 
- 		<DataRuleFunction name="standardize" returnType="numeric" className="com.ibm.infosphere.dataquality.ruleengine.functions.Standardize" executionType="computedFromMultipleAggregations" categoryID="math">
+ 		<DataRuleFunction name="standardize" displayName="%function.standardize.displayName" returnType="numeric" className="com.ibm.infosphere.dataquality.ruleengine.functions.Standardize" executionType="computedFromMultipleAggregations" categoryID="math">
 			<description>%function.standardize.desc</description>
 			<Parameter type="numeric" name="value" column="true">
 				<description>%function.standardize.param1.desc</description>
@@ -349,14 +356,14 @@
 			<RequiredAggregation name="stddev"/>
 		</DataRuleFunction>
 
-		<DataRuleFunction name="sqrt" returnType="numeric" className="com.ibm.infosphere.dataquality.ruleengine.functions.Sqrt" categoryID="math">
+		<DataRuleFunction name="sqrt" displayName="%function.sqrt.displayName" returnType="numeric" className="com.ibm.infosphere.dataquality.ruleengine.functions.Sqrt" categoryID="math">
 			<description>%function.sqrt.desc</description>
 			<Parameter type="numeric" name="value">
 				<description>%function.sqrt.param1.desc</description>
 			</Parameter>
 		</DataRuleFunction>
 
- 		<DataRuleFunction name="stddev" returnType="numeric" className="com.ibm.infosphere.dataquality.ruleengine.functions.Stddev" executionType="precomputedAggregation" categoryID="math">
+ 		<DataRuleFunction name="stddev" displayName="%function.stddev.displayName" returnType="numeric" className="com.ibm.infosphere.dataquality.ruleengine.functions.Stddev" executionType="precomputedAggregation" categoryID="math">
 			<description>%function.stddev.desc</description>
 			<Parameter type="numeric" name="value" column="true">
 				<description>%function.stddev.param1.desc</description>
@@ -366,7 +373,7 @@
 			</Parameter>
 		</DataRuleFunction>
 
-		<DataRuleFunction name="sum" returnType="numeric" className="com.ibm.infosphere.dataquality.ruleengine.functions.Sum" executionType="precomputedAggregation" categoryID="math">
+		<DataRuleFunction name="sum" displayName="%function.sum.displayName" returnType="numeric" className="com.ibm.infosphere.dataquality.ruleengine.functions.Sum" executionType="precomputedAggregation" categoryID="math">
 			<description>%function.sum.desc</description>
 			<Parameter type="numeric" name="value" column="true">
 				<description>%function.sum.param1.desc</description>
@@ -376,7 +383,7 @@
 			</Parameter>
 		</DataRuleFunction>
 
-		<DataRuleFunction name="trunc" returnType="numeric" className="com.ibm.infosphere.dataquality.ruleengine.functions.Trunc" categoryID="math">
+		<DataRuleFunction name="trunc" displayName="%function.trunc.displayName" returnType="numeric" className="com.ibm.infosphere.dataquality.ruleengine.functions.Trunc" categoryID="math">
 			<description>%function.trunc.desc</description>
 			<Parameter type="numeric" name="value">
 				<description>%function.trunc.param1.desc</description>
@@ -388,21 +395,21 @@
 
 		<!-- *************** String Functions ******************** -->
 
-		<DataRuleFunction name="ascii" returnType="numeric" className="com.ibm.infosphere.dataquality.ruleengine.functions.Ascii" categoryID="string">
+		<DataRuleFunction name="ascii" displayName="%function.ascii.displayName" returnType="numeric" className="com.ibm.infosphere.dataquality.ruleengine.functions.Ascii" categoryID="string">
 			<description>%function.ascii.desc</description>
 			<Parameter type="string" name="char">
 				<description>%function.ascii.param1.desc</description>
 			</Parameter>
 		</DataRuleFunction>
 
-		<DataRuleFunction name="char" returnType="string" className="com.ibm.infosphere.dataquality.ruleengine.functions.Char" categoryID="string">
+		<DataRuleFunction name="char" displayName="%function.char.displayName" returnType="string" className="com.ibm.infosphere.dataquality.ruleengine.functions.Char" categoryID="string">
 			<description>%function.char.desc</description>
 			<Parameter type="numeric" name="asciiCode">
 				<description>%function.char.param1.desc</description>
 			</Parameter>
 		</DataRuleFunction>
 
-		<DataRuleFunction name="convert" returnType="string" className="com.ibm.infosphere.dataquality.ruleengine.functions.Convert" categoryID="string">
+		<DataRuleFunction name="convert" displayName="%function.convert.displayName" returnType="string" className="com.ibm.infosphere.dataquality.ruleengine.functions.Convert" categoryID="string">
 			<description>%function.convert.desc</description>
 			<Parameter type="string" name="originalString">
 				<description>%function.convert.param1.desc</description>
@@ -415,14 +422,14 @@
 			</Parameter>
 		</DataRuleFunction>
 
-		<DataRuleFunction name="lcase" returnType="string" className="com.ibm.infosphere.dataquality.ruleengine.functions.Lcase" categoryID="string">
+		<DataRuleFunction name="lcase" displayName="%function.lcase.displayName" returnType="string" className="com.ibm.infosphere.dataquality.ruleengine.functions.Lcase" categoryID="string">
 			<description>%function.lcase.desc</description>
 			<Parameter type="string" name="string">
 				<description>%function.lcase.param1.desc</description>
 			</Parameter>
 		</DataRuleFunction>
 
-		<DataRuleFunction name="index" returnType="numeric" className="com.ibm.infosphere.dataquality.ruleengine.functions.Index" categoryID="string">
+		<DataRuleFunction name="index" displayName="%function.index.displayName" returnType="numeric" className="com.ibm.infosphere.dataquality.ruleengine.functions.Index" categoryID="string">
 			<description>%function.index.desc</description>
 			<Parameter type="string" name="string">
 				<description>%function.index.param1.desc</description>
@@ -432,7 +439,7 @@
 			</Parameter>
 		</DataRuleFunction>
 
-		<DataRuleFunction name="left" returnType="string" className="com.ibm.infosphere.dataquality.ruleengine.functions.Left" categoryID="string">
+		<DataRuleFunction name="left" displayName="%function.left.displayName" returnType="string" className="com.ibm.infosphere.dataquality.ruleengine.functions.Left" categoryID="string">
 			<description>%function.left.desc</description>
 			<Parameter type="string" name="string">
 				<description>%function.left.param1.desc</description>
@@ -442,21 +449,21 @@
 			</Parameter>
 		</DataRuleFunction>
 
-		<DataRuleFunction name="len" returnType="numeric" className="com.ibm.infosphere.dataquality.ruleengine.functions.Len" categoryID="string">
+		<DataRuleFunction name="len" displayName="%function.len.displayName" returnType="numeric" className="com.ibm.infosphere.dataquality.ruleengine.functions.Len" categoryID="string">
 			<description>%function.len.desc</description>
-			<Parameter type="string" name="string">
+			<Parameter type="any" name="value">
 				<description>%function.len.param1.desc</description>
 			</Parameter>
 		</DataRuleFunction>
 
-		<DataRuleFunction name="ltrim" returnType="string" className="com.ibm.infosphere.dataquality.ruleengine.functions.Ltrim" categoryID="string">
+		<DataRuleFunction name="ltrim" displayName="%function.ltrim.displayName" returnType="string" className="com.ibm.infosphere.dataquality.ruleengine.functions.Ltrim" categoryID="string">
 			<description>%function.ltrim.desc</description>
 			<Parameter type="string" name="string">
 				<description>%function.ltrim.param1.desc</description>
 			</Parameter>
 		</DataRuleFunction>
 
-		<DataRuleFunction name="pad" returnType="string" className="com.ibm.infosphere.dataquality.ruleengine.functions.Pad" categoryID="string">
+		<DataRuleFunction name="pad" displayName="%function.pad.displayName" returnType="string" className="com.ibm.infosphere.dataquality.ruleengine.functions.Pad" categoryID="string">
 			<description>%function.pad.desc</description>
 			<Parameter type="string" name="string">
 				<description>%function.pad.param1.desc</description>
@@ -469,7 +476,7 @@
 			</Parameter>
 		</DataRuleFunction>
 
-		<DataRuleFunction name="lpad" returnType="string" className="com.ibm.infosphere.dataquality.ruleengine.functions.Lpad" categoryID="string">
+		<DataRuleFunction name="lpad" displayName="%function.lpad.displayName" returnType="string" className="com.ibm.infosphere.dataquality.ruleengine.functions.Lpad" categoryID="string">
 			<description>%function.lpad.desc</description>
 			<Parameter type="string" name="string">
 				<description>%function.lpad.param1.desc</description>
@@ -479,7 +486,7 @@
 			</Parameter>
 		</DataRuleFunction>
 
-		<DataRuleFunction name="rpad" returnType="string" className="com.ibm.infosphere.dataquality.ruleengine.functions.Rpad" categoryID="string">
+		<DataRuleFunction name="rpad" displayName="%function.rpad.displayName" returnType="string" className="com.ibm.infosphere.dataquality.ruleengine.functions.Rpad" categoryID="string">
 			<description>%function.rpad.desc</description>
 			<Parameter type="string" name="string">
 				<description>%function.rpad.param1.desc</description>
@@ -489,7 +496,7 @@
 			</Parameter>
 		</DataRuleFunction>
 
-		<DataRuleFunction name="right" returnType="string" className="com.ibm.infosphere.dataquality.ruleengine.functions.Right" categoryID="string">
+		<DataRuleFunction name="right" displayName="%function.right.displayName" returnType="string" className="com.ibm.infosphere.dataquality.ruleengine.functions.Right" categoryID="string">
 			<description>%function.right.desc</description>
 			<Parameter type="string" name="string">
 				<description>%function.right.param1.desc</description>
@@ -499,14 +506,14 @@
 			</Parameter>
 		</DataRuleFunction>
 
-		<DataRuleFunction name="rtrim" returnType="string" className="com.ibm.infosphere.dataquality.ruleengine.functions.Rtrim" categoryID="string">
+		<DataRuleFunction name="rtrim" displayName="%function.rtrim.displayName" returnType="string" className="com.ibm.infosphere.dataquality.ruleengine.functions.Rtrim" categoryID="string">
 			<description>%function.rtrim.desc</description>
 			<Parameter type="string" name="string">
 				<description>%function.rtrim.param1.desc</description>
 			</Parameter>
 		</DataRuleFunction>
 
-		<DataRuleFunction name="substring" returnType="string" className="com.ibm.infosphere.dataquality.ruleengine.functions.Substring" categoryID="string">
+		<DataRuleFunction name="substring" displayName="%function.substring.displayName" returnType="string" className="com.ibm.infosphere.dataquality.ruleengine.functions.Substring" categoryID="string">
 			<description>%function.substring.desc</description>
 			<Parameter type="string" name="string">
 				<description>%function.substring.param1.desc</description>
@@ -519,7 +526,7 @@
 			</Parameter>
 		</DataRuleFunction>
 
-		<DataRuleFunction name="str" returnType="string" className="com.ibm.infosphere.dataquality.ruleengine.functions.Str" categoryID="string">
+		<DataRuleFunction name="str" displayName="%function.str.displayName" returnType="string" className="com.ibm.infosphere.dataquality.ruleengine.functions.Str" categoryID="string">
 			<description>%function.str.desc</description>
 			<Parameter type="string" name="string">
 				<description>%function.str.param1.desc</description>
@@ -529,7 +536,7 @@
 			</Parameter>
 		</DataRuleFunction>
 
-		<DataRuleFunction name="tostring" returnType="string" className="com.ibm.infosphere.dataquality.ruleengine.functions.ToString" categoryID="string">
+		<DataRuleFunction name="tostring" displayName="%function.tostring.displayName" returnType="string" className="com.ibm.infosphere.dataquality.ruleengine.functions.ToString" categoryID="string">
 			<description>%function.tostring.desc</description>
 			<Parameter type="any" name="value">
 				<description>%function.tostring.param1.desc</description>
@@ -539,27 +546,28 @@
 			</Parameter>
 		</DataRuleFunction>
                
-                <DataRuleFunction name="scale" returnType="numeric" className="com.ibm.infosphere.dataquality.ruleengine.functions.Scale" categoryID="math">
+        <DataRuleFunction name="scale" displayName="%function.scale.displayName" returnType="numeric" className="com.ibm.infosphere.dataquality.ruleengine.functions.Scale" categoryID="math">
 			<description>%function.scale.desc</description>
 			<Parameter type="any" name="value">
 				<description>%function.scale.param1.desc</description>
 			</Parameter>
-			
 		</DataRuleFunction>
-		<DataRuleFunction name="trim" returnType="string" className="com.ibm.infosphere.dataquality.ruleengine.functions.Trim" categoryID="string">
+
+		<DataRuleFunction name="trim" displayName="%function.trim.displayName" returnType="string" className="com.ibm.infosphere.dataquality.ruleengine.functions.Trim" categoryID="string">
 			<description>%function.trim.desc</description>
 			<Parameter type="string" name="string">
 				<description>%function.trim.param1.desc</description>
 			</Parameter>
 		</DataRuleFunction>
 
-		<DataRuleFunction name="ucase" returnType="string" className="com.ibm.infosphere.dataquality.ruleengine.functions.Ucase" categoryID="string">
+		<DataRuleFunction name="ucase" displayName="%function.ucase.displayName" returnType="string" className="com.ibm.infosphere.dataquality.ruleengine.functions.Ucase" categoryID="string">
 			<description>%function.ucase.desc</description>
 			<Parameter type="string" name="string">
 				<description>%function.ucase.param1.desc</description>
 			</Parameter>
 		</DataRuleFunction>
-		<DataRuleFunction name="val" returnType="numeric" className="com.ibm.infosphere.dataquality.ruleengine.functions.Val" categoryID="string">
+		
+		<DataRuleFunction name="val" displayName="%function.val.displayName" returnType="numeric" className="com.ibm.infosphere.dataquality.ruleengine.functions.Val" categoryID="string">
 			<description>%function.val.desc</description>
 			<Parameter type="string" name="string">
 				<description>%function.val.param1.desc</description>
@@ -574,7 +582,8 @@
 		##################################################
 	-->
 	<DataRuleTests>
-		<DataRuleTest name="=" className="com.ibm.infosphere.dataquality.ruleengine.tests.EqualityTest">
+		<DataRuleTest name="=" displayName="%test.equality.displayName" className="com.ibm.infosphere.dataquality.ruleengine.tests.EqualityTest">
+			<description>%test.equality.desc</description>
 			<TestOperand type="any">
 			    <TestOperandConstraint type="sameDataTypeAsOtherOperand"/>
 			</TestOperand>
@@ -582,7 +591,8 @@
 			    <TestOperandConstraint type="sameDataTypeAsOtherOperand"/>
 			</TestOperand>
 		</DataRuleTest>
-		<DataRuleTest name="&lt;&gt;" className="com.ibm.infosphere.dataquality.ruleengine.tests.NotEqualTest">
+		<DataRuleTest name="&lt;&gt;" displayName="%test.notEquals.displayName" className="com.ibm.infosphere.dataquality.ruleengine.tests.NotEqualTest">
+			<description>%test.notEquals.desc</description>
 			<TestOperand type="any">
 			    <TestOperandConstraint type="sameDataTypeAsOtherOperand"/>
 			</TestOperand>
@@ -590,7 +600,8 @@
 			    <TestOperandConstraint type="sameDataTypeAsOtherOperand"/>
 			</TestOperand>
 		</DataRuleTest>
-		<DataRuleTest name="&gt;" className="com.ibm.infosphere.dataquality.ruleengine.tests.GreaterThanTest">
+		<DataRuleTest name="&gt;" displayName="%test.greaterThan.displayName" className="com.ibm.infosphere.dataquality.ruleengine.tests.GreaterThanTest">
+			<description>%test.greaterThan.desc</description>
 			<TestOperand type="any">
 			    <TestOperandConstraint type="sameDataTypeAsOtherOperand"/>
 			</TestOperand>
@@ -598,7 +609,8 @@
 			    <TestOperandConstraint type="sameDataTypeAsOtherOperand"/>
 			</TestOperand>
 		</DataRuleTest>
-		<DataRuleTest name="&gt;=" className="com.ibm.infosphere.dataquality.ruleengine.tests.GreaterOrEqualTest">
+		<DataRuleTest name="&gt;=" displayName="%test.greaterOrEqual.displayName" className="com.ibm.infosphere.dataquality.ruleengine.tests.GreaterOrEqualTest">
+			<description>%test.greaterOrEqual.desc</description>
 			<TestOperand type="any">
 			    <TestOperandConstraint type="sameDataTypeAsOtherOperand"/>
 			</TestOperand>
@@ -606,7 +618,8 @@
 			    <TestOperandConstraint type="sameDataTypeAsOtherOperand"/>
 			</TestOperand>
 		</DataRuleTest>
-		<DataRuleTest name="&lt;" className="com.ibm.infosphere.dataquality.ruleengine.tests.LessThanTest">
+		<DataRuleTest name="&lt;" displayName="%test.lessThan.displayName" className="com.ibm.infosphere.dataquality.ruleengine.tests.LessThanTest">
+			<description>%test.lessThan.desc</description>
 			<TestOperand type="any">
 			    <TestOperandConstraint type="sameDataTypeAsOtherOperand"/>
 			</TestOperand>
@@ -614,7 +627,8 @@
 			    <TestOperandConstraint type="sameDataTypeAsOtherOperand"/>
 			</TestOperand>
 		</DataRuleTest>
-		<DataRuleTest name="&lt;=" className="com.ibm.infosphere.dataquality.ruleengine.tests.LessOrEqualTest">
+		<DataRuleTest name="&lt;=" displayName="%test.lessOrEqual.displayName" className="com.ibm.infosphere.dataquality.ruleengine.tests.LessOrEqualTest">
+			<description>%test.lessOrEqual.desc</description>
 			<TestOperand type="any">
 			    <TestOperandConstraint type="sameDataTypeAsOtherOperand"/>
 			</TestOperand>
@@ -622,43 +636,56 @@
 			    <TestOperandConstraint type="sameDataTypeAsOtherOperand"/>
 			</TestOperand>
 		</DataRuleTest>
-		<DataRuleTest name="contains" className="com.ibm.infosphere.dataquality.ruleengine.tests.ContainsTest">
+		<DataRuleTest name="contains" displayName="%test.contains.displayName" className="com.ibm.infosphere.dataquality.ruleengine.tests.ContainsTest">
+			<description>%test.contains.desc</description>
 			<TestOperand type="string"/>
 			<TestOperand type="string"/>
 		</DataRuleTest>
-		<DataRuleTest name="exists" className="com.ibm.infosphere.dataquality.ruleengine.tests.ExistsTest">
+		<DataRuleTest name="exists" displayName="%test.exists.displayName" className="com.ibm.infosphere.dataquality.ruleengine.tests.ExistsTest">
+			<description>%test.exists.desc</description>
 			<TestOperand type="any"/>
 			<TestOperand type="any">
 				<TestOperandConstraint type="mustBeEmpty"/>
 			</TestOperand>
 		</DataRuleTest>
- 		<DataRuleTest name="in_reference_column" className="com.ibm.infosphere.dataquality.ruleengine.tests.InReferenceColumnTest" executionType="precomputedAggregation">
+ 		<DataRuleTest name="in_reference_column" displayName="%test.in_reference_column.displayName" className="com.ibm.infosphere.dataquality.ruleengine.tests.InReferenceColumnTest" executionType="precomputedAggregation">
+			<description>%test.in_reference_column.desc</description>
 			<TestOperand type="any"/>
 			<TestOperand type="any">
 				<TestOperandConstraint type="isReferenceColumn"/>
 			</TestOperand>
 		</DataRuleTest>
-		<DataRuleTest name="in_reference_list" className="com.ibm.infosphere.dataquality.ruleengine.tests.InReferenceListTest">
+		<DataRuleTest name="in_reference_list" displayName="%test.in_reference_list.displayName" className="com.ibm.infosphere.dataquality.ruleengine.tests.InReferenceListTest">
+			<description>%test.in_reference_list.desc</description>
 			<TestOperand type="any"/>
 			<TestOperand type="list"/>
 		</DataRuleTest>
-		<DataRuleTest name="is_date" className="com.ibm.infosphere.dataquality.ruleengine.tests.IsDateTest">
+		<DataRuleTest name="is_date" displayName="%test.is_date.displayName" className="com.ibm.infosphere.dataquality.ruleengine.tests.IsDateTest">
+			<description>%test.is_date.desc</description>
 			<TestOperand type="string"/>
 			<TestOperand type="string">
 				<TestOperandConstraint type="isOptional"/>
 			</TestOperand>
 		</DataRuleTest>
- 		<DataRuleTest name="is_numeric" className="com.ibm.infosphere.dataquality.ruleengine.tests.IsNumericTest">
+ 		<DataRuleTest name="is_numeric" displayName="%test.is_numeric.displayName" className="com.ibm.infosphere.dataquality.ruleengine.tests.IsNumericTest">
+			<description>%test.is_numeric.desc</description>
 			<TestOperand type="any"/>
 			<TestOperand type="any">
 				<TestOperandConstraint type="mustBeEmpty"/>
 			</TestOperand>
 		</DataRuleTest>
-		<DataRuleTest name="matches_format" className="com.ibm.infosphere.dataquality.ruleengine.tests.MatchesFormatTest">
+		<DataRuleTest name="matches_dataclass" displayName="%test.matches_dataclass.displayName" className="com.ibm.infosphere.dataquality.ruleengine.tests.MatchesDataClassTest">
+			<description>%test.matches_dataclass.desc</description>
+			<TestOperand type="any"/>
+			<TestOperand type="string"/>
+		</DataRuleTest>
+		<DataRuleTest name="matches_format" displayName="%test.matches_format.displayName" className="com.ibm.infosphere.dataquality.ruleengine.tests.MatchesFormatTest">
+			<description>%test.matches_format.desc</description>
 			<TestOperand type="string"/>
 			<TestOperand type="string"/>
 		</DataRuleTest>
-		<DataRuleTest name="matches_regex" className="com.ibm.infosphere.dataquality.ruleengine.tests.MatchesRegexTest">
+		<DataRuleTest name="matches_regex" displayName="%test.matches_regex.displayName" className="com.ibm.infosphere.dataquality.ruleengine.tests.MatchesRegexTest">
+			<description>%test.matches_regex.desc</description>
 			<TestOperand type="string"/>
 			<TestOperand type="string"/>
 		</DataRuleTest>
@@ -666,7 +693,8 @@
 			<TestOperand type="string"/>
 			<TestOperand type="string"/>
 		</DataRuleTest>-->
-		<DataRuleTest name="occurs" className="com.ibm.infosphere.dataquality.ruleengine.tests.OccursTest" executionType="precomputedAggregation">
+		<DataRuleTest name="occurs" displayName="%test.occurs.displayName" className="com.ibm.infosphere.dataquality.ruleengine.tests.OccursTest" executionType="precomputedAggregation">
+			<description>%test.occurs.desc</description>
 			<TestOperand type="any">
 				<TestOperandConstraint type="mustBeColumn"/>
 			</TestOperand>
@@ -674,7 +702,8 @@
 				<TestOperandConstraint type="minValue" numericValue="0"/>
 			</TestOperand>
 		</DataRuleTest>
- 		<DataRuleTest name="occurs&lt;=" className="com.ibm.infosphere.dataquality.ruleengine.tests.OccursLessOrEqualTest" executionType="precomputedAggregation">
+ 		<DataRuleTest name="occurs&lt;=" displayName="%test.occurslte.displayName" className="com.ibm.infosphere.dataquality.ruleengine.tests.OccursLessOrEqualTest" executionType="precomputedAggregation">
+			<description>%test.occurslte.desc</description>
 			<TestOperand type="any">
 				<TestOperandConstraint type="mustBeColumn"/>
 			</TestOperand>
@@ -682,7 +711,8 @@
 				<TestOperandConstraint type="minValue" numericValue="0"/>
 			</TestOperand>
 		</DataRuleTest>
-		<DataRuleTest name="occurs&lt;" className="com.ibm.infosphere.dataquality.ruleengine.tests.OccursLessTest" executionType="precomputedAggregation">
+		<DataRuleTest name="occurs&lt;" displayName="%test.occurslt.displayName" className="com.ibm.infosphere.dataquality.ruleengine.tests.OccursLessTest" executionType="precomputedAggregation">
+			<description>%test.occurslt.desc</description>
 			<TestOperand type="any">
 				<TestOperandConstraint type="mustBeColumn"/>
 			</TestOperand>
@@ -690,7 +720,8 @@
 				<TestOperandConstraint type="minValue" numericValue="0"/>
 			</TestOperand>
 		</DataRuleTest>
-		<DataRuleTest name="occurs&gt;=" className="com.ibm.infosphere.dataquality.ruleengine.tests.OccursGreaterOrEqualTest" executionType="precomputedAggregation">
+		<DataRuleTest name="occurs&gt;=" displayName="%test.occursgte.displayName" className="com.ibm.infosphere.dataquality.ruleengine.tests.OccursGreaterOrEqualTest" executionType="precomputedAggregation">
+			<description>%test.occursgte.desc</description>
 			<TestOperand type="any">
 				<TestOperandConstraint type="mustBeColumn"/>
 			</TestOperand>
@@ -698,7 +729,8 @@
 				<TestOperandConstraint type="minValue" numericValue="0"/>
 			</TestOperand>
 		</DataRuleTest>
-		<DataRuleTest name="occurs&gt;" className="com.ibm.infosphere.dataquality.ruleengine.tests.OccursGreaterTest" executionType="precomputedAggregation">
+		<DataRuleTest name="occurs&gt;" displayName="%test.occursgt.displayName" className="com.ibm.infosphere.dataquality.ruleengine.tests.OccursGreaterTest" executionType="precomputedAggregation">
+			<description>%test.occursgt.desc</description>
 			<TestOperand type="any">
 				<TestOperandConstraint type="mustBeColumn"/>
 			</TestOperand>
@@ -706,7 +738,8 @@
 				<TestOperandConstraint type="minValue" numericValue="0"/>
 			</TestOperand>
 		</DataRuleTest>
-		<DataRuleTest name="unique" className="com.ibm.infosphere.dataquality.ruleengine.tests.UniqueTest" executionType="precomputedAggregation">
+		<DataRuleTest name="unique" displayName="%test.unique.displayName" className="com.ibm.infosphere.dataquality.ruleengine.tests.UniqueTest" executionType="precomputedAggregation">
+			<description>%test.unique.desc</description>
 			<TestOperand type="any">
 				<TestOperandConstraint type="mustBeColumn"/>
 			</TestOperand>
