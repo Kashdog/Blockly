@@ -56,7 +56,7 @@
             media: '../../media/'
             , toolbox: document.getElementById('toolbox')
         });
-        
+
         var xml = Blockly.Xml.textToDom('<xml xmlns="http://www.w3.org/1999/xhtml"><variables></variables></xml>');
         Blockly.Xml.domToWorkspace(xml, workspace);
 
@@ -154,97 +154,55 @@
                     [].forEach.call(x, function (arrayElement) {
                         var function_name = arrayElement.getAttribute('name');
                         var display_name = arrayElement.getAttribute('displayName');
-                        var description;
+                        var returnType = arrayElement.getAttribute('returnType');
+                        if (returnType == "any") {
+                            returnType = null;
+                        }
+                        var description = arrayElement.getElementsByTagName("description")[0].innerHTML;
+                        var param_displayNames = [];
+                        var param_returnTypes = [];
+                        for (var paramCounter = 0; paramCounter < arrayElement.getElementsByTagName("Parameter").length; paramCounter++) {
+                            param_displayNames.push(arrayElement.getElementsByTagName("Parameter")[paramCounter].getAttribute('displayName'));
+                            if (arrayElement.getElementsByTagName("Parameter")[paramCounter].getAttribute('type') == "any") {
+                                param_returnTypes.push(null);
+                            } else{
+                                param_returnTypes.push(arrayElement.getElementsByTagName("Parameter")[paramCounter].getAttribute('type'));
+                            }
+                            /*
+                            var inputName = "input" + paramCounter;
+                            this.appendValueInput(inputName)
+                                    .setCheck(param_returnTypes[paramCounter])
+                                    .appendField(param_displayNames[paramCounter]);
+                            */
+                        }
+                        var setChecks;
                         var blocks = document.createElement('block'); // create a block tag
                         blocks.id = function_name; // give the block id to be the function name
                         blocks.setAttribute("type", function_name); // set the type attribute of the tag
-                        arrayElement.getElementsByTagName("description")[0].innerHTML;//childNodes[0].nodeValue
-                        
-                        
-                        // Append the block tag into the xml toolbox categories
+                        //childNodes[0].nodeValue// Append the block tag into the xml toolbox categories
                         if (arrayElement.getAttribute('categoryID') == 'general') {
-                            /*
-                            Block Definition using function_name variable
-                        */
-                        Blockly.Blocks[function_name] = {
-                            init: function () {
-                                this.appendValueInput("input")
-                                    .setCheck(["numericliteral","stringliteral"])
-                                    .appendField(function_name + "(");
-                                this.appendDummyInput()
-                                    .appendField(")");
-                                this.setInputsInline(true);
-                                this.setOutput(true, "function");
-                                this.setColour(218);
-                                this.setTooltip("");
-                                this.setHelpUrl("");
-                            }
-                        };
-
-                        /*
-                            Block Generation using function_name variable
-                        */
-                        
                             general_functions.appendChild(blocks);
                         } else if (arrayElement.getAttribute('categoryID') == 'date/time') {
-                                /*
-                            Block Definition using function_name variable
-                        */
-                        Blockly.Blocks[function_name] = {
-                            init: function () {
-                                this.appendValueInput("input")
-                                    .setCheck(["dateliteral","timeliteral"])
-                                    .appendField(function_name + "(");
-                                this.appendDummyInput()
-                                    .appendField(")");
-                                this.setInputsInline(true);
-                                this.setOutput(true, "function");
-                                this.setColour(218);
-                                this.setTooltip("");
-                                this.setHelpUrl("");
-                            }
-                        };
-
-                        /*
-                            Block Generation using function_name variable
-                        */
                             datetime_functions.appendChild(blocks);
                         } else if (arrayElement.getAttribute('categoryID') == 'math') {
-                                /*
-                            Block Definition using function_name variable
-                        */
-                        Blockly.Blocks[function_name] = {
-                            init: function () {
-                                this.appendValueInput("input")
-                                    .setCheck(["numericliteral"])
-                                    .appendField(function_name + "(");
-                                this.appendDummyInput()
-                                    .appendField(")");
-                                this.setInputsInline(true);
-                                this.setOutput(true, "function");
-                                this.setColour(218);
-                                this.setTooltip("");
-                                this.setHelpUrl("");
-                            }
-                        };
-
-                        /*
-                            Block Generation using function_name variable
-                        */
                             math_functions.appendChild(blocks);
                         } else if (arrayElement.getAttribute('categoryID') == 'string') {
-                                /*
+                            string_functions.appendChild(blocks);
+                        }
+                        /*
                             Block Definition using function_name variable
                         */
                         Blockly.Blocks[function_name] = {
                             init: function () {
+                                this.appendDummyInput()
+                                    .appendField(function_name);
                                 this.appendValueInput("input")
-                                    .setCheck(["stringliteral"])
-                                    .appendField(function_name + "(");
+                                    .setCheck(param_returnTypes[0])
+                                    .appendField("(");
                                 this.appendDummyInput()
                                     .appendField(")");
                                 this.setInputsInline(true);
-                                this.setOutput(true, "function");
+                                this.setOutput(true, returnType);
                                 this.setColour(218);
                                 this.setTooltip("");
                                 this.setHelpUrl("");
@@ -254,8 +212,6 @@
                         /*
                             Block Generation using function_name variable
                         */
-                            string_functions.appendChild(blocks);
-                        }
                         Blockly.DataRule[function_name] = function (block) {
                             var value_input = Blockly.DataRule.valueToCode(block, 'input', Blockly.DataRule.ORDER_ATOMIC);
                             var code = function_name + '(' + value_input + ')';
@@ -271,10 +227,20 @@
                     var test_names = '';
                     [].forEach.call(x, function (arrayElement) {
                         var function_name = arrayElement.getAttribute('name');
+                        var display_name = arrayElement.getAttribute('displayName');
+                        var description = arrayElement.getElementsByTagName("description")[0].innerHTML;
+                        var test_operand_type1 = arrayElement.getElementsByTagName("TestOperand")[0].getAttribute('type');
+                        var test_operand_type2 = arrayElement.getElementsByTagName("TestOperand")[1].getAttribute('type');
+                        if (test_operand_type1 == "any") {
+                            test_operand_type1 = null;
+                        }
+                        if (test_operand_type2 == "any") {
+                            test_operand_type2 = null;
+                        }
                         if (arrayElement.getElementsByTagName("TestOperand")[1].getElementsByTagName("TestOperandConstraint").length > 0 && arrayElement.getElementsByTagName("TestOperand")[1].getElementsByTagName("TestOperandConstraint")[0].getAttribute("type") == "mustBeEmpty") {
                             Blockly.Blocks[function_name] = {
                                 init: function () {
-                                    this.appendValueInput("Operand1").setCheck(null);
+                                    this.appendValueInput("Operand1").setCheck(test_operand_type1);
                                     this.appendDummyInput().appendField(function_name);
                                     this.setInputsInline(true);
                                     this.setOutput(true, "Boolean");
@@ -291,8 +257,8 @@
                         } else {
                             Blockly.Blocks[function_name] = {
                                 init: function () {
-                                    this.appendValueInput("Operand1").setCheck(null);
-                                    this.appendValueInput("Operand2").setCheck(null).appendField(function_name);
+                                    this.appendValueInput("Operand1").setCheck(test_operand_type1);
+                                    this.appendValueInput("Operand2").setCheck(test_operand_type2).appendField(function_name);
                                     this.setInputsInline(true);
                                     this.setOutput(true, "Boolean");
                                     this.setColour(186);

@@ -133,7 +133,7 @@ Blockly.Blocks['stringliteral'] = {
         .appendField(new Blockly.FieldTextInput("val"), "stringInput")
         .appendField("'");
     this.setInputsInline(true);
-    this.setOutput(true, "stringliteral");
+    this.setOutput(true, "string");
     this.setColour(160);
     this.setTooltip("");
     this.setHelpUrl("");
@@ -144,7 +144,7 @@ Blockly.Blocks['numericliteral'] = {
   init: function() {
     this.appendDummyInput()
         .appendField(new Blockly.FieldNumber(0), "numericInput");
-    this.setOutput(true, "numericliteral");
+    this.setOutput(true, "numeric");
     this.setColour(160);
     this.setTooltip("");
     this.setHelpUrl("");
@@ -154,9 +154,9 @@ Blockly.Blocks['numericliteral'] = {
 Blockly.Blocks['addition'] = {
   init: function() {
     this.appendValueInput("operand1")
-        .setCheck(["numericliteral","function"]);
+        .setCheck(["numeric"]);
     this.appendValueInput("operand2")
-        .setCheck(["numericliteral","function"])
+        .setCheck(["numeric"])
         .appendField("+");
     this.setInputsInline(true);
     this.setOutput(true, null);
@@ -169,9 +169,9 @@ Blockly.Blocks['addition'] = {
 Blockly.Blocks['subtraction'] = {
   init: function() {
     this.appendValueInput("operand1")
-        .setCheck(["numericliteral","function"]);
+        .setCheck(["numeric"]);
     this.appendValueInput("operand2")
-        .setCheck(["numericliteral","function"])
+        .setCheck(["numeric"])
         .appendField("-");
     this.setInputsInline(true);
     this.setOutput(true, null);
@@ -184,9 +184,9 @@ Blockly.Blocks['subtraction'] = {
 Blockly.Blocks['multiplication'] = {
   init: function() {
     this.appendValueInput("operand1")
-        .setCheck(["numericliteral","function"]);
+        .setCheck(["numeric"]);
     this.appendValueInput("operand2")
-        .setCheck(["numericliteral","function"])
+        .setCheck(["numeric"])
         .appendField("*");
     this.setInputsInline(true);
     this.setOutput(true, null);
@@ -199,9 +199,9 @@ Blockly.Blocks['multiplication'] = {
 Blockly.Blocks['division'] = {
   init: function() {
     this.appendValueInput("operand1")
-        .setCheck(["numericliteral","function"]);
+        .setCheck(["numeric"]);
     this.appendValueInput("operand2")
-        .setCheck(["numericliteral","function"])
+        .setCheck(["numeric"])
         .appendField("/");
     this.setInputsInline(true);
     this.setOutput(true, null);
@@ -214,9 +214,9 @@ Blockly.Blocks['division'] = {
 Blockly.Blocks['power'] = {
   init: function() {
     this.appendValueInput("operand1")
-        .setCheck(["numericliteral","function"]);
+        .setCheck(["numeric"]);
     this.appendValueInput("operand2")
-        .setCheck(["numericliteral","function"])
+        .setCheck(["numeric"])
         .appendField("^");
     this.setInputsInline(true);
     this.setOutput(true, null);
@@ -229,9 +229,9 @@ Blockly.Blocks['power'] = {
 Blockly.Blocks['modulo'] = {
   init: function() {
     this.appendValueInput("operand1")
-        .setCheck(["numericliteral","function"]);
+        .setCheck(["numeric"]);
     this.appendValueInput("operand2")
-        .setCheck(["numericliteral","function"])
+        .setCheck(["numeric"])
         .appendField("modulo");
     this.setInputsInline(true);
     this.setOutput(true, null);
