@@ -1,0 +1,23 @@
+<DataRuleFunctions>
+    <DataRuleFunction name="coalesce" displayName="%function.coalesce.displayName" returnType="any" className="com.ibm.infosphere.dataquality.ruleengine.functions.Coalesce" categoryID="general">
+        <description>%function.coalesce.desc</description>
+        <Parameter type="any" name="value">
+            <description>%function.coalesce.param1.desc</description>
+        </Parameter>
+        <Parameter type="any" name="replacementValue" optional="true">
+            <description>%function.coalesce.param2.desc</description>
+        </Parameter>
+    </DataRuleFunction>
+</DataRuleFunctions>
+coalesce
+<DataRuleFunctions>
+    <DataRuleFunction categoryID="general" className="com.ibm.infosphere.dataquality.ruleengine.functions.Coalesce" displayName="coalesce" name="coalesce" returnType="any">
+        <description>%function.coalesce.desc</description>
+        <Parameter name="value" type="any">
+            <description>%function.coalesce.param1.desc</description>
+        </Parameter>
+        <Parameter name="replacementValue" optional="true" type="any">
+            <description>%function.coalesce.param2.desc</description>
+        </Parameter>
+    </DataRuleFunction>
+</DataRuleFunctions>
