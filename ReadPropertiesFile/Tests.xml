@@ -1,0 +1,167 @@
+        <DataRuleTests>
+            <DataRuleTest name="=" displayName="%test.equality.displayName" className="com.ibm.infosphere.dataquality.ruleengine.tests.EqualityTest">
+                <description>%test.equality.desc</description>
+                <TestOperand type="any">
+                    <TestOperandConstraint type="sameDataTypeAsOtherOperand" />
+                </TestOperand>
+                <TestOperand type="any">
+                    <TestOperandConstraint type="sameDataTypeAsOtherOperand" />
+                </TestOperand>
+            </DataRuleTest>
+            <DataRuleTest name="&lt;&gt;" displayName="%test.notEquals.displayName" className="com.ibm.infosphere.dataquality.ruleengine.tests.NotEqualTest">
+                <description>%test.notEquals.desc</description>
+                <TestOperand type="any">
+                    <TestOperandConstraint type="sameDataTypeAsOtherOperand" />
+                </TestOperand>
+                <TestOperand type="any">
+                    <TestOperandConstraint type="sameDataTypeAsOtherOperand" />
+                </TestOperand>
+            </DataRuleTest>
+            <DataRuleTest name="&gt;" displayName="%test.greaterThan.displayName" className="com.ibm.infosphere.dataquality.ruleengine.tests.GreaterThanTest">
+                <description>%test.greaterThan.desc</description>
+                <TestOperand type="any">
+                    <TestOperandConstraint type="sameDataTypeAsOtherOperand" />
+                </TestOperand>
+                <TestOperand type="any">
+                    <TestOperandConstraint type="sameDataTypeAsOtherOperand" />
+                </TestOperand>
+            </DataRuleTest>
+            <DataRuleTest name="&gt;=" displayName="%test.greaterOrEqual.displayName" className="com.ibm.infosphere.dataquality.ruleengine.tests.GreaterOrEqualTest">
+                <description>%test.greaterOrEqual.desc</description>
+                <TestOperand type="any">
+                    <TestOperandConstraint type="sameDataTypeAsOtherOperand" />
+                </TestOperand>
+                <TestOperand type="any">
+                    <TestOperandConstraint type="sameDataTypeAsOtherOperand" />
+                </TestOperand>
+            </DataRuleTest>
+            <DataRuleTest name="&lt;" displayName="%test.lessThan.displayName" className="com.ibm.infosphere.dataquality.ruleengine.tests.LessThanTest">
+                <description>%test.lessThan.desc</description>
+                <TestOperand type="any">
+                    <TestOperandConstraint type="sameDataTypeAsOtherOperand" />
+                </TestOperand>
+                <TestOperand type="any">
+                    <TestOperandConstraint type="sameDataTypeAsOtherOperand" />
+                </TestOperand>
+            </DataRuleTest>
+            <DataRuleTest name="&lt;=" displayName="%test.lessOrEqual.displayName" className="com.ibm.infosphere.dataquality.ruleengine.tests.LessOrEqualTest">
+                <description>%test.lessOrEqual.desc</description>
+                <TestOperand type="any">
+                    <TestOperandConstraint type="sameDataTypeAsOtherOperand" />
+                </TestOperand>
+                <TestOperand type="any">
+                    <TestOperandConstraint type="sameDataTypeAsOtherOperand" />
+                </TestOperand>
+            </DataRuleTest>
+            <DataRuleTest name="contains" displayName="%test.contains.displayName" className="com.ibm.infosphere.dataquality.ruleengine.tests.ContainsTest">
+                <description>%test.contains.desc</description>
+                <TestOperand type="string" />
+                <TestOperand type="string" />
+            </DataRuleTest>
+            <DataRuleTest name="exists" displayName="%test.exists.displayName" className="com.ibm.infosphere.dataquality.ruleengine.tests.ExistsTest">
+                <description>%test.exists.desc</description>
+                <TestOperand type="any" />
+                <TestOperand type="any">
+                    <TestOperandConstraint type="mustBeEmpty" />
+                </TestOperand>
+            </DataRuleTest>
+            <DataRuleTest name="in_reference_column" displayName="%test.in_reference_column.displayName" className="com.ibm.infosphere.dataquality.ruleengine.tests.InReferenceColumnTest" executionType="precomputedAggregation">
+                <description>%test.in_reference_column.desc</description>
+                <TestOperand type="any" />
+                <TestOperand type="any">
+                    <TestOperandConstraint type="isReferenceColumn" />
+                </TestOperand>
+            </DataRuleTest>
+            <DataRuleTest name="in_reference_list" displayName="%test.in_reference_list.displayName" className="com.ibm.infosphere.dataquality.ruleengine.tests.InReferenceListTest">
+                <description>%test.in_reference_list.desc</description>
+                <TestOperand type="any" />
+                <TestOperand type="list" />
+            </DataRuleTest>
+            <DataRuleTest name="is_date" displayName="%test.is_date.displayName" className="com.ibm.infosphere.dataquality.ruleengine.tests.IsDateTest">
+                <description>%test.is_date.desc</description>
+                <TestOperand type="string" />
+                <TestOperand type="string">
+                    <TestOperandConstraint type="isOptional" />
+                </TestOperand>
+            </DataRuleTest>
+            <DataRuleTest name="is_numeric" displayName="%test.is_numeric.displayName" className="com.ibm.infosphere.dataquality.ruleengine.tests.IsNumericTest">
+                <description>%test.is_numeric.desc</description>
+                <TestOperand type="any" />
+                <TestOperand type="any">
+                    <TestOperandConstraint type="mustBeEmpty" />
+                </TestOperand>
+            </DataRuleTest>
+            <DataRuleTest name="matches_dataclass" displayName="%test.matches_dataclass.displayName" className="com.ibm.infosphere.dataquality.ruleengine.tests.MatchesDataClassTest">
+                <description>%test.matches_dataclass.desc</description>
+                <TestOperand type="any" />
+                <TestOperand type="string" />
+            </DataRuleTest>
+            <DataRuleTest name="matches_format" displayName="%test.matches_format.displayName" className="com.ibm.infosphere.dataquality.ruleengine.tests.MatchesFormatTest">
+                <description>%test.matches_format.desc</description>
+                <TestOperand type="string" />
+                <TestOperand type="string" />
+            </DataRuleTest>
+            <DataRuleTest name="matches_regex" displayName="%test.matches_regex.displayName" className="com.ibm.infosphere.dataquality.ruleengine.tests.MatchesRegexTest">
+                <description>%test.matches_regex.desc</description>
+                <TestOperand type="string" />
+                <TestOperand type="string" />
+            </DataRuleTest>
+            <!--  		<DataRuleTest name="matches_datatype" className="TODO">
+			<TestOperand type="string"/>
+			<TestOperand type="string"/>
+		</DataRuleTest>-->
+            <DataRuleTest name="occurs" displayName="%test.occurs.displayName" className="com.ibm.infosphere.dataquality.ruleengine.tests.OccursTest" executionType="precomputedAggregation">
+                <description>%test.occurs.desc</description>
+                <TestOperand type="any">
+                    <TestOperandConstraint type="mustBeColumn" />
+                </TestOperand>
+                <TestOperand type="numeric">
+                    <TestOperandConstraint type="minValue" numericValue="0" />
+                </TestOperand>
+            </DataRuleTest>
+            <DataRuleTest name="occurs&lt;=" displayName="%test.occurslte.displayName" className="com.ibm.infosphere.dataquality.ruleengine.tests.OccursLessOrEqualTest" executionType="precomputedAggregation">
+                <description>%test.occurslte.desc</description>
+                <TestOperand type="any">
+                    <TestOperandConstraint type="mustBeColumn" />
+                </TestOperand>
+                <TestOperand type="numeric">
+                    <TestOperandConstraint type="minValue" numericValue="0" />
+                </TestOperand>
+            </DataRuleTest>
+            <DataRuleTest name="occurs&lt;" displayName="%test.occurslt.displayName" className="com.ibm.infosphere.dataquality.ruleengine.tests.OccursLessTest" executionType="precomputedAggregation">
+                <description>%test.occurslt.desc</description>
+                <TestOperand type="any">
+                    <TestOperandConstraint type="mustBeColumn" />
+                </TestOperand>
+                <TestOperand type="numeric">
+                    <TestOperandConstraint type="minValue" numericValue="0" />
+                </TestOperand>
+            </DataRuleTest>
+            <DataRuleTest name="occurs&gt;=" displayName="%test.occursgte.displayName" className="com.ibm.infosphere.dataquality.ruleengine.tests.OccursGreaterOrEqualTest" executionType="precomputedAggregation">
+                <description>%test.occursgte.desc</description>
+                <TestOperand type="any">
+                    <TestOperandConstraint type="mustBeColumn" />
+                </TestOperand>
+                <TestOperand type="numeric">
+                    <TestOperandConstraint type="minValue" numericValue="0" />
+                </TestOperand>
+            </DataRuleTest>
+            <DataRuleTest name="occurs&gt;" displayName="%test.occursgt.displayName" className="com.ibm.infosphere.dataquality.ruleengine.tests.OccursGreaterTest" executionType="precomputedAggregation">
+                <description>%test.occursgt.desc</description>
+                <TestOperand type="any">
+                    <TestOperandConstraint type="mustBeColumn" />
+                </TestOperand>
+                <TestOperand type="numeric">
+                    <TestOperandConstraint type="minValue" numericValue="0" />
+                </TestOperand>
+            </DataRuleTest>
+            <DataRuleTest name="unique" displayName="%test.unique.displayName" className="com.ibm.infosphere.dataquality.ruleengine.tests.UniqueTest" executionType="precomputedAggregation">
+                <description>%test.unique.desc</description>
+                <TestOperand type="any">
+                    <TestOperandConstraint type="mustBeColumn" />
+                </TestOperand>
+                <TestOperand type="any">
+                    <TestOperandConstraint type="mustBeEmpty" />
+                </TestOperand>
+            </DataRuleTest>
+        </DataRuleTests>
