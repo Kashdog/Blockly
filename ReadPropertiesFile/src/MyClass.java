@@ -42,14 +42,14 @@ public class MyClass{
     		Document doc = dBuilder.parse(fXmlFile);
     		Document docTests = dBuilder.parse(testXmlFile);
     		String inputDoc = DocumentToString(doc);
-        //System.out.println(inputDoc);
-        //Document doc = StringToDocument(strXml);
-        updateNodeValue(doc);
-        updateNodeValueTests(docTests);
+        	//System.out.println(inputDoc);
+       		//Document doc = StringToDocument(strXml);
+        	updateNodeValue(doc);
+       		updateNodeValueTests(docTests);
         
     		String newxml = DocumentToString(doc);
     		String testxml = DocumentToString(docTests);
-        System.out.println(newxml);
+        	System.out.println(newxml);
     		System.out.print(testxml);
 
     }
@@ -77,7 +77,6 @@ public class MyClass{
 			while (enuKeys.hasMoreElements()) {
 				String key = (String) enuKeys.nextElement();
 				String value = properties.getProperty(key);
-				value.replace("%","Parameter");
 				//System.out.println(key + " = \"" + value + "\"");
 				hmap.put("%" + key, value);
 				
