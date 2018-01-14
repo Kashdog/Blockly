@@ -32,6 +32,7 @@ goog.provide('Blockly.Blocks.texts'); // Deprecated
 goog.provide('Blockly.Constants.Text');
 
 goog.require('Blockly.Blocks');
+goog.require('Blockly.FieldDate');
 
 Blockly.Constants.Text.HUE = 160;
 /** @deprecated Use Blockly.Constants.Text.HUE */
@@ -151,6 +152,15 @@ Blockly.Blocks['numericliteral'] = {
   }
 };
 
+Blockly.Blocks['example_date'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField('date:')
+        .appendField(new Blockly.FieldDate('2015-02-05'), 'FIELDNAME');
+  }
+};
+
+
 Blockly.Blocks['addition'] = {
   init: function() {
     this.appendValueInput("operand1")
@@ -159,7 +169,7 @@ Blockly.Blocks['addition'] = {
         .setCheck(["numeric"])
         .appendField("+");
     this.setInputsInline(true);
-    this.setOutput(true, null);
+    this.setOutput(true, "numeric");
     this.setColour(315);
  this.setTooltip("");
  this.setHelpUrl("");
@@ -174,7 +184,7 @@ Blockly.Blocks['subtraction'] = {
         .setCheck(["numeric"])
         .appendField("-");
     this.setInputsInline(true);
-    this.setOutput(true, null);
+    this.setOutput(true, "numeric");
     this.setColour(315);
  this.setTooltip("");
  this.setHelpUrl("");
@@ -189,7 +199,7 @@ Blockly.Blocks['multiplication'] = {
         .setCheck(["numeric"])
         .appendField("*");
     this.setInputsInline(true);
-    this.setOutput(true, null);
+    this.setOutput(true, "numeric");
     this.setColour(315);
  this.setTooltip("");
  this.setHelpUrl("");
@@ -204,7 +214,7 @@ Blockly.Blocks['division'] = {
         .setCheck(["numeric"])
         .appendField("/");
     this.setInputsInline(true);
-    this.setOutput(true, null);
+    this.setOutput(true, "numeric");
     this.setColour(315);
  this.setTooltip("");
  this.setHelpUrl("");
@@ -219,7 +229,7 @@ Blockly.Blocks['power'] = {
         .setCheck(["numeric"])
         .appendField("^");
     this.setInputsInline(true);
-    this.setOutput(true, null);
+    this.setOutput(true, "numeric");
     this.setColour(315);
  this.setTooltip("");
  this.setHelpUrl("");
@@ -234,7 +244,7 @@ Blockly.Blocks['modulo'] = {
         .setCheck(["numeric"])
         .appendField("modulo");
     this.setInputsInline(true);
-    this.setOutput(true, null);
+    this.setOutput(true, "numeric");
     this.setColour(315);
  this.setTooltip("");
  this.setHelpUrl("");
@@ -287,7 +297,7 @@ Blockly.DataRule['or'] = function(block) {
 Blockly.DataRule['not'] = function(block) {
   var value_name = Blockly.DataRule.valueToCode(block, 'NAME', Blockly.DataRule.ORDER_ATOMIC);
   var code = 'NOT ' + value_name + ' ';
-  return [code, Blockly.DataRule.ORDER_NONE];
+  return [code, Blockly.DataRule.ORDER_ATOMIC];
 };
 
 Blockly.DataRule['stringliteral'] = function(block) {
@@ -308,42 +318,42 @@ Blockly.DataRule['addition'] = function(block) {
   var value_operand1 = Blockly.DataRule.valueToCode(block, 'operand1', Blockly.DataRule.ORDER_ATOMIC);
   var value_operand2 = Blockly.DataRule.valueToCode(block, 'operand2', Blockly.DataRule.ORDER_ATOMIC);
   var code = value_operand1 + ' + ' + value_operand2;
-  return [code, Blockly.DataRule.ORDER_NONE];
+  return [code, Blockly.DataRule.ORDER_ATOMIC];
 };
 
 Blockly.DataRule['subtraction'] = function(block) {
   var value_operand1 = Blockly.DataRule.valueToCode(block, 'operand1', Blockly.DataRule.ORDER_ATOMIC);
   var value_operand2 = Blockly.DataRule.valueToCode(block, 'operand2', Blockly.DataRule.ORDER_ATOMIC);
   var code = value_operand1 + ' - ' + value_operand2;
-  return [code, Blockly.DataRule.ORDER_NONE];
+  return [code, Blockly.DataRule.ORDER_ATOMIC];
 };
 
 Blockly.DataRule['multiplication'] = function(block) {
   var value_operand1 = Blockly.DataRule.valueToCode(block, 'operand1', Blockly.DataRule.ORDER_ATOMIC);
   var value_operand2 = Blockly.DataRule.valueToCode(block, 'operand2', Blockly.DataRule.ORDER_ATOMIC);
   var code = value_operand1 + ' * ' + value_operand2;
-  return [code, Blockly.DataRule.ORDER_NONE];
+  return [code, Blockly.DataRule.ORDER_ATOMIC];
 };
 
 Blockly.DataRule['division'] = function(block) {
   var value_operand1 = Blockly.DataRule.valueToCode(block, 'operand1', Blockly.DataRule.ORDER_ATOMIC);
   var value_operand2 = Blockly.DataRule.valueToCode(block, 'operand2', Blockly.DataRule.ORDER_ATOMIC);
   var code = value_operand1 + ' / ' + value_operand2;
-  return [code, Blockly.DataRule.ORDER_NONE];
+  return [code, Blockly.DataRule.ORDER_ATOMIC];
 };
 
 Blockly.DataRule['power'] = function(block) {
   var value_operand1 = Blockly.DataRule.valueToCode(block, 'operand1', Blockly.DataRule.ORDER_ATOMIC);
   var value_operand2 = Blockly.DataRule.valueToCode(block, 'operand2', Blockly.DataRule.ORDER_ATOMIC);
   var code = value_operand1 + ' ^ ' + value_operand2;
-  return [code, Blockly.DataRule.ORDER_NONE];
+  return [code, Blockly.DataRule.ORDER_ATOMIC];
 };
 
 Blockly.DataRule['modulo'] = function(block) {
   var value_operand1 = Blockly.DataRule.valueToCode(block, 'operand1', Blockly.DataRule.ORDER_ATOMIC);
   var value_operand2 = Blockly.DataRule.valueToCode(block, 'operand2', Blockly.DataRule.ORDER_ATOMIC);
   var code = value_operand1 + ' % ' + value_operand2;
-  return [code, Blockly.DataRule.ORDER_NONE];
+  return [code, Blockly.DataRule.ORDER_ATOMIC];
 };
 
 
