@@ -152,11 +152,28 @@ Blockly.Blocks['numericliteral'] = {
   }
 };
 
-Blockly.Blocks['example_date'] = {
+var today = new Date();
+var dd = today.getDate();
+var mm = today.getMonth()+1; //January is 0!
+
+if(dd<10){
+    dd='0'+dd;
+} 
+if(mm<10){
+    mm='0'+mm;
+} 
+
+var yyyy = today.getFullYear();
+
+Blockly.Blocks['dateliteral'] = {
   init: function() {
     this.appendDummyInput()
         .appendField('date:')
-        .appendField(new Blockly.FieldDate('2015-02-05'), 'FIELDNAME');
+        .appendField(new Blockly.FieldDate(yyyy + '-' + mm + '-' + dd), 'dateInput');
+    this.setOutput(true, "date");
+    this.setColour(160);
+    this.setTooltip("");
+    this.setHelpUrl("");
   }
 };
 
@@ -276,7 +293,7 @@ Blockly.DataRule['ifthenelse'] = function(block) {
   var condition = Blockly.DataRule.valueToCode(block, 'Condition', Blockly.DataRule.ORDER_ATOMIC);
   var action = Blockly.DataRule.valueToCode(block, 'Action', Blockly.DataRule.ORDER_ATOMIC);
   var alternate_action = Blockly.DataRule.valueToCode(block, 'AlternateAction', Blockly.DataRule.ORDER_ATOMIC);
-  var code = 'IF ' + condition + ' THEN ' + action + 'ELSE' + alternate_action;
+  var code = 'IF ' + condition + ' THEN ' + action + ' ELSE ' + alternate_action;
   return code;
 };
 
@@ -311,6 +328,13 @@ Blockly.DataRule['numericliteral'] = function(block) {
   var number_numericinput = block.getFieldValue('numericInput');
   // TODO: Assemble DataRule into code variable.
   var code = number_numericinput;
+  return [code, Blockly.DataRule.ORDER_ATOMIC];
+};
+
+Blockly.DataRule['dateliteral'] = function(block) {
+  var date_dateinput = block.getFieldValue('dateInput');
+  // TODO: Assemble DataRule into code variable.
+  var code = date_dateinput;
   return [code, Blockly.DataRule.ORDER_ATOMIC];
 };
 
@@ -355,6 +379,8 @@ Blockly.DataRule['modulo'] = function(block) {
   var code = value_operand1 + ' % ' + value_operand2;
   return [code, Blockly.DataRule.ORDER_ATOMIC];
 };
+
+
 
 
 

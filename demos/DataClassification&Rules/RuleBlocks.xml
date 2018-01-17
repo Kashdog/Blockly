@@ -1,0 +1,113 @@
+<xml xmlns="http://www.w3.org/1999/xhtml">
+    <variables></variables>
+    <block type="ifthen" id="ifthen" x="85" y="23">
+        <value name="Condition">
+            <block type="=" id="=">
+                <value name="Operand1">
+                    <block type="variable" id="variable">
+                        <field name="variable">variable</field>
+                    </block>
+                </value>
+                <value name="Operand2">
+                    <block type="stringliteral" id="stringliteral">
+                        <field name="stringInput">val</field>
+                    </block>
+                </value>
+            </block>
+        </value>
+        <value name="Action">
+            <block type="=" id="~8Hd$TaQ;R3YB^/07fli">
+                <value name="Operand1">
+                    <block type="variable" id="c9wLWA=a|$c+VZ^BKr`O">
+                        <field name="variable">variable</field>
+                    </block>
+                </value>
+                <value name="Operand2">
+                    <block type="stringliteral" id="PKfLHk=M|F{@SZHa+cMA">
+                        <field name="stringInput">val</field>
+                    </block>
+                </value>
+            </block>
+        </value>
+    </block>
+</xml>
+
+
+<xml xmlns="http://www.w3.org/1999/xhtml">
+    <variables></variables>
+    <block type="ifthenelse" id="ifthenelse" x="85" y="23">
+        <value name="Condition">
+            <block type="not" id="not">
+                <value name="NAME">
+                    <block type="=" id="=">
+                        <value name="Operand1">
+                            <block type="coalesce" id="coalesce">
+                                <value name="input1">
+                                    <block type="variable" id="variable">
+                                        <field name="variable">var1</field>
+                                    </block>
+                                </value>
+                                <value name="input2">
+                                    <block type="variable" id="variable">
+                                        <field name="variable">var2</field>
+                                    </block>
+                                </value>
+                            </block>
+                        </value>
+                        <value name="Operand2">
+                            <block type="stringliteral" id="stringliteral">
+                                <field name="stringInput">val</field>
+                            </block>
+                        </value>
+                    </block>
+                </value>
+            </block>
+        </value>
+        <value name="Action">
+            <block type="and" id="and">
+                <value name="Condition1">
+                    <block type="=" id="=">
+                        <value name="Operand1">
+                            <block type="variable" id="variable">
+                                <field name="variable">variable</field>
+                            </block>
+                        </value>
+                        <value name="Operand2">
+                            <block type="stringliteral" id="stringliteral">
+                                <field name="stringInput">val</field>
+                            </block>
+                        </value>
+                    </block>
+                </value>
+                <value name="Condition2">
+                    <block type="=" id="=">
+                        <value name="Operand1">
+                            <block type="variable" id="variable">
+                                <field name="variable">variable</field>
+                            </block>
+                        </value>
+                        <value name="Operand2">
+                            <block type="stringliteral" id="stringliteral">
+                                <field name="stringInput">val</field>
+                            </block>
+                        </value>
+                    </block>
+                </value>
+            </block>
+        </value>
+        <value name="AlternateAction">
+            <block type="=" id="=">
+                <value name="Operand1">
+                    <block type="variable" id="variable">
+                        <field name="variable">variable</field>
+                    </block>
+                </value>
+                <value name="Operand2">
+                    <block type="stringliteral" id="stringliteral">
+                        <field name="stringInput">val</field>
+                    </block>
+                </value>
+            </block>
+        </value>
+    </block>
+</xml>
