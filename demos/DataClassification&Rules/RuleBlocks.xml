@@ -1,40 +1,5 @@
 <xml xmlns="http://www.w3.org/1999/xhtml">
     <variables></variables>
-    <block type="ifthen" id="ifthen" x="85" y="23">
-        <value name="Condition">
-            <block type="=" id="=">
-                <value name="Operand1">
-                    <block type="variable" id="variable">
-                        <field name="variable">variable</field>
-                    </block>
-                </value>
-                <value name="Operand2">
-                    <block type="stringliteral" id="stringliteral">
-                        <field name="stringInput">val</field>
-                    </block>
-                </value>
-            </block>
-        </value>
-        <value name="Action">
-            <block type="=" id="~8Hd$TaQ;R3YB^/07fli">
-                <value name="Operand1">
-                    <block type="variable" id="c9wLWA=a|$c+VZ^BKr`O">
-                        <field name="variable">variable</field>
-                    </block>
-                </value>
-                <value name="Operand2">
-                    <block type="stringliteral" id="PKfLHk=M|F{@SZHa+cMA">
-                        <field name="stringInput">val</field>
-                    </block>
-                </value>
-            </block>
-        </value>
-    </block>
-</xml>
-
-
-<xml xmlns="http://www.w3.org/1999/xhtml">
-    <variables></variables>
     <block type="ifthenelse" id="ifthenelse" x="85" y="23">
         <value name="Condition">
             <block type="not" id="not">
@@ -43,13 +8,40 @@
                         <value name="Operand1">
                             <block type="coalesce" id="coalesce">
                                 <value name="input1">
-                                    <block type="variable" id="variable">
-                                        <field name="variable">var1</field>
+                                    <block type="coalesce" id="+o^#5aZbkX3cxw2^@;;8">
+                                        <value name="input1">
+                                            <block type="coalesce" id="uW`-[g+c+p2Wo%.15W#i">
+                                                <value name="input1">
+                                                    <block type="variable" id="variable">
+                                                        <field name="variable">var1</field>
+                                                    </block>
+                                                </value>
+                                                <value name="input2">
+                                                    <block type="variable" id="%NudT[?d5k/]SB-,SGh%">
+                                                        <field name="variable">var2</field>
+                                                    </block>
+                                                </value>
+                                            </block>
+                                        </value>
+                                        <value name="input2">
+                                            <block type="variable" id=",iEH^_J0ugVblz6Id/(T">
+                                                <field name="variable">var2</field>
+                                            </block>
+                                        </value>
                                     </block>
                                 </value>
                                 <value name="input2">
-                                    <block type="variable" id="variable">
-                                        <field name="variable">var2</field>
+                                    <block type="coalesce" id="D]r@,nw/YZYiQ9)h{|`!">
+                                        <value name="input1">
+                                            <block type="variable" id="]7/w{S6XoP6[!,%XCzt|">
+                                                <field name="variable">var3</field>
+                                            </block>
+                                        </value>
+                                        <value name="input2">
+                                            <block type="variable" id="a^bUzESZGX@#VjGg$;Oc">
+                                                <field name="variable">var4</field>
+                                            </block>
+                                        </value>
                                     </block>
                                 </value>
                             </block>
@@ -66,28 +58,28 @@
         <value name="Action">
             <block type="and" id="and">
                 <value name="Condition1">
-                    <block type="=" id="=">
+                    <block type="=" id="l1o{D(-$sZpnsnf2[}(F">
                         <value name="Operand1">
-                            <block type="variable" id="variable">
+                            <block type="variable" id="bBACxv[29S)yQ]8r4Fe=">
                                 <field name="variable">variable</field>
                             </block>
                         </value>
                         <value name="Operand2">
-                            <block type="stringliteral" id="stringliteral">
+                            <block type="stringliteral" id="GNZjalk#8A=#oaE%UlmD">
                                 <field name="stringInput">val</field>
                             </block>
                         </value>
                     </block>
                 </value>
                 <value name="Condition2">
-                    <block type="=" id="=">
+                    <block type="=" id="qjTE7A=[vRV[fq,U!U{s">
                         <value name="Operand1">
-                            <block type="variable" id="variable">
+                            <block type="variable" id="Ky2OahhK$nkK{ZDWluEW">
                                 <field name="variable">variable</field>
                             </block>
                         </value>
                         <value name="Operand2">
-                            <block type="stringliteral" id="stringliteral">
+                            <block type="stringliteral" id="q~Eba6hjx4Lj_^gx^E,~">
                                 <field name="stringInput">val</field>
                             </block>
                         </value>
@@ -96,14 +88,14 @@
             </block>
         </value>
         <value name="AlternateAction">
-            <block type="=" id="=">
+            <block type="=" id="w#[#d$uSZ{Up0qFIlRZ)">
                 <value name="Operand1">
-                    <block type="variable" id="variable">
+                    <block type="variable" id="XhO[po~XVH=|@2f;R%@J">
                         <field name="variable">variable</field>
                     </block>
                 </value>
                 <value name="Operand2">
-                    <block type="stringliteral" id="stringliteral">
+                    <block type="stringliteral" id="VPBb70kN|cO~VZ]=nTi=">
                         <field name="stringInput">val</field>
                     </block>
                 </value>

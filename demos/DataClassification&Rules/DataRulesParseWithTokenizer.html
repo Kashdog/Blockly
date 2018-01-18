@@ -1,0 +1,1238 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Blockly Demo: Toolbox</title>
+    <script src="../../blockly_compressed.js"></script>
+    <script src="../../blocks_compressed.js"></script>
+    <script src="../../datarulegeneration_compressed.js"></script>
+    <script src="./datarules.js"></script>
+    <script src="../../msg/js/en.js"></script>
+    <style>
+        body {
+            background-color: #fff;
+            font-family: sans-serif;
+        }
+        
+        h1 {
+            font-weight: normal;
+            font-size: 140%;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="blocklyDiv" style="height: 600px; width: 1400px;"></div>
+    <xml id="toolbox" style="display: none">
+        <category name="General Functions"></category>
+        <category name="Date/Time Functions"></category>
+        <category name="Math Functions"></category>
+        <category name="String Functions"></category>
+        <category name="Tests"></category>
+        <category name="Operations">
+            <block id="addition" type="addition"></block>
+            <block id="subtraction" type="subtraction"></block>
+            <block id="multiplication" type="multiplication"></block>
+            <block id="division" type="division"></block>
+            <block id="power" type="power"></block>
+            <block id="modulo" type="modulo"></block>
+        </category>
+        <category name="Variables and Literals">
+            <block id="variable" type="variable"></block>
+            <block id="numericliteral" type="numericliteral"></block>
+            <block id="stringliteral" type="stringliteral"></block>
+            <block id="dateliteral" type="dateliteral"></block>
+        </category>
+        <category name="Boolean">
+            <block id="ifthen" type="ifthen"></block>
+            <block id="ifthenelse" type="ifthenelse"></block>
+            <block id="and" type="and"></block>
+            <block id="or" type="or"></block>
+            <block id="not" type="not"></block>
+        </category>
+    </xml>
+    <script>
+        var workspace = Blockly.inject('blocklyDiv', {
+            media: '../../media/'
+            , toolbox: document.getElementById('toolbox')
+        });
+
+        var xml = Blockly.Xml.textToDom('<xml xmlns="http://www.w3.org/1999/xhtml"><variables></variables></xml>');
+        Blockly.Xml.domToWorkspace(xml, workspace);
+
+        function myUpdateFunction(event) {
+            var code = Blockly.DataRule.workspaceToCode(workspace);
+            /*if (code.substring(code.length - 2, code.length - 1) == ";"){
+                code = code.substring(0, code.length - 2);
+            }*/
+            document.getElementById("generatedCode").innerHTML = "Generated Code: " + code;
+
+        }
+        workspace.addChangeListener(myUpdateFunction);
+
+        function showCode() {
+            // Generate JavaScript code and display it.
+            Blockly.DataRule.INFINITE_LOOP_TRAP = null;
+            var code = Blockly.DataRule.workspaceToCode(workspace);
+            alert(code);
+        }
+
+        function downloadXML() {
+            var xml = Blockly.Xml.workspaceToDom(workspace);
+            var xml_text = Blockly.Xml.domToText(xml);
+            alert(xml_text);
+            var dl = document.createElement('a');
+            dl.setAttribute('href', 'data:text/csv;charset=utf-8,' + encodeURIComponent(xml_text));
+            dl.setAttribute('download', 'DataClassificationBlocks.txt');
+            dl.click();
+        }
+    </script>
+    <button onClick="showCode()">Generate Rule</button>
+    <button onClick="downloadXML()">Export the Blocks</button>
+
+    <input type="file" id="fileinput" />
+    <script type="text/javascript">
+        function readSingleFile(evt) {
+            //Retrieve the first (and only!) File from the FileList object
+            var f = evt.target.files[0];
+            if (f) {
+                var r = new FileReader();
+                r.onload = function (e) {
+                    var contents = e.target.result;
+                    alert(contents);
+                    var xml = Blockly.Xml.textToDom(contents);
+                    Blockly.Xml.domToWorkspace(xml, workspace);
+                }
+                r.readAsText(f);
+            } else {
+                alert("Failed to load file");
+            }
+        }
+        document.getElementById('fileinput').addEventListener('change', readSingleFile, false);
+    </script> Load Palette
+    <input type="file" id="loadpalette" />
+    <script type="text/javascript">
+        function readSingleFile(evt) {
+            //Retrieve the first (and only!) File from the FileList object
+            var f = evt.target.files[0];
+            if (f) {
+                var r = new FileReader();
+                r.onload = function (e) {
+                    var contents = e.target.result;
+                    if (window.DOMParser) {
+                        parser = new DOMParser();
+                        xmlDoc = parser.parseFromString(contents, "text/xml");
+                    } else // Internet Explorer
+                    {
+                        xmlDoc = new ActiveXObject("Microsoft.XMLDOM");
+                        xmlDoc.async = false;
+                        xmlDoc.loadXML(contents);
+                    }
+                    var x = xmlDoc.getElementsByTagName('DataRuleFunction'); // get all the data rule functions tags
+                    var general_functions, datetime_functions, math_functions, string_functions, datarule_tests;
+
+                    /*
+                      Gather all the category tags for blocks for the functions
+                    */
+                    for (var j = 0; j < document.getElementsByTagName('category').length; j++) {
+                        if (document.getElementsByTagName('category')[j].getAttribute("name") == "General Functions") {
+                            general_functions = document.getElementsByTagName('category')[j];
+                        }
+                        if (document.getElementsByTagName('category')[j].getAttribute("name") == "Date/Time Functions") {
+                            datetime_functions = document.getElementsByTagName('category')[j];
+                        }
+                        if (document.getElementsByTagName('category')[j].getAttribute("name") == "Math Functions") {
+                            math_functions = document.getElementsByTagName('category')[j];
+                        }
+                        if (document.getElementsByTagName('category')[j].getAttribute("name") == "String Functions") {
+                            string_functions = document.getElementsByTagName('category')[j];
+                        }
+                    }
+
+                    var function_names = [];
+                    /*
+                 
+                    Create Blocks by parsing the tags
+                    */
+                    [].forEach.call(x, function (arrayElement) {
+                        var function_name = arrayElement.getAttribute('name');
+                        function_names.push(function_name);
+                        var display = arrayElement.getAttribute('displayName');
+                        var label = [];
+                        var order_of_parameters = [];
+
+                        function GetSubstringIndex(str, substring, n) {
+                            var times = 0
+                                , index = null;
+
+                            while (times < n && index !== -1) {
+                                index = str.indexOf(substring, index + 1);
+                                times++;
+                            }
+
+                            return index;
+                        }
+
+                        var returnType = arrayElement.getAttribute('returnType');
+                        if (returnType == "any") {
+                            returnType = null;
+                        }
+                        var description = arrayElement.getElementsByTagName("description")[0].innerHTML;
+                        //var param_displayNames = [];
+                        var param_returnTypes = [];
+                        for (var paramCounter = 0; paramCounter < arrayElement.getElementsByTagName("Parameter").length; paramCounter++) {
+                            //param_displayNames.push(arrayElement.getElementsByTagName("Parameter")[paramCounter].getAttribute('displayName'));
+                            if (arrayElement.getElementsByTagName("Parameter")[paramCounter].getAttribute('type') == "any") {
+                                param_returnTypes.push(null);
+                            } else {
+                                param_returnTypes.push(arrayElement.getElementsByTagName("Parameter")[paramCounter].getAttribute('type'));
+                            }
+                        }
+                        if (param_returnTypes.length > 0) {
+                            for (var i = 1; i <= param_returnTypes.length; i++) {
+                                if (i == 1) {
+                                    label.push(display.substring(0, GetSubstringIndex(display, "%", 1)));
+                                    order_of_parameters.push(parseInt(display.substring(GetSubstringIndex(display, "%", 1) + 1, GetSubstringIndex(display, "%", 1) + 2)));
+                                } else if (GetSubstringIndex(display, "%", i) > 0) {
+                                    label.push(display.substring(GetSubstringIndex(display, "%", i - 1) + 3, GetSubstringIndex(display, "%", i) - 1));
+                                    order_of_parameters.push(parseInt(display.substring(GetSubstringIndex(display, "%", i) + 1, GetSubstringIndex(display, "%", i) + 2)));
+                                }
+                            }
+                        }
+
+                        if (label[0] == null) {
+                            label[0] = display;
+                        }
+                        label.push(display.substring(GetSubstringIndex(display, "%", param_returnTypes.length) + 3));
+
+                        console.log(param_returnTypes.length + " " + function_name);
+                        var blocks = document.createElement('block'); // create a block tag
+                        blocks.id = function_name; // give the block id to be the function name
+                        blocks.setAttribute("type", function_name); // set the type attribute of the tag
+                        //childNodes[0].nodeValue// Append the block tag into the xml toolbox categories
+                        if (arrayElement.getAttribute('categoryID') == 'general') {
+                            general_functions.appendChild(blocks);
+                        } else if (arrayElement.getAttribute('categoryID') == 'date/time') {
+                            datetime_functions.appendChild(blocks);
+                        } else if (arrayElement.getAttribute('categoryID') == 'math') {
+                            math_functions.appendChild(blocks);
+                        } else if (arrayElement.getAttribute('categoryID') == 'string') {
+                            string_functions.appendChild(blocks);
+                        }
+                        /*
+                            Block Definition using function_name variable
+                        */
+                        Blockly.Blocks[function_name] = {
+                            init: function () {
+                                if (param_returnTypes.length == 0) {
+                                    this.appendDummyInput()
+                                        .appendField(label[0]);
+                                } else {
+                                    for (var i = 0; i < param_returnTypes.length; i++) {
+                                        this.appendValueInput("input" + order_of_parameters[i])
+                                            .setCheck(param_returnTypes[order_of_parameters[i] - 1])
+                                            .appendField(label[i]);
+                                    }
+                                    if (label.length > param_returnTypes.length) {
+                                        this.appendDummyInput()
+                                            .appendField(label[label.length - 1]);
+                                    }
+                                }
+                                this.setInputsInline(true);
+                                this.setOutput(true, returnType);
+                                this.setColour(218);
+                                this.setTooltip(description);
+                                this.setHelpUrl("");
+                            }
+                        };
+
+                        /*
+                            Block Generation using function_name variable
+                        */
+                        Blockly.DataRule[function_name] = function (block) {
+                            var code = "";
+                            var value_inputs = [];
+                            if (param_returnTypes.length == 0) {
+                                code = function_name + '()';
+                            } else {
+                                for (var i = 0; i < param_returnTypes.length; i++) {
+                                    value_inputs[order_of_parameters[i] - 1] = Blockly.DataRule.valueToCode(block, 'input' + order_of_parameters[i], Blockly.DataRule.ORDER_ATOMIC);
+                                }
+                                code = function_name + '('
+                                for (var i = 0; i < value_inputs.length - 1; i++) {
+                                    code += value_inputs[i] + ",";
+                                }
+                                code += value_inputs[value_inputs.length - 1] + ')';
+                            }
+                            //var value_input = Blockly.DataRule.valueToCode(block, 'input', Blockly.DataRule.ORDER_ATOMIC);
+                            //var code = function_name + '(' + value_input + ')';
+                            return [code, Blockly.DataRule.ORDER_ATOMIC];
+                        };
+                    });
+
+                    x = xmlDoc.getElementsByTagName('DataRuleTest');
+                    for (var k = 0; k < document.getElementsByTagName('category').length; k++) {
+                        if (document.getElementsByTagName('category')[k].getAttribute("name") == "Tests") {
+                            datarule_tests = document.getElementsByTagName('category')[k];
+                        }
+                    }
+                    var test_names = '';
+                    [].forEach.call(x, function (arrayElement) {
+                        var function_name = arrayElement.getAttribute('name');
+                        var display = arrayElement.getAttribute('displayName');
+                        var display_name;
+                        var display_name_after_operands;
+                        var left_operand_boundary = display.indexOf("1") + 2;
+                        if (display.indexOf("2") > 0) {
+                            var right_operand_boundary = display.indexOf("2") - 2;
+                            display_name = display.substring(left_operand_boundary, right_operand_boundary);
+                            display_name_after_operands = display.substring(display.indexOf("2") + 2);
+                        } else {
+                            display_name = display.substring(left_operand_boundary);
+                        }
+
+
+
+                        var description = arrayElement.getElementsByTagName("description")[0].innerHTML;
+                        var test_operand_type1 = arrayElement.getElementsByTagName("TestOperand")[0].getAttribute('type');
+                        var test_operand_type2 = arrayElement.getElementsByTagName("TestOperand")[1].getAttribute('type');
+                        if (test_operand_type1 == "any") {
+                            test_operand_type1 = null;
+                        }
+                        if (test_operand_type2 == "any") {
+                            test_operand_type2 = null;
+                        }
+                        if (arrayElement.getElementsByTagName("TestOperand")[1].getElementsByTagName("TestOperandConstraint").length > 0 && arrayElement.getElementsByTagName("TestOperand")[1].getElementsByTagName("TestOperandConstraint")[0].getAttribute("type") == "mustBeEmpty") {
+                            Blockly.Blocks[function_name] = {
+                                init: function () {
+                                    this.appendValueInput("Operand1").setCheck(test_operand_type1);
+                                    this.appendDummyInput().appendField(display_name);
+                                    this.setInputsInline(true);
+                                    this.setOutput(true, "Boolean");
+                                    this.setColour(186);
+                                    this.setTooltip(description);
+                                    this.setHelpUrl("");
+                                }
+                            };
+                            Blockly.DataRule[function_name] = function (block) {
+                                var value_name1 = Blockly.DataRule.valueToCode(block, 'Operand1', Blockly.DataRule.ORDER_ATOMIC);
+                                var code = value_name1 + ' ' + function_name + ' ';
+                                return [code, Blockly.DataRule.ORDER_ATOMIC];
+                            };
+                        } else {
+                            Blockly.Blocks[function_name] = {
+                                init: function () {
+                                    this.appendValueInput("Operand1").setCheck(test_operand_type1);
+                                    this.appendValueInput("Operand2").setCheck(test_operand_type2).appendField(display_name);
+                                    this.appendDummyInput().appendField(display_name_after_operands);
+                                    this.setInputsInline(true);
+                                    this.setOutput(true, "Boolean");
+                                    this.setColour(186);
+                                    this.setTooltip(description);
+                                    this.setHelpUrl("");
+                                }
+                            };
+                            Blockly.DataRule[function_name] = function (block) {
+                                var value_name1 = Blockly.DataRule.valueToCode(block, 'Operand1', Blockly.DataRule.ORDER_ATOMIC);
+                                var value_name2 = Blockly.DataRule.valueToCode(block, 'Operand2', Blockly.DataRule.ORDER_ATOMIC);
+                                var code = value_name1 + ' ' + function_name + ' ' + value_name2;
+                                return [code, Blockly.DataRule.ORDER_ATOMIC];
+                            };
+                        }
+                        var blocks = document.createElement('block');
+                        blocks.id = function_name;
+                        blocks.setAttribute("type", function_name);
+                        datarule_tests.appendChild(blocks);
+                    });
+                    workspace.updateToolbox(document.getElementById('toolbox'));
+                }
+                r.readAsText(f);
+            } else {
+                alert("Failed to load file");
+            }
+        }
+        document.getElementById('loadpalette').addEventListener('change', readSingleFile, false);
+    </script>
+    Generate Blocks
+    <input type="file" id="generateBlocks">
+    <script type="text/javascript">
+        function readSingleFile(evt) {
+            //Retrieve the first (and only!) File from the FileList object
+            var f = evt.target.files[0];
+            if (f) {
+                var r = new FileReader();
+                r.onload = function (e) {
+                    var contents = e.target.result;
+                    if (window.DOMParser) {
+                        parser = new DOMParser();
+                        xmlDoc = parser.parseFromString(contents, "text/xml");
+                    } else // Internet Explorer
+                    {
+                        xmlDoc = new ActiveXObject("Microsoft.XMLDOM");
+                        xmlDoc.async = false;
+                        xmlDoc.loadXML(contents);
+                    }
+                    var x = xmlDoc.getElementsByTagName('DataRuleFunction'); // get all the data rule functions tags
+                    var function_names = [];
+
+                    [].forEach.call(x, function (arrayElement) {
+                        var function_name = arrayElement.getAttribute('name');
+                        function_names.push(function_name);
+                    });
+                    var test_names = [];
+                    x = xmlDoc.getElementsByTagName('DataRuleTest');
+                    [].forEach.call(x, function (arrayElement) {
+                        var test_name = arrayElement.getAttribute('name');
+                        test_names.push(test_name);
+                    });
+
+                    function GetSubstringIndex(str, substring, n) {
+                        var times = 0
+                            , index = null;
+
+                        while (times < n && index !== -1) {
+                            index = str.indexOf(substring, index + 1);
+                            times++;
+                        }
+
+                        return index;
+                    }
+
+                    function HowManyTimesSubstringOccurs(str, substring) {
+                        var times = 0
+                            , index = null;
+
+                        while (index !== -1) {
+                            index = str.indexOf(substring, index + 1);
+                            if (index !== -1) {
+                                times++;
+                            }
+
+                        }
+
+                        return times;
+                    }
+
+                    function isAnOperation(rule) {
+                        if (rule.includes("+") || rule.includes("-") || rule.includes("*") || rule.includes("/") || rule.includes("^") || rule.includes("%")) {
+                            return true;
+                        } else {
+                            return false;
+                        }
+                    }
+
+                    function isAStringLiteral(rule) {
+                        if (rule.substring(0, 1) === '\'' && rule.substring(rule.length - 1, rule.length) === '\'') {
+                            return true;
+                        } else {
+                            return false
+                        }
+                    }
+
+                    function isAFunction(rule) {
+                        if (rule.includes("(") && rule.includes(")") && rule.substring(0, 1) !== "(") {
+                            return true;
+                        } else {
+                            return false;
+                        }
+                    }
+
+                    function isAFunctionWithoutValues(rule) {
+                        if (rule.lastIndexOf(")") - rule.indexOf("(") == 1) {
+                            return true;
+                        } else {
+                            return false;
+                        }
+                    }
+
+                    function trimStringLiteral(literal) {
+                        literal = literal.substring(1, literal.length - 1)
+                        return literal;
+                    }
+
+                    function trimFunction(function_with_parentheses) {
+                        return function_with_parentheses.substring(0, function_with_parentheses.indexOf("("));
+                    }
+
+
+                    function fetchCode(rule) {
+                        var block;
+                        switch (true) {
+                        case (!isNaN(rule)):
+                            block = '<block type="numericliteral" id="numericliteral"><field name="numericInput">' + rule + '</field></block>';
+                            break;
+                        case (isAStringLiteral(rule)):
+                            block = '<block type="stringliteral" id="stringliteral"><field name="stringInput">' + trimStringLiteral(rule) + '</field></block>';
+                            break;
+                        case (isAFunction(rule)):
+                            block = getFunctionBlocks(rule);
+                            break;
+                        case (isAnOperation(rule)):
+                            block = getOperationBlocks(rule);
+                            break;
+                        default:
+                            block = '<block type="variable" id="variable"><field name="variable">' + rule + '</field></block>';
+                        }
+                        return block;
+
+                    }
+
+                    function HowManyTimesSubstringOccurs(str, substring) {
+                        var times = 0
+                            , index = null;
+
+                        while (index !== -1) {
+                            index = str.indexOf(substring, index + 1);
+                            if (index !== -1) {
+                                times++;
+                            }
+
+                        }
+
+                        return times;
+                    }
+
+                    function getFunctionBlocks(function_name) {
+                        var function_tags = '<block type="' + trimFunction(function_name) + '" id="' + trimFunction(function_name) + '">';
+                        var parameter_block;
+                        //function_tags += '<value name="input' + i + '">' + fetchCode(parameter_block) + '</value>';
+
+                        if (!isAFunctionWithoutValues(function_name)) {
+                            function_name = function_name.substring(function_name.indexOf("(") + 1, function_name.lastIndexOf(")"));
+                            var function_parameters = function_name.split(",");
+                            var parameter_block = "";
+                            var parameter_blocks = [];
+                            var found_first_parenthese = false;
+                            var starts_a_parenthese = false;
+                            var first_parenthese_index;
+                            var last_parenthese_index;
+                            var function_begin_indexes = [];
+                            var function_end_indexes = [];
+                            var parenthese_counter = 1;
+                            for (var i = 0; i < function_parameters.length; i++) {
+                                if (found_first_parenthese == false && function_parameters[i].includes("(")) {
+                                    first_parenthese_index = i;
+                                    parenthese_counter = 1;
+                                    if (!function_parameters[i].includes(")")) {
+                                        function_begin_indexes.push(i);
+                                        found_first_parenthese = true;
+                                    }
+                                } else if (starts_a_parenthese == true && function_parameters[i].includes(")")) {
+                                    starts_a_parenthese = false;
+                                } else if (function_parameters[i].includes(")") && starts_a_parenthese == false) {
+                                    last_parenthese_index = i;
+                                    function_end_indexes.push(i);
+                                    found_first_parenthese = false;
+                                }
+
+
+                                if (first_parenthese_index != null && HowManyTimesSubstringOccurs(function_parameters[first_parenthese_index], "(") > parenthese_counter) {
+                                    starts_a_parenthese = true;
+                                    parenthese_counter += 1;
+
+                                }
+                            }
+
+                            for (var i = 0; i < function_parameters.length; i++) {
+                                var foundParameter = false;
+                                for (var j = 0; j < function_begin_indexes.length; j++) {
+                                    if (i == function_begin_indexes[j]) {
+                                        parameter_block = function_parameters.slice(function_begin_indexes[j], function_end_indexes[j] + 1).join();
+                                        parameter_blocks.push(parameter_block);
+                                        foundParameter = true;
+                                        i = function_end_indexes[j];
+                                    }
+                                }
+                                if (foundParameter == false) {
+                                    parameter_block = function_parameters[i];
+                                    parameter_blocks.push(parameter_block);
+                                }
+                            }
+                            var parameters_toString = "";
+                            for (var i = 0; i < function_parameters.length; i++) {
+                                parameters_toString += function_parameters[i] + " ";
+                            }
+
+                            for (var i = 0; i < parameter_blocks.length; i++) {
+                                function_tags += '<value name="input' + (i + 1) + '">' + fetchCode(parameter_blocks[i]) + '</value>';
+                            }
+                        }
+
+                        function_tags += '</block>';
+                        return function_tags;
+                    }
+
+                    function getOperationBlocks(operation) {
+                        operation = operation.substring(operation.indexOf("(") + 1, operation.lastIndexOf(")"));
+                        var operation_name = "";
+                        var operation_sign = "";
+                        if (operation.includes("+")) {
+                            operation_name = "addition";
+                            operation_sign = "+";
+                        } else if (operation.includes("-")) {
+                            operation_name = "subtraction";
+                            operation_sign = "-";
+                        } else if (operation.includes("*")) {
+                            operation_name = "multiplication";
+                            operation_sign = "*";
+                        } else if (operation.includes("/")) {
+                            operation_name = "division";
+                            operation_sign = "/";
+                        } else if (operation.includes("^")) {
+                            operation_name = "power";
+                            operation_sign = "^";
+                        } else if (operation.includes("%")) {
+                            operation_name = "modulo";
+                            operation_sign = "%";
+                        }
+                        var operation_tags = '<block type="' + operation_name + '" id="' + operation_name + '">';
+                        var operation_parameters = operation.split(operation_sign);
+                        var parameter_block = "";
+                        var parameter_blocks = [];
+                        var found_first_parenthese = false;
+                        var starts_a_parenthese = false;
+                        var first_parenthese_index;
+                        var last_parenthese_index;
+                        var operation_begin_indexes = [];
+                        var operation_end_indexes = [];
+                        var parenthese_counter = 1;
+                        for (var i = 0; i < operation_parameters.length; i++) {
+                            if (found_first_parenthese == false && operation_parameters[i].includes("(")) {
+                                first_parenthese_index = i;
+                                parenthese_counter = 1;
+                                if (!operation_parameters[i].includes(")")) {
+                                    operation_begin_indexes.push(i);
+                                    found_first_parenthese = true;
+                                }
+                            } else if (starts_a_parenthese == true && operation_parameters[i].includes(")")) {
+                                starts_a_parenthese = false;
+                            } else if (operation_parameters[i].includes(")") && starts_a_parenthese == false) {
+                                last_parenthese_index = i;
+                                operation_end_indexes.push(i);
+                                found_first_parenthese = false;
+                            }
+
+
+                            if (first_parenthese_index != null && HowManyTimesSubstringOccurs(operation_parameters[first_parenthese_index], "(") > parenthese_counter) {
+                                starts_a_parenthese = true;
+                                parenthese_counter += 1;
+
+                            }
+                        }
+
+                        for (var i = 0; i < operation_parameters.length; i++) {
+                            var foundParameter = false;
+                            for (var j = 0; j < operation_begin_indexes.length; j++) {
+                                if (i == operation_begin_indexes[j]) {
+                                    parameter_block = operation_parameters.slice(operation_begin_indexes[j], operation_end_indexes[j] + 1).join(operation_sign);
+                                    parameter_blocks.push(parameter_block);
+                                    foundParameter = true;
+                                    i = operation_end_indexes[j];
+                                }
+                            }
+                            if (foundParameter == false) {
+                                parameter_block = operation_parameters[i];
+                                parameter_blocks.push(parameter_block);
+                            }
+                        }
+
+                        for (var i = 0; i < parameter_blocks.length; i++) {
+                            operation_tags += '<value name="operand' + (i + 1) + '">' + fetchCode(parameter_blocks[i]) + '</value>';
+                        }
+
+
+
+                        operation_tags += '</block>';
+                        return operation_tags;
+                    }
+
+
+
+                    var ruletoBlocks_precedent = '<xml xmlns="http://www.w3.org/1999/xhtml"><variables></variables>';
+                    var ruletoBlocks_aftercedent = '</xml>'
+                    var ruleBlocks_condition = "";
+                    var ruleBlocks_action = "";
+                    var ruleBlocks_alternateaction = "";
+                    var res = document.getElementById("ruleToBlocks").innerHTML.replace('&lt;&gt;', '<>').replace('&lt;', '<').replace('&gt;', '>').replace('&lt;=', '<=').replace('&gt;=', '>=').split(" ");
+                    var before_condition;
+                    var after_condition;
+                    var before_action;
+                    var after_action;
+                    var before_alternateaction;
+                    var after_alternateaction;
+                    var if_index = res.indexOf("IF");
+                    var then_index = res.indexOf("THEN");
+                    var else_index = res.indexOf("ELSE");
+                    var and_is = [false, false, false];
+                    var and_index = [];
+                    for (var i = 1; i <= 3; i++) {
+                        if (GetSubstringIndex(res, "AND", i) != -1 && GetSubstringIndex(res, "AND", i) < then_index) {
+                            and_is[0] = true;
+                            and_index[0] = GetSubstringIndex(res, "AND", i);
+                        } else if (GetSubstringIndex(res, "AND", i) != -1 && GetSubstringIndex(res, "AND", i) > then_index & GetSubstringIndex(res, "AND", i) < else_index) {
+                            and_is[1] = true;
+                            and_index[1] = GetSubstringIndex(res, "AND", i);
+                        } else if (GetSubstringIndex(res, "AND", i) != -1 && GetSubstringIndex(res, "AND", i) > else_index) {
+                            and_is[2] = true;
+                            and_index[2] = GetSubstringIndex(res, "AND", i);
+                        }
+                    }
+                    var or_is = [false, false, false];
+                    var or_index = [];
+                    for (var i = 1; i <= 3; i++) {
+                        if (GetSubstringIndex(res, "OR", i) != -1 && GetSubstringIndex(res, "OR", i) < then_index) {
+                            or_is[0] = true;
+                            or_index[0] = GetSubstringIndex(res, "OR", i);
+                        } else if (GetSubstringIndex(res, "OR", i) != -1 && GetSubstringIndex(res, "OR", i) > then_index && GetSubstringIndex(res, "OR", i) < else_index) {
+                            or_is[1] = true;
+                            or_index[1] = GetSubstringIndex(res, "OR", i);
+                        } else if (GetSubstringIndex(res, "OR", i) != -1 && GetSubstringIndex(res, "OR", i) > else_index) {
+                            or_is[2] = true;
+                            or_index[2] = GetSubstringIndex(res, "OR", i);
+                        }
+                    }
+                    var not_is = [false, false, false];
+                    var not_index = [];
+                    for (var i = 1; i <= 3; i++) {
+                        if (GetSubstringIndex(res, "NOT", i) != -1 && GetSubstringIndex(res, "NOT", i) < then_index) {
+                            not_is[0] = true;
+                            not_index[0] = GetSubstringIndex(res, "NOT", i);
+                        } else if (GetSubstringIndex(res, "NOT", i) != -1 && GetSubstringIndex(res, "NOT", i) > then_index && GetSubstringIndex(res, "NOT", i) < else_index) {
+                            not_is[1] = true;
+                            not_index[1] = GetSubstringIndex(res, "NOT", i);
+                        } else if (GetSubstringIndex(res, "NOT", i) != -1 && GetSubstringIndex(res, "NOT", i) > else_index) {
+                            not_is[2] = true;
+                            not_index[2] = GetSubstringIndex(res, "NOT", i);
+                        }
+                    }
+                    if (if_index == 0 && else_index == -1) {
+                        ruletoBlocks_precedent += '<block type="ifthen" id="ifthen" x="85" y="23">';
+                        ruletoBlocks_aftercedent = '</block>' + ruletoBlocks_aftercedent;
+                        if (and_is[0] == true) {
+                            ruleBlocks_condition += '<value name="Condition"><block type="and" id="and">';
+                          [].forEach.call(test_names, function (testName) {
+                                if (res.indexOf(testName) != -1) {
+                                    for (var i = 1; i <= 4; i++) {
+                                        if (GetSubstringIndex(res, testName, i) != -1 && GetSubstringIndex(res, testName, i) < and_index[0] && GetSubstringIndex(res, testName, i) < then_index) {
+                                            ruleBlocks_condition += '<value name="Condition1"><block type="' + testName.replace('<>', '&lt;&gt;').replace('<', '&lt;').replace('>', '&gt;').replace('<=', '&lt;=').replace('>=', '&gt;=') + '" id="' + testName.replace('<>', '&lt;&gt;').replace('<', '&lt;').replace('>', '&gt;').replace('<=', '&lt;=').replace('>=', '&gt;=') + '">';
+                                            before_condition = res.slice(1, GetSubstringIndex(res, testName, i));
+                                            after_condition = res.slice(GetSubstringIndex(res, testName, i) + 1, and_index[0]);
+                                            ruleBlocks_condition += '<value name="Operand1">' + fetchCode(before_condition[0]) + '</value>';
+                                            ruleBlocks_condition += '<value name="Operand2">' + fetchCode(after_condition[0]) + '</value>';
+                                            ruleBlocks_condition += '</block></value>';
+                                        } else if (GetSubstringIndex(res, testName, i) != -1 && GetSubstringIndex(res, testName, i) > and_index[0] && GetSubstringIndex(res, testName, i) < then_index) {
+                                            ruleBlocks_condition += '<value name="Condition2"><block type="' + testName.replace('<>', '&lt;&gt;').replace('<', '&lt;').replace('>', '&gt;').replace('<=', '&lt;=').replace('>=', '&gt;=') + '" id="' + testName.replace('<>', '&lt;&gt;').replace('<', '&lt;').replace('>', '&gt;').replace('<=', '&lt;=').replace('>=', '&gt;=') + '">';
+                                            before_condition = res.slice(and_index[0] + 1, GetSubstringIndex(res, testName, i));
+                                            after_condition = res.slice(GetSubstringIndex(res, testName, i) + 1, then_index);
+                                            ruleBlocks_condition += '<value name="Operand1">' + fetchCode(before_condition[0]) + '</value>';
+                                            ruleBlocks_condition += '<value name="Operand2">' + fetchCode(after_condition[0]) + '</value>';
+                                            ruleBlocks_condition += '</block></value>';
+                                        }
+                                    }
+
+
+                                }
+                            });
+                            ruleBlocks_condition += '</block></value>';
+                        } else if (or_is[0] == true) {
+                            ruleBlocks_condition += '<value name="Condition"><block type="or" id="or">';
+                          [].forEach.call(test_names, function (testName) {
+                                if (res.indexOf(testName) != -1) {
+                                    for (var i = 1; i <= 4; i++) {
+                                        if (GetSubstringIndex(res, testName, i) != -1 && GetSubstringIndex(res, testName, i) < or_index[0] && GetSubstringIndex(res, testName, i) < then_index) {
+                                            ruleBlocks_condition += '<value name="Condition1"><block type="' + testName.replace('<>', '&lt;&gt;').replace('<', '&lt;').replace('>', '&gt;').replace('<=', '&lt;=').replace('>=', '&gt;=') + '" id="' + testName.replace('<>', '&lt;&gt;').replace('<', '&lt;').replace('>', '&gt;').replace('<=', '&lt;=').replace('>=', '&gt;=') + '">';
+                                            before_condition = res.slice(1, GetSubstringIndex(res, testName, i));
+                                            after_condition = res.slice(GetSubstringIndex(res, testName, i) + 1, or_index[0]);
+                                            ruleBlocks_condition += '<value name="Operand1">' + fetchCode(before_condition[0]) + '</value>';
+                                            ruleBlocks_condition += '<value name="Operand2">' + fetchCode(after_condition[0]) + '</value>';
+                                            ruleBlocks_condition += '</block></value>';
+                                        } else if (GetSubstringIndex(res, testName, i) != -1 && GetSubstringIndex(res, testName, i) > or_index[0] && GetSubstringIndex(res, testName, i) < then_index) {
+                                            ruleBlocks_condition += '<value name="Condition2"><block type="' + testName.replace('<>', '&lt;&gt;').replace('<', '&lt;').replace('>', '&gt;').replace('<=', '&lt;=').replace('>=', '&gt;=') + '" id="' + testName.replace('<>', '&lt;&gt;').replace('<', '&lt;').replace('>', '&gt;').replace('<=', '&lt;=').replace('>=', '&gt;=') + '">';
+                                            before_condition = res.slice(or_index[0] + 1, GetSubstringIndex(res, testName, i));
+                                            after_condition = res.slice(GetSubstringIndex(res, testName, i) + 1, then_index);
+                                            ruleBlocks_condition += '<value name="Operand1">' + fetchCode(before_condition[0]) + '</value>';
+                                            ruleBlocks_condition += '<value name="Operand2">' + fetchCode(after_condition[0]) + '</value>';
+                                            ruleBlocks_condition += '</block></value>';
+                                        }
+                                    }
+
+
+                                }
+                            });
+                            ruleBlocks_condition += '</block></value>';
+
+                        } else if (not_is[0] == true) {
+                            ruleBlocks_condition += '<value name="Condition"><block type="not" id="not">';
+                            [].forEach.call(test_names, function (testName) {
+                                if (res.indexOf(testName) != -1) {
+                                    for (var i = 1; i <= 4; i++) {
+                                        if (GetSubstringIndex(res, testName, i) != -1 && GetSubstringIndex(res, testName, i) > not_index[0] && GetSubstringIndex(res, testName, i) < then_index) {
+                                            ruleBlocks_condition += '<value name="NAME"><block type="' + testName.replace('<>', '&lt;&gt;').replace('<', '&lt;').replace('>', '&gt;').replace('<=', '&lt;=').replace('>=', '&gt;=') + '" id="' + testName.replace('<>', '&lt;&gt;').replace('<', '&lt;').replace('>', '&gt;').replace('<=', '&lt;=').replace('>=', '&gt;=') + '">';
+                                            before_condition = res.slice(not_index[0] + 1, GetSubstringIndex(res, testName, i));
+                                            after_condition = res.slice(GetSubstringIndex(res, testName, i) + 1, then_index);
+                                            ruleBlocks_condition += '<value name="Operand1">' + fetchCode(before_condition[0]) + '</value>';
+                                            ruleBlocks_condition += '<value name="Operand2">' + fetchCode(after_condition[0]) + '</value>';
+                                            ruleBlocks_condition += '</block></value>';
+                                        }
+                                    }
+
+
+                                }
+                            });
+                            ruleBlocks_condition += '</block></value>';
+                        } else {
+                          [].forEach.call(test_names, function (testName) {
+                                if (res.indexOf(testName) != -1) {
+                                    for (var i = 1; i <= 4; i++) {
+                                        if (GetSubstringIndex(res, testName, i) != -1 && GetSubstringIndex(res, testName, i) < then_index) {
+                                            ruleBlocks_condition += '<value name="Condition"><block type="' + testName.replace('<>', '&lt;&gt;').replace('<', '&lt;').replace('>', '&gt;').replace('<=', '&lt;=').replace('>=', '&gt;=') + '" id="' + testName.replace('<>', '&lt;&gt;').replace('<', '&lt;').replace('>', '&gt;').replace('<=', '&lt;=').replace('>=', '&gt;=') + '">';
+                                            before_condition = res.slice(1, GetSubstringIndex(res, testName, i));
+                                            after_condition = res.slice(GetSubstringIndex(res, testName, i) + 1, then_index);
+                                            ruleBlocks_condition += '<value name="Operand1">' + fetchCode(before_condition[0]) + '</value>';
+                                            ruleBlocks_condition += '<value name="Operand2">' + fetchCode(after_condition[0]) + '</value>';
+                                            ruleBlocks_condition += '</block></value>';
+                                        }
+                                    }
+
+
+                                }
+                            });
+                        }
+
+                        if (and_is[1] == true) {
+                            ruleBlocks_action += '<value name="Action"><block type="and" id="and">';
+                          [].forEach.call(test_names, function (testName) {
+                                if (res.indexOf(testName) != -1) {
+                                    for (var i = 1; i <= 4; i++) {
+                                        if (GetSubstringIndex(res, testName, i) != -1 && GetSubstringIndex(res, testName, i) < and_index[1] && GetSubstringIndex(res, testName, i) > then_index) {
+                                            ruleBlocks_action += '<value name="Condition1"><block type="' + testName.replace('<>', '&lt;&gt;').replace('<', '&lt;').replace('>', '&gt;').replace('<=', '&lt;=').replace('>=', '&gt;=') + '" id="' + testName.replace('<>', '&lt;&gt;').replace('<', '&lt;').replace('>', '&gt;').replace('<=', '&lt;=').replace('>=', '&gt;=') + '">';
+                                            before_action = res.slice(then_index + 1, GetSubstringIndex(res, testName, i));
+                                            after_action = res.slice(GetSubstringIndex(res, testName, i) + 1, and_index[1]);
+                                            ruleBlocks_action += '<value name="Operand1">' + fetchCode(before_action[0]) + '</value>';
+                                            ruleBlocks_action += '<value name="Operand2">' + fetchCode(after_action[0]) + '</value>';
+                                            ruleBlocks_action += '</block></value>';
+
+
+
+
+
+
+
+
+
+                                        } else if (GetSubstringIndex(res, testName, i) != -1 && GetSubstringIndex(res, testName, i) > and_index[1] && GetSubstringIndex(res, testName, i) > then_index) {
+                                            ruleBlocks_action += '<value name="Condition2"><block type="' + testName.replace('<>', '&lt;&gt;').replace('<', '&lt;').replace('>', '&gt;').replace('<=', '&lt;=').replace('>=', '&gt;=') + '" id="' + testName.replace('<>', '&lt;&gt;').replace('<', '&lt;').replace('>', '&gt;').replace('<=', '&lt;=').replace('>=', '&gt;=') + '">';
+                                            before_action = res.slice(and_index[1] + 1, GetSubstringIndex(res, testName, i));
+                                            after_action = res.slice(GetSubstringIndex(res, testName, i) + 1);
+                                            ruleBlocks_action += '<value name="Operand1">' + fetchCode(before_action[0]) + '</value>';
+                                            ruleBlocks_action += '<value name="Operand2">' + fetchCode(after_action[0]) + '</value>';
+                                            ruleBlocks_action += '</block></value>';
+                                        }
+                                    }
+
+
+                                }
+                            });
+                            ruleBlocks_action += '</block></value>';
+                        } else if (or_is[1] == true) {
+                            ruleBlocks_action += '<value name="Action"><block type="or" id="or">';
+                          [].forEach.call(test_names, function (testName) {
+                                if (res.indexOf(testName) != -1) {
+                                    for (var i = 1; i <= 4; i++) {
+                                        if (GetSubstringIndex(res, testName, i) != -1 && GetSubstringIndex(res, testName, i) < or_index[1] && GetSubstringIndex(res, testName, i) > then_index && GetSubstringIndex(res, testName, i) < else_index) {
+                                            ruleBlocks_action += '<value name="Condition1"><block type="' + testName.replace('<>', '&lt;&gt;').replace('<', '&lt;').replace('>', '&gt;').replace('<=', '&lt;=').replace('>=', '&gt;=') + '" id="' + testName.replace('<>', '&lt;&gt;').replace('<', '&lt;').replace('>', '&gt;').replace('<=', '&lt;=').replace('>=', '&gt;=') + '">';
+                                            before_action = res.slice(then_index + 1, GetSubstringIndex(res, testName, i));
+                                            after_action = res.slice(GetSubstringIndex(res, testName, i) + 1, or_index[1]);
+                                            ruleBlocks_action += '<value name="Operand1">' + fetchCode(before_action[0]) + '</value>';
+                                            ruleBlocks_action += '<value name="Operand2">' + fetchCode(after_action[0]) + '</value>';
+                                            ruleBlocks_action += '</block></value>';
+                                        } else if (GetSubstringIndex(res, testName, i) != -1 && GetSubstringIndex(res, testName, i) > or_index[1] && GetSubstringIndex(res, testName, i) > then_index && GetSubstringIndex(res, testName, i) < else_index) {
+                                            ruleBlocks_action += '<value name="Condition2"><block type="' + testName.replace('<>', '&lt;&gt;').replace('<', '&lt;').replace('>', '&gt;').replace('<=', '&lt;=').replace('>=', '&gt;=') + '" id="' + testName.replace('<>', '&lt;&gt;').replace('<', '&lt;').replace('>', '&gt;').replace('<=', '&lt;=').replace('>=', '&gt;=') + '">';
+                                            before_action = res.slice(or_index[1] + 1, GetSubstringIndex(res, testName, i));
+                                            after_action = res.slice(GetSubstringIndex(res, testName, i) + 1);
+                                            ruleBlocks_action += '<value name="Operand1">' + fetchCode(before_action[0]) + '</value>';
+                                            ruleBlocks_action += '<value name="Operand2">' + fetchCode(after_action[0]) + '</value>';
+                                            ruleBlocks_action += '</block></value>';
+                                        }
+                                    }
+
+
+                                }
+                            });
+                            ruleBlocks_action += '</block></value>';
+                        } else if (not_is[1] == true) {
+                            ruleBlocks_action += '<value name="Action"><block type="not" id="not">';
+                                [].forEach.call(test_names, function (testName) {
+                                if (res.indexOf(testName) != -1) {
+                                    for (var i = 1; i <= 4; i++) {
+                                        if (GetSubstringIndex(res, testName, i) != -1 && GetSubstringIndex(res, testName, i) > not_index[1] && GetSubstringIndex(res, testName, i) > then_index && GetSubstringIndex(res, testName, i) < else_index) {
+                                            ruleBlocks_action += '<value name="NAME"><block type="' + testName.replace('<>', '&lt;&gt;').replace('<', '&lt;').replace('>', '&gt;').replace('<=', '&lt;=').replace('>=', '&gt;=') + '" id="' + testName.replace('<>', '&lt;&gt;').replace('<', '&lt;').replace('>', '&gt;').replace('<=', '&lt;=').replace('>=', '&gt;=') + '">';
+                                            before_action = res.slice(not_index[1] + 1, GetSubstringIndex(res, testName, i));
+                                            after_action = res.slice(GetSubstringIndex(res, testName, i) + 1, else_index);
+                                            ruleBlocks_action += '<value name="Operand1">' + fetchCode(before_action[0]) + '</value>';
+                                            ruleBlocks_action += '<value name="Operand2">' + fetchCode(after_action[0]) + '</value>';
+                                            ruleBlocks_action += '</block></value>';
+
+                                        }
+                                    }
+                                }
+                            });
+                            ruleBlocks_action += '</block></value>';
+                        } else {
+                            [].forEach.call(test_names, function (testName) {
+                                if (res.indexOf(testName) != -1) {
+                                    for (var i = 1; i <= 4; i++) {
+                                        if (GetSubstringIndex(res, testName, i) != -1 && GetSubstringIndex(res, testName, i) > then_index) {
+                                            ruleBlocks_action += '<value name="Action"><block type="' + testName.replace('<>', '&lt;&gt;').replace('<', '&lt;').replace('>', '&gt;').replace('<=', '&lt;=').replace('>=', '&gt;=') + '" id="' + testName.replace('<>', '&lt;&gt;').replace('<', '&lt;').replace('>', '&gt;').replace('<=', '&lt;=').replace('>=', '&gt;=') + '">';
+                                            before_action = res.slice(then_index + 1, GetSubstringIndex(res, testName, i));
+                                            after_action = res.slice(GetSubstringIndex(res, testName, i) + 1);
+                                            ruleBlocks_action += '<value name="Operand1">' + fetchCode(before_action[0]) + '</value>';
+                                            ruleBlocks_action += '<value name="Operand2">' + fetchCode(after_action[0]) + '</value>';
+                                            ruleBlocks_action += '</block></value>';
+                                        }
+                                    }
+
+
+                                }
+                            });
+                        }
+
+                    } else if (if_index == 0 && else_index != -1) {
+                        ruletoBlocks_precedent += '<block type="ifthenelse" id="ifthenelse" x="85" y="23">';
+                        ruletoBlocks_aftercedent = '</block>' + ruletoBlocks_aftercedent;
+
+                        if (and_is[0] == true) {
+                            ruleBlocks_condition += '<value name="Condition"><block type="and" id="and">';
+                          [].forEach.call(test_names, function (testName) {
+                                if (res.indexOf(testName) != -1) {
+                                    for (var i = 1; i <= 4; i++) {
+                                        if (GetSubstringIndex(res, testName, i) != -1 && GetSubstringIndex(res, testName, i) < and_index[0] && GetSubstringIndex(res, testName, i) < then_index) {
+                                            ruleBlocks_condition += '<value name="Condition1"><block type="' + testName.replace('<>', '&lt;&gt;').replace('<', '&lt;').replace('>', '&gt;').replace('<=', '&lt;=').replace('>=', '&gt;=') + '" id="' + testName.replace('<>', '&lt;&gt;').replace('<', '&lt;').replace('>', '&gt;').replace('<=', '&lt;=').replace('>=', '&gt;=') + '">';
+                                            before_condition = res.slice(1, GetSubstringIndex(res, testName, i));
+                                            after_condition = res.slice(GetSubstringIndex(res, testName, i) + 1, and_index[0]);
+                                            ruleBlocks_condition += '<value name="Operand1">' + fetchCode(before_condition[0]) + '</value>';
+                                            ruleBlocks_condition += '<value name="Operand2">' + fetchCode(after_condition[0]) + '</value>';
+                                            ruleBlocks_condition += '</block></value>';
+
+
+
+
+
+
+
+
+
+                                        } else if (GetSubstringIndex(res, testName, i) != -1 && GetSubstringIndex(res, testName, i) > and_index[0] && GetSubstringIndex(res, testName, i) < then_index) {
+                                            ruleBlocks_condition += '<value name="Condition2"><block type="' + testName.replace('<>', '&lt;&gt;').replace('<', '&lt;').replace('>', '&gt;').replace('<=', '&lt;=').replace('>=', '&gt;=') + '" id="' + testName.replace('<>', '&lt;&gt;').replace('<', '&lt;').replace('>', '&gt;').replace('<=', '&lt;=').replace('>=', '&gt;=') + '">';
+                                            before_condition = res.slice(and_index[0] + 1, GetSubstringIndex(res, testName, i));
+                                            after_condition = res.slice(GetSubstringIndex(res, testName, i) + 1, then_index);
+                                            ruleBlocks_condition += '<value name="Operand1">' + fetchCode(before_condition[0]) + '</value>';
+                                            ruleBlocks_condition += '<value name="Operand2">' + fetchCode(after_condition[0]) + '</value>';
+                                            ruleBlocks_condition += '</block></value>';
+                                        }
+                                    }
+
+
+                                }
+                            });
+                            ruleBlocks_condition += '</block></value>';
+                        } else if (or_is[0] == true) {
+                            ruleBlocks_condition += '<value name="Condition"><block type="or" id="or">';
+                          [].forEach.call(test_names, function (testName) {
+                                if (res.indexOf(testName) != -1) {
+                                    for (var i = 1; i <= 4; i++) {
+                                        if (GetSubstringIndex(res, testName, i) != -1 && GetSubstringIndex(res, testName, i) < or_index[0] && GetSubstringIndex(res, testName, i) < then_index) {
+                                            ruleBlocks_condition += '<value name="Condition1"><block type="' + testName.replace('<>', '&lt;&gt;').replace('<', '&lt;').replace('>', '&gt;').replace('<=', '&lt;=').replace('>=', '&gt;=') + '" id="' + testName.replace('<>', '&lt;&gt;').replace('<', '&lt;').replace('>', '&gt;').replace('<=', '&lt;=').replace('>=', '&gt;=') + '">';
+                                            before_condition = res.slice(1, GetSubstringIndex(res, testName, i));
+                                            after_condition = res.slice(GetSubstringIndex(res, testName, i) + 1, or_index[0]);
+                                            ruleBlocks_condition += '<value name="Operand1">' + fetchCode(before_condition[0]) + '</value>';
+                                            ruleBlocks_condition += '<value name="Operand2">' + fetchCode(after_condition[0]) + '</value>';
+                                            ruleBlocks_condition += '</block></value>';
+
+
+
+
+
+
+
+
+
+                                        } else if (GetSubstringIndex(res, testName, i) != -1 && GetSubstringIndex(res, testName, i) > or_index[0] && GetSubstringIndex(res, testName, i) < then_index) {
+                                            ruleBlocks_condition += '<value name="Condition2"><block type="' + testName.replace('<>', '&lt;&gt;').replace('<', '&lt;').replace('>', '&gt;').replace('<=', '&lt;=').replace('>=', '&gt;=') + '" id="' + testName.replace('<>', '&lt;&gt;').replace('<', '&lt;').replace('>', '&gt;').replace('<=', '&lt;=').replace('>=', '&gt;=') + '">';
+                                            before_condition = res.slice(or_index[0] + 1, GetSubstringIndex(res, testName, i));
+                                            after_condition = res.slice(GetSubstringIndex(res, testName, i) + 1, then_index);
+                                            ruleBlocks_condition += '<value name="Operand1">' + fetchCode(before_condition[0]) + '</value>';
+                                            ruleBlocks_condition += '<value name="Operand2">' + fetchCode(after_condition[0]) + '</value>';
+                                            ruleBlocks_condition += '</block></value>';
+                                        }
+                                    }
+
+
+                                }
+                            });
+                            ruleBlocks_condition += '</block></value>';
+
+                        } else if (not_is[0] == true) {
+                            ruleBlocks_condition += '<value name="Condition"><block type="not" id="not">';
+                          [].forEach.call(test_names, function (testName) {
+                                if (res.indexOf(testName) != -1) {
+                                    for (var i = 1; i <= 4; i++) {
+                                        if (GetSubstringIndex(res, testName, i) != -1 && GetSubstringIndex(res, testName, i) > not_index[0] && GetSubstringIndex(res, testName, i) < then_index) {
+                                            ruleBlocks_condition += '<value name="NAME"><block type="' + testName.replace('<>', '&lt;&gt;').replace('<', '&lt;').replace('>', '&gt;').replace('<=', '&lt;=').replace('>=', '&gt;=') + '" id="' + testName.replace('<>', '&lt;&gt;').replace('<', '&lt;').replace('>', '&gt;').replace('<=', '&lt;=').replace('>=', '&gt;=') + '">';
+                                            before_condition = res.slice(not_index[0] + 1, GetSubstringIndex(res, testName, i));
+                                            after_condition = res.slice(GetSubstringIndex(res, testName, i) + 1, then_index);
+                                            ruleBlocks_condition += '<value name="Operand1">' + fetchCode(before_condition[0]) + '</value>';
+                                            ruleBlocks_condition += '<value name="Operand2">' + fetchCode(after_condition[0]) + '</value>';
+                                            ruleBlocks_condition += '</block></value>';
+                                        }
+                                    }
+                                }
+                            });
+                            ruleBlocks_condition += '</block></value>';
+                        } else {
+                          [].forEach.call(test_names, function (testName) {
+                                if (res.indexOf(testName) != -1) {
+                                    for (var i = 1; i <= 4; i++) {
+                                        if (GetSubstringIndex(res, testName, i) != -1 && GetSubstringIndex(res, testName, i) < then_index) {
+                                            ruleBlocks_condition += '<value name="Condition"><block type="' + testName.replace('<>', '&lt;&gt;').replace('<', '&lt;').replace('>', '&gt;').replace('<=', '&lt;=').replace('>=', '&gt;=') + '" id="' + testName.replace('<>', '&lt;&gt;').replace('<', '&lt;').replace('>', '&gt;').replace('<=', '&lt;=').replace('>=', '&gt;=') + '">';
+                                            before_condition = res.slice(1, GetSubstringIndex(res, testName, i));
+                                            after_condition = res.slice(GetSubstringIndex(res, testName, i) + 1, then_index);
+                                            ruleBlocks_condition += '<value name="Operand1">' + fetchCode(before_condition[0]) + '</value>';
+                                            ruleBlocks_condition += '<value name="Operand2">' + fetchCode(after_condition[0]) + '</value>';
+                                            ruleBlocks_condition += '</block></value>';
+                                        }
+                                    }
+
+
+                                }
+                            });
+                        }
+
+                        if (and_is[1] == true) {
+                            ruleBlocks_action += '<value name="Action"><block type="and" id="and">';
+                          [].forEach.call(test_names, function (testName) {
+                                if (res.indexOf(testName) != -1) {
+                                    for (var i = 1; i <= 4; i++) {
+                                        if (GetSubstringIndex(res, testName, i) != -1 && GetSubstringIndex(res, testName, i) < and_index[1] && GetSubstringIndex(res, testName, i) > then_index && GetSubstringIndex(res, testName, i) < else_index) {
+                                            ruleBlocks_action += '<value name="Condition1"><block type="' + testName.replace('<>', '&lt;&gt;').replace('<', '&lt;').replace('>', '&gt;').replace('<=', '&lt;=').replace('>=', '&gt;=') + '" id="' + testName.replace('<>', '&lt;&gt;').replace('<', '&lt;').replace('>', '&gt;').replace('<=', '&lt;=').replace('>=', '&gt;=') + '">';
+                                            before_action = res.slice(then_index + 1, GetSubstringIndex(res, testName, i));
+                                            after_action = res.slice(GetSubstringIndex(res, testName, i) + 1, and_index[1]);
+                                            ruleBlocks_action += '<value name="Operand1">' + fetchCode(before_action[0]) + '</value>';
+                                            ruleBlocks_action += '<value name="Operand2">' + fetchCode(after_action[0]) + '</value>';
+                                            ruleBlocks_action += '</block></value>';
+
+
+
+
+
+
+
+
+
+                                        } else if (GetSubstringIndex(res, testName, i) != -1 && GetSubstringIndex(res, testName, i) > and_index[1] && GetSubstringIndex(res, testName, i) > then_index && GetSubstringIndex(res, testName, i) < else_index) {
+                                            ruleBlocks_action += '<value name="Condition2"><block type="' + testName.replace('<>', '&lt;&gt;').replace('<', '&lt;').replace('>', '&gt;').replace('<=', '&lt;=').replace('>=', '&gt;=') + '" id="' + testName.replace('<>', '&lt;&gt;').replace('<', '&lt;').replace('>', '&gt;').replace('<=', '&lt;=').replace('>=', '&gt;=') + '">';
+                                            before_action = res.slice(and_index[1] + 1, GetSubstringIndex(res, testName, i));
+                                            after_action = res.slice(GetSubstringIndex(res, testName, i) + 1, else_index);
+                                            ruleBlocks_action += '<value name="Operand1">' + fetchCode(before_action[0]) + '</value>';
+                                            ruleBlocks_action += '<value name="Operand2">' + fetchCode(after_action[0]) + '</value>';
+                                            ruleBlocks_action += '</block></value>';
+                                        }
+                                    }
+
+
+                                }
+                            });
+                            ruleBlocks_action += '</block></value>';
+                        } else if (or_is[1] == true) {
+                            ruleBlocks_action += '<value name="Action"><block type="or" id="or">';
+                          [].forEach.call(test_names, function (testName) {
+                                if (res.indexOf(testName) != -1) {
+                                    for (var i = 1; i <= 4; i++) {
+                                        if (GetSubstringIndex(res, testName, i) != -1 && GetSubstringIndex(res, testName, i) < or_index[1] && GetSubstringIndex(res, testName, i) > then_index && GetSubstringIndex(res, testName, i) < else_index) {
+                                            ruleBlocks_action += '<value name="Condition1"><block type="' + testName.replace('<>', '&lt;&gt;').replace('<', '&lt;').replace('>', '&gt;').replace('<=', '&lt;=').replace('>=', '&gt;=') + '" id="' + testName.replace('<>', '&lt;&gt;').replace('<', '&lt;').replace('>', '&gt;').replace('<=', '&lt;=').replace('>=', '&gt;=') + '">';
+                                            before_action = res.slice(then_index + 1, GetSubstringIndex(res, testName, i));
+                                            after_action = res.slice(GetSubstringIndex(res, testName, i) + 1, or_index[1]);
+                                            ruleBlocks_action += '<value name="Operand1">' + fetchCode(before_action[0]) + '</value>';
+                                            ruleBlocks_action += '<value name="Operand2">' + fetchCode(after_action[0]) + '</value>';
+                                            ruleBlocks_action += '</block></value>';
+
+
+
+
+
+
+
+
+
+                                        } else if (GetSubstringIndex(res, testName, i) != -1 && GetSubstringIndex(res, testName, i) > or_index[1] && GetSubstringIndex(res, testName, i) > then_index && GetSubstringIndex(res, testName, i) < else_index) {
+                                            ruleBlocks_action += '<value name="Condition2"><block type="' + testName.replace('<>', '&lt;&gt;').replace('<', '&lt;').replace('>', '&gt;').replace('<=', '&lt;=').replace('>=', '&gt;=') + '" id="' + testName.replace('<>', '&lt;&gt;').replace('<', '&lt;').replace('>', '&gt;').replace('<=', '&lt;=').replace('>=', '&gt;=') + '">';
+                                            before_action = res.slice(or_index[1] + 1, GetSubstringIndex(res, testName, i));
+                                            after_action = res.slice(GetSubstringIndex(res, testName, i) + 1, else_index);
+                                            ruleBlocks_action += '<value name="Operand1">' + fetchCode(before_action[0]) + '</value>';
+                                            ruleBlocks_action += '<value name="Operand2">' + fetchCode(after_action[0]) + '</value>';
+                                            ruleBlocks_action += '</block></value>';
+                                        }
+                                    }
+
+
+                                }
+                            });
+                            ruleBlocks_action += '</block></value>';
+                        } else if (not_is[1] == true) {
+                            ruleBlocks_action += '<value name="Action"><block type="not" id="not">';
+                                 [].forEach.call(test_names, function (testName) {
+                                if (res.indexOf(testName) != -1) {
+                                    for (var i = 1; i <= 4; i++) {
+                                        if (GetSubstringIndex(res, testName, i) != -1 && GetSubstringIndex(res, testName, i) > not_index[1] && GetSubstringIndex(res, testName, i) > then_index && GetSubstringIndex(res, testName, i) < else_index) {
+                                            ruleBlocks_action += '<value name="NAME"><block type="' + testName.replace('<>', '&lt;&gt;').replace('<', '&lt;').replace('>', '&gt;').replace('<=', '&lt;=').replace('>=', '&gt;=') + '" id="' + testName.replace('<>', '&lt;&gt;').replace('<', '&lt;').replace('>', '&gt;').replace('<=', '&lt;=').replace('>=', '&gt;=') + '">';
+                                            before_action = res.slice(not_index[1] + 1, GetSubstringIndex(res, testName, i));
+                                            after_action = res.slice(GetSubstringIndex(res, testName, i) + 1, else_index);
+                                            ruleBlocks_action += '<value name="Operand1">' + fetchCode(before_action[0]) + '</value>';
+                                            ruleBlocks_action += '<value name="Operand2">' + fetchCode(after_action[0]) + '</value>';
+                                            ruleBlocks_action += '</block></value>';
+
+                                        }
+                                    }
+                                }
+                            });
+                            ruleBlocks_action += '</block></value>';
+                        } else {
+                            [].forEach.call(test_names, function (testName) {
+                                if (res.indexOf(testName) != -1) {
+                                    for (var i = 1; i <= 4; i++) {
+                                        if (GetSubstringIndex(res, testName, i) != -1 && GetSubstringIndex(res, testName, i) > then_index && GetSubstringIndex(res, testName, i) < else_index) {
+                                            ruleBlocks_action += '<value name="Action"><block type="' + testName.replace('<>', '&lt;&gt;').replace('<', '&lt;').replace('>', '&gt;').replace('<=', '&lt;=').replace('>=', '&gt;=') + '" id="' + testName.replace('<>', '&lt;&gt;').replace('<', '&lt;').replace('>', '&gt;').replace('<=', '&lt;=').replace('>=', '&gt;=') + '">';
+                                            before_action = res.slice(then_index + 1, GetSubstringIndex(res, testName, i));
+                                            after_action = res.slice(GetSubstringIndex(res, testName, i) + 1);
+                                            ruleBlocks_action += '<value name="Operand1">' + fetchCode(before_action[0]) + '</value>';
+                                            ruleBlocks_action += '<value name="Operand2">' + fetchCode(after_action[0]) + '</value>';
+                                            ruleBlocks_action += '</block></value>';
+                                        }
+                                    }
+
+
+                                }
+                            });
+                        }
+
+                        if (and_is[2] == true) {
+                            ruleBlocks_alternateaction += '<value name="AlternateAction"><block type="and" id="and">';
+                          [].forEach.call(test_names, function (testName) {
+                                if (res.indexOf(testName) != -1) {
+                                    for (var i = 1; i <= 4; i++) {
+                                        if (GetSubstringIndex(res, testName, i) != -1 && GetSubstringIndex(res, testName, i) < and_index[2] && GetSubstringIndex(res, testName, i) > else_index) {
+                                            ruleBlocks_alternateaction += '<value name="Condition1"><block type="' + testName.replace('<>', '&lt;&gt;').replace('<', '&lt;').replace('>', '&gt;').replace('<=', '&lt;=').replace('>=', '&gt;=') + '" id="' + testName.replace('<>', '&lt;&gt;').replace('<', '&lt;').replace('>', '&gt;').replace('<=', '&lt;=').replace('>=', '&gt;=') + '">';
+                                            before_action = res.slice(else_index + 1, GetSubstringIndex(res, testName, i));
+                                            after_action = res.slice(GetSubstringIndex(res, testName, i) + 1, and_index[2]);
+                                            ruleBlocks_alternateaction += '<value name="Operand1">' + fetchCode(before_action[0]) + '</value>';
+                                            ruleBlocks_alternateaction += '<value name="Operand2">' + fetchCode(after_action[0]) + '</value>';
+                                            ruleBlocks_alternateaction += '</block></value>';
+
+
+
+
+
+
+
+
+
+                                        } else if (GetSubstringIndex(res, testName, i) != -1 && GetSubstringIndex(res, testName, i) > and_index[2] && GetSubstringIndex(res, testName, i) > else_index) {
+                                            ruleBlocks_alternateaction += '<value name="Condition2"><block type="' + testName.replace('<>', '&lt;&gt;').replace('<', '&lt;').replace('>', '&gt;').replace('<=', '&lt;=').replace('>=', '&gt;=') + '" id="' + testName.replace('<>', '&lt;&gt;').replace('<', '&lt;').replace('>', '&gt;').replace('<=', '&lt;=').replace('>=', '&gt;=') + '">';
+                                            before_action = res.slice(and_index[2] + 1, GetSubstringIndex(res, testName, i));
+                                            after_action = res.slice(GetSubstringIndex(res, testName, i) + 1);
+                                            ruleBlocks_alternateaction += '<value name="Operand1">' + fetchCode(before_action[0]) + '</value>';
+                                            ruleBlocks_alternateaction += '<value name="Operand2">' + fetchCode(after_action[0]) + '</value>';
+                                            ruleBlocks_alternateaction += '</block></value>';
+                                        }
+                                    }
+
+
+                                }
+                            });
+                            ruleBlocks_alternateaction += '</block></value>';
+                        } else if (or_is[2] == true) {
+                            ruleBlocks_alternateaction += '<value name="AlternateAction"><block type="or" id="or">';
+                          [].forEach.call(test_names, function (testName) {
+                                if (res.indexOf(testName) != -1) {
+                                    for (var i = 1; i <= 4; i++) {
+                                        if (GetSubstringIndex(res, testName, i) != -1 && GetSubstringIndex(res, testName, i) < or_index[2] && GetSubstringIndex(res, testName, i) > else_index) {
+                                            ruleBlocks_alternateaction += '<value name="Condition1"><block type="' + testName.replace('<>', '&lt;&gt;').replace('<', '&lt;').replace('>', '&gt;').replace('<=', '&lt;=').replace('>=', '&gt;=') + '" id="' + testName.replace('<>', '&lt;&gt;').replace('<', '&lt;').replace('>', '&gt;').replace('<=', '&lt;=').replace('>=', '&gt;=') + '">';
+                                            before_action = res.slice(else_index + 1, GetSubstringIndex(res, testName, i));
+                                            after_action = res.slice(GetSubstringIndex(res, testName, i) + 1, or_index[2]);
+                                            ruleBlocks_alternateaction += '<value name="Operand1">' + fetchCode(before_action[0]) + '</value>';
+                                            ruleBlocks_alternateaction += '<value name="Operand2">' + fetchCode(after_action[0]) + '</value>';
+                                            ruleBlocks_alternateaction += '</block></value>';
+                                        } else if (GetSubstringIndex(res, testName, i) != -1 && GetSubstringIndex(res, testName, i) > or_index[2] && GetSubstringIndex(res, testName, i) > else_index) {
+                                            ruleBlocks_alternateaction += '<value name="Condition2"><block type="' + testName.replace('<>', '&lt;&gt;').replace('<', '&lt;').replace('>', '&gt;').replace('<=', '&lt;=').replace('>=', '&gt;=') + '" id="' + testName.replace('<>', '&lt;&gt;').replace('<', '&lt;').replace('>', '&gt;').replace('<=', '&lt;=').replace('>=', '&gt;=') + '">';
+                                            before_action = res.slice(or_index[2] + 1, GetSubstringIndex(res, testName, i));
+                                            after_action = res.slice(GetSubstringIndex(res, testName, i) + 1);
+                                            ruleBlocks_alternateaction += '<value name="Operand1">' + fetchCode(before_action[0]) + '</value>';
+                                            ruleBlocks_alternateaction += '<value name="Operand2">' + fetchCode(after_action[0]) + '</value>';
+                                            ruleBlocks_alternateaction += '</block></value>';
+                                        }
+                                    }
+                                }
+                            });
+                            ruleBlocks_alternateaction += '</block></value>';
+                        } else if (not_is[2] == true) {
+                            ruleBlocks_alternateaction += '<value name="AlternateAction"><block type="not" id="not">';
+                          [].forEach.call(test_names, function (testName) {
+                                if (res.indexOf(testName) != -1) {
+                                    for (var i = 1; i <= 4; i++) {
+                                        if (GetSubstringIndex(res, testName, i) != -1 && GetSubstringIndex(res, testName, i) > not_index[2] && GetSubstringIndex(res, testName, i) > else_index) {
+                                            ruleBlocks_alternateaction += '<value name="NAME"><block type="' + testName.replace('<>', '&lt;&gt;').replace('<', '&lt;').replace('>', '&gt;').replace('<=', '&lt;=').replace('>=', '&gt;=') + '" id="' + testName.replace('<>', '&lt;&gt;').replace('<', '&lt;').replace('>', '&gt;').replace('<=', '&lt;=').replace('>=', '&gt;=') + '">';
+                                            before_action = res.slice(not_index[2] + 1, GetSubstringIndex(res, testName, i));
+                                            after_action = res.slice(GetSubstringIndex(res, testName, i) + 1);
+                                            ruleBlocks_alternateaction += '<value name="Operand1">' + fetchCode(before_action[0]) + '</value>';
+                                            ruleBlocks_alternateaction += '<value name="Operand2">' + fetchCode(after_action[0]) + '</value>';
+                                            ruleBlocks_alternateaction += '</block></value>';
+                                        }
+                                    }
+
+
+                                }
+                            });
+                            ruleBlocks_alternateaction += '</block></value>';
+                        } else {
+                            [].forEach.call(test_names, function (testName) {
+                                if (res.indexOf(testName) != -1) {
+                                    for (var i = 1; i <= 4; i++) {
+                                        if (GetSubstringIndex(res, testName, i) != -1 && GetSubstringIndex(res, testName, i) > else_index) {
+                                            ruleBlocks_alternateaction += '<value name="AlternateAction"><block type="' + testName.replace('<>', '&lt;&gt;').replace('<', '&lt;').replace('>', '&gt;').replace('<=', '&lt;=').replace('>=', '&gt;=') + '" id="' + testName.replace('<>', '&lt;&gt;').replace('<', '&lt;').replace('>', '&gt;').replace('<=', '&lt;=').replace('>=', '&gt;=') + '">';
+                                            before_alternateaction = res.slice(else_index + 1, GetSubstringIndex(res, testName, i));
+                                            after_alternateaction = res.slice(GetSubstringIndex(res, testName, i) + 1);
+                                            ruleBlocks_alternateaction += '<value name="Operand1">' + fetchCode(before_alternateaction[0]) + '</value>';
+                                            ruleBlocks_alternateaction += '<value name="Operand2">' + fetchCode(after_alternateaction[0]) + '</value>';
+                                            ruleBlocks_alternateaction += '</block></value>';
+                                        }
+                                    }
+
+
+                                }
+                            });
+
+                        }
+                    }
+
+                    var xml = Blockly.Xml.textToDom(ruletoBlocks_precedent + ruleBlocks_condition + ruleBlocks_action + ruleBlocks_alternateaction + ruletoBlocks_aftercedent);
+                    Blockly.Xml.domToWorkspace(xml, workspace);
+
+                }
+                r.readAsText(f);
+            } else {
+                alert("Failed to load file");
+            }
+        }
+        document.getElementById('generateBlocks').addEventListener('change', readSingleFile, false);
+    </script>
+    <br>
+    <br>
+    <div id="generatedCode">Generated code: </div>
+    <div id="ruleToBlocks">IF NOT coalesce(coalesce(coalesce(var1,var2),var2),coalesce(var3,var4)) = 'val' THEN variable = 'val' AND variable = 'val' ELSE variable = 'val'</div>
+
+    <!-- IF NOT coalesce(ascii(var1),var2) = 'val' THEN variable = 'val' AND variable = 'val' ELSE variable = 'val' -->
+    <!-- IF NOT coalesce(coalesce(coalesce(var1,var2),var2),vara) = 'val' THEN variable = 'val' AND variable = 'val' ELSE variable = 'val' -->
+</body>
+
+</html>
