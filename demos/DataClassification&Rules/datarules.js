@@ -32,7 +32,6 @@ goog.provide('Blockly.Blocks.texts'); // Deprecated
 goog.provide('Blockly.Constants.Text');
 
 goog.require('Blockly.Blocks');
-goog.require('Blockly.FieldDate');
 
 Blockly.Constants.Text.HUE = 160;
 /** @deprecated Use Blockly.Constants.Text.HUE */
@@ -339,31 +338,31 @@ Blockly.DataRule['dateliteral'] = function(block) {
 };
 
 Blockly.DataRule['addition'] = function(block) {
-  var value_operand1 = Blockly.DataRule.valueToCode(block, 'operand1', Blockly.DataRule.ORDER_ATOMIC);
-  var value_operand2 = Blockly.DataRule.valueToCode(block, 'operand2', Blockly.DataRule.ORDER_ATOMIC);
+  var value_operand1 = Blockly.DataRule.valueToCode(block, 'operand1', Blockly.DataRule.ORDER_ADDITION);
+  var value_operand2 = Blockly.DataRule.valueToCode(block, 'operand2', Blockly.DataRule.ORDER_ADDITION);
   var code = value_operand1 + '+' + value_operand2;
-  return [code, Blockly.DataRule.ORDER_NONE];
+  return [code, Blockly.DataRule.ORDER_ADDITION];
 };
 
 Blockly.DataRule['subtraction'] = function(block) {
-  var value_operand1 = Blockly.DataRule.valueToCode(block, 'operand1', Blockly.DataRule.ORDER_ATOMIC);
-  var value_operand2 = Blockly.DataRule.valueToCode(block, 'operand2', Blockly.DataRule.ORDER_ATOMIC);
+  var value_operand1 = Blockly.DataRule.valueToCode(block, 'operand1', Blockly.DataRule.ORDER_SUBTRACTION);
+  var value_operand2 = Blockly.DataRule.valueToCode(block, 'operand2', Blockly.DataRule.ORDER_SUBTRACTION);
   var code = value_operand1 + '-' + value_operand2;
-  return [code, Blockly.DataRule.ORDER_NONE];
+  return [code, Blockly.DataRule.ORDER_SUBTRACTION];
 };
 
 Blockly.DataRule['multiplication'] = function(block) {
-  var value_operand1 = Blockly.DataRule.valueToCode(block, 'operand1', Blockly.DataRule.ORDER_ATOMIC);
-  var value_operand2 = Blockly.DataRule.valueToCode(block, 'operand2', Blockly.DataRule.ORDER_ATOMIC);
+  var value_operand1 = Blockly.DataRule.valueToCode(block, 'operand1', Blockly.DataRule.ORDER_MULTIPLICATION);
+  var value_operand2 = Blockly.DataRule.valueToCode(block, 'operand2', Blockly.DataRule.ORDER_MULTIPLICATION);
   var code = value_operand1 + '*' + value_operand2;
-  return [code, Blockly.DataRule.ORDER_NONE];
+  return [code, Blockly.DataRule.ORDER_MULTIPLICATION];
 };
 
 Blockly.DataRule['division'] = function(block) {
-  var value_operand1 = Blockly.DataRule.valueToCode(block, 'operand1', Blockly.DataRule.ORDER_ATOMIC);
-  var value_operand2 = Blockly.DataRule.valueToCode(block, 'operand2', Blockly.DataRule.ORDER_ATOMIC);
+  var value_operand1 = Blockly.DataRule.valueToCode(block, 'operand1', Blockly.DataRule.ORDER_DIVISION);
+  var value_operand2 = Blockly.DataRule.valueToCode(block, 'operand2', Blockly.DataRule.ORDER_DIVISION);
   var code = value_operand1 + '/' + value_operand2;
-  return [code, Blockly.DataRule.ORDER_NONE];
+  return [code, Blockly.DataRule.ORDER_DIVISION];
 };
 
 Blockly.DataRule['power'] = function(block) {
@@ -374,10 +373,10 @@ Blockly.DataRule['power'] = function(block) {
 };
 
 Blockly.DataRule['modulo'] = function(block) {
-  var value_operand1 = Blockly.DataRule.valueToCode(block, 'operand1', Blockly.DataRule.ORDER_ATOMIC);
-  var value_operand2 = Blockly.DataRule.valueToCode(block, 'operand2', Blockly.DataRule.ORDER_ATOMIC);
+  var value_operand1 = Blockly.DataRule.valueToCode(block, 'operand1', Blockly.DataRule.ORDER_MODULUS);
+  var value_operand2 = Blockly.DataRule.valueToCode(block, 'operand2', Blockly.DataRule.ORDER_MODULUS);
   var code = value_operand1 + '%' + value_operand2;
-  return [code, Blockly.DataRule.ORDER_NONE];
+  return [code, Blockly.DataRule.ORDER_MODULUS];
 };
 
 

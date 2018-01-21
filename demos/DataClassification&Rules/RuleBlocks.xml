@@ -8,40 +8,67 @@
                         <value name="Operand1">
                             <block type="coalesce" id="coalesce">
                                 <value name="input1">
-                                    <block type="coalesce" id="+o^#5aZbkX3cxw2^@;;8">
-                                        <value name="input1">
-                                            <block type="coalesce" id="uW`-[g+c+p2Wo%.15W#i">
-                                                <value name="input1">
-                                                    <block type="variable" id="variable">
-                                                        <field name="variable">var1</field>
+                                    <block type="subtraction" id="subtraction">
+                                        <value name="operand1">
+                                            <block type="subtraction" id="#]lL{Lz/Eyc/BYNeIDiT">
+                                                <value name="operand1">
+                                                    <block type="addition" id="addition">
+                                                        <value name="operand1">
+                                                            <block type="numericliteral" id="numericliteral">
+                                                                <field name="numericInput">1</field>
+                                                            </block>
+                                                        </value>
+                                                        <value name="operand2">
+                                                            <block type="multiplication" id="multiplication">
+                                                                <value name="operand1">
+                                                                    <block type="numericliteral" id="Pu_E_8$s/UJV8eNbN.5f">
+                                                                        <field name="numericInput">2</field>
+                                                                    </block>
+                                                                </value>
+                                                                <value name="operand2">
+                                                                    <block type="numericliteral" id="Z*cXN5^hCa4={zUqCjm`">
+                                                                        <field name="numericInput">3</field>
+                                                                    </block>
+                                                                </value>
+                                                            </block>
+                                                        </value>
                                                     </block>
                                                 </value>
-                                                <value name="input2">
-                                                    <block type="variable" id="%NudT[?d5k/]SB-,SGh%">
-                                                        <field name="variable">var2</field>
+                                                <value name="operand2">
+                                                    <block type="numericliteral" id="*0k?^?ZDdRx2T9zX2~x%">
+                                                        <field name="numericInput">2</field>
                                                     </block>
                                                 </value>
                                             </block>
                                         </value>
-                                        <value name="input2">
-                                            <block type="variable" id=",iEH^_J0ugVblz6Id/(T">
-                                                <field name="variable">var2</field>
+                                        <value name="operand2">
+                                            <block type="addition" id="~?8)iv-omw%x_[!NPyHi">
+                                                <value name="operand1">
+                                                    <block type="multiplication" id="2A3$_,}HdXbJ2Ht@n}Z`">
+                                                        <value name="operand1">
+                                                            <block type="numericliteral" id="?9Pv;/]R%h8Ld]p5Ha.0">
+                                                                <field name="numericInput">3</field>
+                                                            </block>
+                                                        </value>
+                                                        <value name="operand2">
+                                                            <block type="numericliteral" id="TuyeAEW^eqPX~vP]wD33">
+                                                                <field name="numericInput">4</field>
+                                                            </block>
+                                                        </value>
+                                                    </block>
+                                                </value>
+                                                <value name="operand2">
+                                                    <block type="numericliteral" id="KoSz5^vh(0{#eO{8RyOq">
+                                                        <field name="numericInput">5</field>
+                                                    </block>
+                                                </value>
                                             </block>
                                         </value>
                                     </block>
                                 </value>
                                 <value name="input2">
-                                    <block type="coalesce" id="D]r@,nw/YZYiQ9)h{|`!">
-                                        <value name="input1">
-                                            <block type="variable" id="]7/w{S6XoP6[!,%XCzt|">
-                                                <field name="variable">var3</field>
-                                            </block>
-                                        </value>
-                                        <value name="input2">
-                                            <block type="variable" id="a^bUzESZGX@#VjGg$;Oc">
-                                                <field name="variable">var4</field>
-                                            </block>
-                                        </value>
+                                    <block type="numericliteral" id="ev25jj4;c~5UxL%3X4./">
+                                        <field name="numericInput">1</field>
                                     </block>
                                 </value>
                             </block>
@@ -58,28 +85,28 @@
         <value name="Action">
             <block type="and" id="and">
                 <value name="Condition1">
-                    <block type="=" id="l1o{D(-$sZpnsnf2[}(F">
+                    <block type="=" id="$=4-bFT:`@f$MCf/40U|">
                         <value name="Operand1">
-                            <block type="variable" id="bBACxv[29S)yQ]8r4Fe=">
+                            <block type="variable" id="variable">
                                 <field name="variable">variable</field>
                             </block>
                         </value>
                         <value name="Operand2">
-                            <block type="stringliteral" id="GNZjalk#8A=#oaE%UlmD">
+                            <block type="stringliteral" id="gYVB3r+$$Ct-i(rd5Kcf">
                                 <field name="stringInput">val</field>
                             </block>
                         </value>
                     </block>
                 </value>
                 <value name="Condition2">
-                    <block type="=" id="qjTE7A=[vRV[fq,U!U{s">
+                    <block type="=" id="*/mq:hTX?x~[^/$3JO{@">
                         <value name="Operand1">
-                            <block type="variable" id="Ky2OahhK$nkK{ZDWluEW">
+                            <block type="variable" id="x5OToWC]`5SVp17#2Z;c">
                                 <field name="variable">variable</field>
                             </block>
                         </value>
                         <value name="Operand2">
-                            <block type="stringliteral" id="q~Eba6hjx4Lj_^gx^E,~">
+                            <block type="stringliteral" id="!(JD_Je(EGgg.:vzGH`]">
                                 <field name="stringInput">val</field>
                             </block>
                         </value>
@@ -88,15 +115,10 @@
             </block>
         </value>
         <value name="AlternateAction">
-            <block type="=" id="w#[#d$uSZ{Up0qFIlRZ)">
+            <block type="unique" id="unique">
                 <value name="Operand1">
-                    <block type="variable" id="XhO[po~XVH=|@2f;R%@J">
+                    <block type="variable" id="JLEDm`Q]5B6dYk:94x],">
                         <field name="variable">variable</field>
-                    </block>
-                </value>
-                <value name="Operand2">
-                    <block type="stringliteral" id="VPBb70kN|cO~VZ]=nTi=">
-                        <field name="stringInput">val</field>
                     </block>
                 </value>
             </block>
