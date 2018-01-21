@@ -606,6 +606,7 @@
                             } else if (operation_pre_split[i] === (")")) {
                                 parenthese_counter--;
                             }
+                            
                             if (parenthese_counter == 0) {
                                 found_first_parenthese = false;
                             }
@@ -1456,7 +1457,7 @@
     <br>
     <br>
     <div id="generatedCode">Generated code: </div>
-    <div id="ruleToBlocks">IF NOT coalesce((((1+(2*3))-2)-3*4+5),1) = 'val' THEN variable = 'val' AND variable = 'val' ELSE variable unique</div>
+    <div id="ruleToBlocks">IF NOT coalesce((((1+(2*3))-2)-3+4*5),1) = 'val' THEN variable = 'val' AND variable = 'val' ELSE variable unique</div>
     <!-- IF NOT coalesce((((1+(2*3))-2)-3*4+5),1) = 'val' THEN variable = 'val' AND variable = 'val' ELSE variable = 'val' -->
     <!-- IF NOT coalesce(ascii(var1),var2) = 'val' THEN variable = 'val' AND variable = 'val' ELSE variable = 'val' -->
     <!-- IF NOT coalesce(coalesce(coalesce(var1,var2),var2),vara) = 'val' THEN variable = 'val' AND variable = 'val' ELSE variable = 'val' -->

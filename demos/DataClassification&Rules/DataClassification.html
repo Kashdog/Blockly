@@ -26,37 +26,37 @@
 
 <body>
     <div id="blocklyDiv" style="height: 600px; width: 1400px;"></div>
-    
+
     <xml id="toolbox" style="display: none">
         <category name="Logic">
-                <block id ="ifthen"  type="ifthen"></block>
-                <block id ="elseifthen" type="elseifthen"></block>
-                <block id ="elsethen" type="elsethen"></block>
-                <block id ="and"  type="and"></block>
-                <block id ="or"  type="or"></block>
+            <block id="ifthen" type="ifthen"></block>
+            <block id="elseifthen" type="elseifthen"></block>
+            <block id="elsethen" type="elsethen"></block>
+            <block id="and" type="and"></block>
+            <block id="or" type="or"></block>
         </category>
-        <category name = "Checks">
-                <block id ="is"  type="is"></block>
-                <block id ="isnot"  type="isnot"></block>
-                <block id ="exists"  type="exists"></block>
-                <block id ="doesnotexist"  type="doesnotexist"></block>
-                <block id ="contains"  type="contains"></block>
-                <block id ="startswith"  type="startswith"></block>
-                <block id ="endswith"  type="endswith"></block>
-                <block id="comparison" type="comparison"></block>
+        <category name="Checks">
+            <block id="is" type="is"></block>
+            <block id="isnot" type="isnot"></block>
+            <block id="exists" type="exists"></block>
+            <block id="doesnotexist" type="doesnotexist"></block>
+            <block id="contains" type="contains"></block>
+            <block id="startswith" type="startswith"></block>
+            <block id="endswith" type="endswith"></block>
+            <block id="comparison" type="comparison"></block>
         </category>
         <category name="Math">
-            <block id ="number"  type="number"></block>
-            <block id ="arithmetic"  type="arithmetic">
+            <block id="number" type="number"></block>
+            <block id="arithmetic" type="arithmetic">
             </block>
-            <block id ="round"  type="round">
+            <block id="round" type="round">
             </block>
-            <block id ="constrain"  type="constrain"></block>
+            <block id="constrain" type="constrain"></block>
         </category>
-        
-                <category name="Text">
-            <block id ="textvalue"  type="textvalue"></block>
-            <block id ="text_indexOf"  type="text_indexOf">
+
+        <category name="Text">
+            <block id="textvalue" type="textvalue"></block>
+            <block id="text_indexOf" type="text_indexOf">
                 <value name="VALUE">
                     <block type="variables_get">
                         <field name="VAR">{textVariable}</field>
@@ -68,28 +68,21 @@
                     </shadow>
                 </value>
             </block>
-            <block id ="text_charAt"  type="text_charAt">
-                <value name="VALUE">
-                    <block type="variables_get">
-                        <field name="VAR">{textVariable}</field>
-                    </block>
-                </value>
-            </block>
-            <block id ="text_getSubstring"  type="text_getSubstring">
+            <block id="text_getSubstring" type="text_getSubstring">
                 <value name="STRING">
                     <block type="variables_get">
                         <field name="VAR">{textVariable}</field>
                     </block>
                 </value>
             </block>
-            <block id ="text_changeCase"  type="text_changeCase">
+            <block id="text_changeCase" type="text_changeCase">
                 <value name="TEXT">
                     <shadow type="text">
                         <field name="TEXT">abc</field>
                     </shadow>
                 </value>
             </block>
-            <block id ="text_trim" type="text_trim">
+            <block id="text_trim" type="text_trim">
                 <value name="TEXT">
                     <shadow type="text">
                         <field name="TEXT">abc</field>
@@ -97,59 +90,59 @@
                 </value>
             </block>
         </category>
-   
-    
-            <category name="Value Properties">
-                <block id ="value"  type="value"></block>
-                <block id ="format"  type="format"></block>
-                <block id ="frequencyofthevalue"  type="frequencyofthevalue"></block>
-            </category>
-            <category name = "Column Properties">
-                <block id ="nameofcolumn"  type="nameofcolumn"></block>
-                <block id ="ridofcolumn"  type="ridofcolumn"></block>
-                <block id ="inferredformatofthecolumn"  type="inferredformatofthecolumn"></block>
-                <block id ="inferreddataclassofthecolumn"  type="inferreddataclassofthecolumn"></block>
-                <block id ="inferreddatatypeofthecolumn"  type="inferreddatatypeofthecolumn"></block>
-                <block id ="numberofnullvalues" type="numberofnullvalues"></block>
-                <block id ="numberofemptyvalues"  type="numberofemptyvalues"></block>
-                <block id ="numberofmissingvalues"  type="numberofmissingvalues"></block>
-                <block id ="numberofnonmissingvalues"  type="numberofnonmissingvalues"></block>
-                <block id ="numberofuniquevalues"  type="numberofuniquevalues"></block>
-                <block id ="minimumstringvalue"  type="minimumstringvalue"></block>
-                <block id ="maximumstringvalue"  type="maximumstringvalue"></block>
-                <block id ="minimumnumericvalue"  type="minimumnumericvalue"></block>
-                <block id ="maximumnumericvalue"  type="maximumnumericvalue"></block>
-            </category>
-            <category name = "Data Classes">
-                <block id ="dataclass"  type="dataclass"></block>
-                <block id ="inferreddataclassis"  type="inferreddataclassis"></block>
-                <block id ="positiveclassification"  type="positiveclassification"></block>
-                <block id ="negativeclassification"  type="negativeclassification"></block>
-            </category>
-    </xml>        
-        
+
+
+        <category name="Value Properties">
+            <block id="value" type="value"></block>
+            <block id="format" type="format"></block>
+            <block id="frequencyofthevalue" type="frequencyofthevalue"></block>
+        </category>
+        <category name="Column Properties">
+            <block id="nameofcolumn" type="nameofcolumn"></block>
+            <block id="ridofcolumn" type="ridofcolumn"></block>
+            <block id="inferredformatofthecolumn" type="inferredformatofthecolumn"></block>
+            <block id="inferreddataclassofthecolumn" type="inferreddataclassofthecolumn"></block>
+            <block id="inferreddatatypeofthecolumn" type="inferreddatatypeofthecolumn"></block>
+            <block id="numberofnullvalues" type="numberofnullvalues"></block>
+            <block id="numberofemptyvalues" type="numberofemptyvalues"></block>
+            <block id="numberofmissingvalues" type="numberofmissingvalues"></block>
+            <block id="numberofnonmissingvalues" type="numberofnonmissingvalues"></block>
+            <block id="numberofuniquevalues" type="numberofuniquevalues"></block>
+            <block id="minimumstringvalue" type="minimumstringvalue"></block>
+            <block id="maximumstringvalue" type="maximumstringvalue"></block>
+            <block id="minimumnumericvalue" type="minimumnumericvalue"></block>
+            <block id="maximumnumericvalue" type="maximumnumericvalue"></block>
+        </category>
+        <category name="Data Classes">
+            <block id="dataclass" type="dataclass"></block>
+            <block id="inferreddataclassis" type="inferreddataclassis"></block>
+            <block id="positiveclassification" type="positiveclassification"></block>
+            <block id="negativeclassification" type="negativeclassification"></block>
+        </category>
+    </xml>
+
 
     <xml id="ValueScope" style="display: none">
         <category name="Logic">
-                <block id ="ifthen"  type="ifthen"></block>
-                <block id ="elseifthen" type="elseifthen"></block>
-                <block id ="elsethen" type="elsethen"></block>
-                <block id ="and"  type="and"></block>
-                <block id ="or"  type="or"></block>
+            <block id="ifthen" type="ifthen"></block>
+            <block id="elseifthen" type="elseifthen"></block>
+            <block id="elsethen" type="elsethen"></block>
+            <block id="and" type="and"></block>
+            <block id="or" type="or"></block>
         </category>
-        <category name = "Checks">
-                <block id ="is"  type="is"></block>
-                <block id ="isnot"  type="isnot"></block>
-                <block id ="exists"  type="exists"></block>
-                <block id ="doesnotexist"  type="doesnotexist"></block>
-                <block id ="contains"  type="contains"></block>
-                <block id ="startswith"  type="startswith"></block>
-                <block id ="endswith"  type="endswith"></block>
-                <block id="comparison" type="comparison"></block>
+        <category name="Checks">
+            <block id="is" type="is"></block>
+            <block id="isnot" type="isnot"></block>
+            <block id="exists" type="exists"></block>
+            <block id="doesnotexist" type="doesnotexist"></block>
+            <block id="contains" type="contains"></block>
+            <block id="startswith" type="startswith"></block>
+            <block id="endswith" type="endswith"></block>
+            <block id="comparison" type="comparison"></block>
         </category>
-                <category name="Math">
-            <block id ="number"  type="number"></block>
-            <block id ="arithmetic"  type="arithmetic">
+        <category name="Math">
+            <block id="number" type="number"></block>
+            <block id="arithmetic" type="arithmetic">
                 <value name="A">
                     <shadow type="math_number">
                         <field name="NUM">1</field>
@@ -161,110 +154,14 @@
                     </shadow>
                 </value>
             </block>
-            <block id ="math_round"  type="math_round">
+            <block id="math_round" type="math_round">
                 <value name="NUM">
                     <shadow type="math_number">
                         <field name="NUM">3.1</field>
                     </shadow>
                 </value>
             </block>
-            <block id ="math_constrain"  type="math_constrain">
-                <value name="VALUE">
-                    <shadow type="math_number">
-                        <field name="NUM">50</field>
-                    </shadow>
-                </value>
-                <value name="LOW">
-                    <shadow type="math_number">
-                        <field name="NUM">1</field>
-                    </shadow>
-                </value>
-                <value name="HIGH">
-                    <shadow type="math_number">
-                        <field name="NUM">100</field>
-                    </shadow>
-                </value>
-            </block>
-        </category>
-            <category name="Text">
-            <block id ="textvalue"  type="textvalue"></block>
-            <block id ="text_indexOf"  type="text_indexOf">
-                <value name="VALUE">
-                    <block type="variables_get">
-                        <field name="VAR">{textVariable}</field>
-                    </block>
-                </value>
-                <value name="FIND">
-                    <shadow type="text">
-                        <field name="TEXT">abc</field>
-                    </shadow>
-                </value>
-            </block>
-            <block id ="text_charAt"  type="text_charAt">
-                <value name="VALUE">
-                    <block type="variables_get">
-                        <field name="VAR">{textVariable}</field>
-                    </block>
-                </value>
-            </block>
-            <block id ="text_getSubstring"  type="text_getSubstring">
-                <value name="STRING">
-                    <block type="variables_get">
-                        <field name="VAR">{textVariable}</field>
-                    </block>
-                </value>
-            </block>
-            <block id ="text_changeCase"  type="text_changeCase"></block>
-            <block id ="text_trim" type="text_trim">
-                <value name="TEXT">
-                    <shadow type="text">
-                        <field name="TEXT">abc</field>
-                    </shadow>
-                </value>
-            </block>
-        </category>
-            <category name="Value Properties">
-                <block id='value' type='value'></block>
-                <block id ="frequencyofthevalue"  type="frequencyofthevalue"></block>
-                <block id ="format"  type="format"></block>
-            </category>
-            <category name = "Column Properties">
-                <block id ="nameofcolumn"  type="nameofcolumn"></block>
-                <block id ="ridofcolumn"  type="ridofcolumn"></block>
-            </category>
-            <category name = "Data Classes">
-                <block id ="positiveclassification"  type="positiveclassification"></block>
-                <block id ="negativeclassification"  type="negativeclassification"></block>
-            </category>            
-     </xml>        
-
-
-    
-      <xml id="ColumnScope" style="display: none">
-          <category name="Logic">
-                <block id ="ifthen"  type="ifthen"></block>
-                <block id ="elseifthen" type="elseifthen"></block>
-                <block id ="elsethen" type="elsethen"></block>
-                <block id ="and"  type="and"></block>
-                <block id ="or"  type="or"></block>
-          </category>
-          <category name = "Checks">
-                <block id ="is"  type="is"></block>
-                <block id ="isnot"  type="isnot"></block>
-                <block id ="exists"  type="exists"></block>
-                <block id ="doesnotexist"  type="doesnotexist"></block>
-                <block id ="contains"  type="contains"></block>
-                <block id ="startswith"  type="startswith"></block>
-                <block id ="endswith"  type="endswith"></block>
-                <block id="comparison" type="comparison"></block>
-            </category>
-        <category name="Math">
-            <block id ="number"  type="number"></block>
-            <block id ="arithmetic"  type="arithmetic">
-            </block>
-            <block id ="math_round"  type="math_round">
-            </block>
-            <block id ="math_constrain"  type="math_constrain">
+            <block id="math_constrain" type="math_constrain">
                 <value name="VALUE">
                     <shadow type="math_number">
                         <field name="NUM">50</field>
@@ -283,7 +180,8 @@
             </block>
         </category>
         <category name="Text">
-            <block id ="text_indexOf"  type="text_indexOf">
+            <block id="textvalue" type="textvalue"></block>
+            <block id="text_indexOf" type="text_indexOf">
                 <value name="VALUE">
                     <block type="variables_get">
                         <field name="VAR">{textVariable}</field>
@@ -295,88 +193,64 @@
                     </shadow>
                 </value>
             </block>
-            <block id ="text_charAt"  type="text_charAt">
-                <value name="VALUE">
-                    <block type="variables_get">
-                        <field name="VAR">{textVariable}</field>
-                    </block>
-                </value>
-            </block>
-            <block id ="text_getSubstring"  type="text_getSubstring">
+            <block id="text_getSubstring" type="text_getSubstring">
                 <value name="STRING">
                     <block type="variables_get">
                         <field name="VAR">{textVariable}</field>
                     </block>
                 </value>
             </block>
-            <block id ="text_changeCase"  type="text_changeCase">
+            <block id="text_changeCase" type="text_changeCase"></block>
+            <block id="text_trim" type="text_trim">
                 <value name="TEXT">
                     <shadow type="text">
                         <field name="TEXT">abc</field>
                     </shadow>
                 </value>
             </block>
-            <block id ="text_trim" type="text_trim">
-                <value name="TEXT">
-                    <shadow type="text">
-                        <field name="TEXT">abc</field>
-                    </shadow>
-                </value>
-            </block>
-            </category> 
-            <category name = "Column Properties">
-                <block id ="nameofcolumn"  type="nameofcolumn"></block>
-                <block id ="ridofcolumn"  type="ridofcolumn"></block>
-                <block id ="inferredformatofthecolumn"  type="inferredformatofthecolumn"></block>
-                <block id ="inferreddataclassofthecolumn"  type="inferreddataclassofthecolumn"></block>
-                <block id ="inferreddatatypeofthecolumn"  type="inferreddatatypeofthecolumn"></block>
-                <block id ="minimumstringvalue"  type="minimumstringvalue"></block>
-                <block id ="maximumstringvalue"  type="maximumstringvalue"></block>
-                <block id ="minimumnumericvalue"  type="minimumnumericvalue"></block>
-                <block id ="maximumnumericvalue"  type="maximumnumericvalue"></block>
-                <block id ="numberofnullvalues" type="numberofnullvalues"></block>
-                <block id ="numberofemptyvalues"  type="numberofemptyvalues"></block>
-                <block id ="numberofmissingvalues"  type="numberofmissingvalues"></block>
-                <block id ="numberofnonmissingvalues"  type="numberofnonmissingvalues"></block>
-                <block id ="numberofuniquevalues"  type="numberofuniquevalues"></block>
-            </category>
-            <category name = "Data Classes">
-                <block id ="dataclass"  type="dataclass"></block>
-                <block id ="inferreddataclassis"  type="inferreddataclassis"></block>
-                <block id="classificationconfidence" type="classificationconfidence"></block>
-                <block id ="positiveclassification"  type="positiveclassification"></block>
-                <block id ="negativeclassification"  type="negativeclassification"></block>
-            </category>    
+        </category>
+        <category name="Value Properties">
+            <block id='value' type='value'></block>
+            <block id="frequencyofthevalue" type="frequencyofthevalue"></block>
+            <block id="format" type="format"></block>
+        </category>
+        <category name="Column Properties">
+            <block id="nameofcolumn" type="nameofcolumn"></block>
+            <block id="ridofcolumn" type="ridofcolumn"></block>
+        </category>
+        <category name="Data Classes">
+            <block id="positiveclassification" type="positiveclassification"></block>
+            <block id="negativeclassification" type="negativeclassification"></block>
+        </category>
     </xml>
-    
-      <xml id="AllColumnsScope" style="display: none">
+
+
+
+    <xml id="ColumnScope" style="display: none">
         <category name="Logic">
-                <block id ="ifthen"  type="ifthen"></block>
-                <block id ="elseifthen" type="elseifthen"></block>
-                <block id ="elsethen" type="elsethen"></block>
-                <block id ="and"  type="and"></block>
-                <block id ="or"  type="or"></block>
-                <block id ="forloop"  type="forloop"></block>
+            <block id="ifthen" type="ifthen"></block>
+            <block id="elseifthen" type="elseifthen"></block>
+            <block id="elsethen" type="elsethen"></block>
+            <block id="and" type="and"></block>
+            <block id="or" type="or"></block>
         </category>
-          
-        <category name = "Checks">
-                <block id ="is"  type="is"></block>
-                <block id ="isnot"  type="isnot"></block>
-                <block id ="exists"  type="exists"></block>
-                <block id ="doesnotexist"  type="doesnotexist"></block>
-                <block id ="contains"  type="contains"></block>
-                <block id ="startswith"  type="startswith"></block>
-                <block id ="endswith"  type="endswith"></block>
-                <block id="comparison" type="comparison"></block>
+        <category name="Checks">
+            <block id="is" type="is"></block>
+            <block id="isnot" type="isnot"></block>
+            <block id="exists" type="exists"></block>
+            <block id="doesnotexist" type="doesnotexist"></block>
+            <block id="contains" type="contains"></block>
+            <block id="startswith" type="startswith"></block>
+            <block id="endswith" type="endswith"></block>
+            <block id="comparison" type="comparison"></block>
         </category>
-          
         <category name="Math">
-            <block id ="number"  type="number"></block>
-            <block id ="arithmetic"  type="arithmetic">
+            <block id="number" type="number"></block>
+            <block id="arithmetic" type="arithmetic">
             </block>
-            <block id ="math_round"  type="math_round">
+            <block id="math_round" type="math_round">
             </block>
-            <block id ="math_constrain"  type="math_constrain">
+            <block id="math_constrain" type="math_constrain">
                 <value name="VALUE">
                     <shadow type="math_number">
                         <field name="NUM">50</field>
@@ -395,8 +269,8 @@
             </block>
         </category>
         <category name="Text">
-            <block id ="textvalue"  type="textvalue"></block>
-            <block id ="text_indexOf"  type="text_indexOf">
+            <block id="textvalue" type="textvalue"></block>
+            <block id="text_indexOf" type="text_indexOf">
                 <value name="VALUE">
                     <block type="variables_get">
                         <field name="VAR">{textVariable}</field>
@@ -408,28 +282,21 @@
                     </shadow>
                 </value>
             </block>
-            <block id ="text_charAt"  type="text_charAt">
-                <value name="VALUE">
-                    <block type="variables_get">
-                        <field name="VAR">{textVariable}</field>
-                    </block>
-                </value>
-            </block>
-            <block id ="text_getSubstring"  type="text_getSubstring">
+            <block id="text_getSubstring" type="text_getSubstring">
                 <value name="STRING">
                     <block type="variables_get">
                         <field name="VAR">{textVariable}</field>
                     </block>
                 </value>
             </block>
-            <block id ="text_changeCase"  type="text_changeCase">
+            <block id="text_changeCase" type="text_changeCase">
                 <value name="TEXT">
                     <shadow type="text">
                         <field name="TEXT">abc</field>
                     </shadow>
                 </value>
             </block>
-            <block id ="text_trim" type="text_trim">
+            <block id="text_trim" type="text_trim">
                 <value name="TEXT">
                     <shadow type="text">
                         <field name="TEXT">abc</field>
@@ -437,29 +304,135 @@
                 </value>
             </block>
         </category>
-            <category name = "Column Properties">
-                <block id ="nameofcolumnposition"  type="nameofcolumnposition"></block>
-                <block id ="ridofcolumnposition"  type="ridofcolumnposition"></block>
-                <block id ="inferredformatofthecolumnposition"  type="inferredformatofthecolumnposition"></block>
-                <block id ="inferreddataclassofthecolumnposition"  type="inferreddataclassofthecolumnposition"></block>
-                <block id ="inferreddatatypeofthecolumnposition"  type="inferreddatatypeofthecolumnposition"></block>
-                <block id ="minimumstringvalueposition"  type="minimumstringvalueposition"></block>
-                <block id ="maximumstringvalueposition"  type="maximumstringvalueposition"></block>
-                <block id ="maximumstringvalueposition"  type="maximumstringvalueposition"></block>
-                <block id ="minimumnumericvalueposition"  type="minimumnumericvalueposition"></block>
-                <block id ="maximumnumericvalueposition"  type="maximumnumericvalueposition"></block>
-                <block id ="numberofnullvaluesposition" type="numberofnullvaluesposition"></block>
-                <block id ="numberofemptyvaluesposition"  type="numberofemptyvaluesposition"></block>
-                <block id ="numberofmissingvaluesposition"  type="numberofmissingvaluesposition"></block>
-                <block id ="numberofnonmissingvaluesposition"  type="numberofnonmissingvaluesposition"></block>
-                <block id ="numberofuniquevaluesposition"  type="numberofuniquevaluesposition"></block>
-                <block id ="frequencyofthevalueposition"  type="frequencyofthevalueposition"></block>
-            </category>
-            <category name = "Data Classes">
-                <block id ="dataclass"  type="dataclass"></block>
-                <block id ="inferreddataclassisposition"  type="inferreddataclassisposition"></block>
-                <block id="classifycolumn" type="classifycolumn"></block>
-            </category>
+        <category name="Column Properties">
+            <block id="nameofcolumn" type="nameofcolumn"></block>
+            <block id="ridofcolumn" type="ridofcolumn"></block>
+            <block id="inferredformatofthecolumn" type="inferredformatofthecolumn"></block>
+            <block id="inferreddataclassofthecolumn" type="inferreddataclassofthecolumn"></block>
+            <block id="inferreddatatypeofthecolumn" type="inferreddatatypeofthecolumn"></block>
+            <block id="minimumstringvalue" type="minimumstringvalue"></block>
+            <block id="maximumstringvalue" type="maximumstringvalue"></block>
+            <block id="minimumnumericvalue" type="minimumnumericvalue"></block>
+            <block id="maximumnumericvalue" type="maximumnumericvalue"></block>
+            <block id="numberofnullvalues" type="numberofnullvalues"></block>
+            <block id="numberofemptyvalues" type="numberofemptyvalues"></block>
+            <block id="numberofmissingvalues" type="numberofmissingvalues"></block>
+            <block id="numberofnonmissingvalues" type="numberofnonmissingvalues"></block>
+            <block id="numberofuniquevalues" type="numberofuniquevalues"></block>
+        </category>
+        <category name="Data Classes">
+            <block id="dataclass" type="dataclass"></block>
+            <block id="inferreddataclassis" type="inferreddataclassis"></block>
+            <block id="classificationconfidence" type="classificationconfidence"></block>
+            <block id="positiveclassification" type="positiveclassification"></block>
+            <block id="negativeclassification" type="negativeclassification"></block>
+        </category>
+    </xml>
+
+    <xml id="AllColumnsScope" style="display: none">
+        <category name="Logic">
+            <block id="ifthen" type="ifthen"></block>
+            <block id="elseifthen" type="elseifthen"></block>
+            <block id="elsethen" type="elsethen"></block>
+            <block id="and" type="and"></block>
+            <block id="or" type="or"></block>
+            <block id="forloop" type="forloop"></block>
+        </category>
+
+        <category name="Checks">
+            <block id="is" type="is"></block>
+            <block id="isnot" type="isnot"></block>
+            <block id="exists" type="exists"></block>
+            <block id="doesnotexist" type="doesnotexist"></block>
+            <block id="contains" type="contains"></block>
+            <block id="startswith" type="startswith"></block>
+            <block id="endswith" type="endswith"></block>
+            <block id="comparison" type="comparison"></block>
+        </category>
+
+        <category name="Math">
+            <block id="number" type="number"></block>
+            <block id="arithmetic" type="arithmetic">
+            </block>
+            <block id="math_round" type="math_round">
+            </block>
+            <block id="math_constrain" type="math_constrain">
+                <value name="VALUE">
+                    <shadow type="math_number">
+                        <field name="NUM">50</field>
+                    </shadow>
+                </value>
+                <value name="LOW">
+                    <shadow type="math_number">
+                        <field name="NUM">1</field>
+                    </shadow>
+                </value>
+                <value name="HIGH">
+                    <shadow type="math_number">
+                        <field name="NUM">100</field>
+                    </shadow>
+                </value>
+            </block>
+        </category>
+        <category name="Text">
+            <block id="textvalue" type="textvalue"></block>
+            <block id="text_indexOf" type="text_indexOf">
+                <value name="VALUE">
+                    <block type="variables_get">
+                        <field name="VAR">{textVariable}</field>
+                    </block>
+                </value>
+                <value name="FIND">
+                    <shadow type="text">
+                        <field name="TEXT">abc</field>
+                    </shadow>
+                </value>
+            </block>
+            <block id="text_getSubstring" type="text_getSubstring">
+                <value name="STRING">
+                    <block type="variables_get">
+                        <field name="VAR">{textVariable}</field>
+                    </block>
+                </value>
+            </block>
+            <block id="text_changeCase" type="text_changeCase">
+                <value name="TEXT">
+                    <shadow type="text">
+                        <field name="TEXT">abc</field>
+                    </shadow>
+                </value>
+            </block>
+            <block id="text_trim" type="text_trim">
+                <value name="TEXT">
+                    <shadow type="text">
+                        <field name="TEXT">abc</field>
+                    </shadow>
+                </value>
+            </block>
+        </category>
+        <category name="Column Properties">
+            <block id="nameofcolumnposition" type="nameofcolumnposition"></block>
+            <block id="ridofcolumnposition" type="ridofcolumnposition"></block>
+            <block id="inferredformatofthecolumnposition" type="inferredformatofthecolumnposition"></block>
+            <block id="inferreddataclassofthecolumnposition" type="inferreddataclassofthecolumnposition"></block>
+            <block id="inferreddatatypeofthecolumnposition" type="inferreddatatypeofthecolumnposition"></block>
+            <block id="minimumstringvalueposition" type="minimumstringvalueposition"></block>
+            <block id="maximumstringvalueposition" type="maximumstringvalueposition"></block>
+            <block id="maximumstringvalueposition" type="maximumstringvalueposition"></block>
+            <block id="minimumnumericvalueposition" type="minimumnumericvalueposition"></block>
+            <block id="maximumnumericvalueposition" type="maximumnumericvalueposition"></block>
+            <block id="numberofnullvaluesposition" type="numberofnullvaluesposition"></block>
+            <block id="numberofemptyvaluesposition" type="numberofemptyvaluesposition"></block>
+            <block id="numberofmissingvaluesposition" type="numberofmissingvaluesposition"></block>
+            <block id="numberofnonmissingvaluesposition" type="numberofnonmissingvaluesposition"></block>
+            <block id="numberofuniquevaluesposition" type="numberofuniquevaluesposition"></block>
+            <block id="frequencyofthevalueposition" type="frequencyofthevalueposition"></block>
+        </category>
+        <category name="Data Classes">
+            <block id="dataclass" type="dataclass"></block>
+            <block id="inferreddataclassisposition" type="inferreddataclassisposition"></block>
+            <block id="classifycolumn" type="classifycolumn"></block>
+        </category>
 
 
 
@@ -467,7 +440,6 @@
     </xml>
 
     <script>
-
         var workspace = Blockly.inject('blocklyDiv', {
             media: '../../media/'
             , toolbox: document.getElementById('toolbox')
@@ -475,17 +447,17 @@
 
         function showCode() {
             // Generate JavaScript code and display it.
-            
+
             Blockly.JavaScript.INFINITE_LOOP_TRAP = null;
             var code = Blockly.JavaScript.workspaceToCode(workspace);
-            alert(code); 
+            alert(code);
             var dl = document.createElement('a');
             dl.setAttribute('href', 'data:text/csv;charset=utf-8,' + encodeURIComponent(code));
             dl.setAttribute('download', 'DataClassificationJS.txt');
             dl.click();
         }
-        
-        function downloadXML(){
+
+        function downloadXML() {
             var xml = Blockly.Xml.workspaceToDom(workspace);
             var xml_text = Blockly.Xml.domToText(xml);
             alert(xml_text);
@@ -494,69 +466,62 @@
             dl.setAttribute('download', 'DataClassificationBlocks.txt');
             dl.click();
         }
-        
-        
     </script>
     <button onClick="showCode()">Generate Javascript</button>
     <button onClick="downloadXML()">Export the Blocks</button>
-     <input type="file" id="fileinput" />
+    <input type="file" id="fileinput" />
     <script type="text/javascript">
-    function readSingleFile(evt) {
-    //Retrieve the first (and only!) File from the FileList object
-    var f = evt.target.files[0]; 
+        function readSingleFile(evt) {
+            //Retrieve the first (and only!) File from the FileList object
+            var f = evt.target.files[0];
 
-    if (f) {
-      var r = new FileReader();
-      r.onload = function(e) { 
-	    var contents = e.target.result;
-        alert(contents); 
-        var xml = Blockly.Xml.textToDom(contents);
-        Blockly.Xml.domToWorkspace(xml, workspace);
-      }
-      r.readAsText(f);
-      
-      
-    } else { 
-      alert("Failed to load file");
-    }
-    }
+            if (f) {
+                var r = new FileReader();
+                r.onload = function (e) {
+                    var contents = e.target.result;
+                    alert(contents);
+                    var xml = Blockly.Xml.textToDom(contents);
+                    Blockly.Xml.domToWorkspace(xml, workspace);
+                }
+                r.readAsText(f);
 
-    document.getElementById('fileinput').addEventListener('change', readSingleFile, false);
+
+            } else {
+                alert("Failed to load file");
+            }
+        }
+
+        document.getElementById('fileinput').addEventListener('change', readSingleFile, false);
     </script>
     <script type="text/javascript">
-function scope(value)
-{
-    if(value == "Value"){
-         workspace.updateToolbox(document.getElementById('ValueScope'));
-        Blockly.mainWorkspace.clear();
-        var xml = Blockly.Xml.textToDom('<xml xmlns="http://www.w3.org/1999/xhtml"><variables></variables><block type="ifthen" id="ifthen" x="141" y="24"><value name="Action1"><block type="positiveclassification" id="positiveclassification"></block></value><next><block type="elsethen" id="elsethen"><value name="Action1"><block type="negativeclassification" id="negativeclassification"></block></value></block></next></block></xml>');
-        Blockly.Xml.domToWorkspace(xml, workspace);
-    }
-        
-    else if (value == "Column"){
-        workspace.updateToolbox(document.getElementById('ColumnScope'));
-        Blockly.mainWorkspace.clear();
-        var xml = Blockly.Xml.textToDom('<xml xmlns="http://www.w3.org/1999/xhtml"><variables></variables><block type="ifthen" id="ifthen" x="373" y="184"><value name="Action1"><block type="classificationconfidence" id="classificationconfidence"><field name="confidence">100</field></block></value><next><block type="elsethen" id="elsethen"><value name="Action1"><block type="negativeclassification" id="negativeclassification"></block></value></block></next></block></xml>');
-        Blockly.Xml.domToWorkspace(xml, workspace);
-    }
-        
-    else{
-        workspace.updateToolbox(document.getElementById('AllColumnsScope'));
-        Blockly.mainWorkspace.clear();
-        var xml = Blockly.Xml.textToDom('<xml xmlns="http://www.w3.org/1999/xhtml"><variables></variables><block type="forloop" id="forloop" x="158" y="99"><field name="variable">i</field><statement name="NAME"><block type="ifthen" id="ifthen"><value name="Action1"><block type="classifycolumn" id="classifycolumn"><field name="columnposition">i+1</field><field name="DataClass">EA</field><field name="confidence">100</field></block></value></block></statement></block></xml>');
-        Blockly.Xml.domToWorkspace(xml, workspace);
-    }
-        
-}
-</script>
+        function scope(value) {
+            if (value == "Value") {
+                workspace.updateToolbox(document.getElementById('ValueScope'));
+                Blockly.mainWorkspace.clear();
+                var xml = Blockly.Xml.textToDom('<xml xmlns="http://www.w3.org/1999/xhtml"><variables></variables><block type="ifthen" id="ifthen" x="141" y="24"><value name="Action1"><block type="positiveclassification" id="positiveclassification"></block></value><next><block type="elsethen" id="elsethen"><value name="Action1"><block type="negativeclassification" id="negativeclassification"></block></value></block></next></block></xml>');
+                Blockly.Xml.domToWorkspace(xml, workspace);
+            } else if (value == "Column") {
+                workspace.updateToolbox(document.getElementById('ColumnScope'));
+                Blockly.mainWorkspace.clear();
+                var xml = Blockly.Xml.textToDom('<xml xmlns="http://www.w3.org/1999/xhtml"><variables></variables><block type="ifthen" id="ifthen" x="373" y="184"><value name="Action1"><block type="classificationconfidence" id="classificationconfidence"><field name="confidence">100</field></block></value><next><block type="elsethen" id="elsethen"><value name="Action1"><block type="negativeclassification" id="negativeclassification"></block></value></block></next></block></xml>');
+                Blockly.Xml.domToWorkspace(xml, workspace);
+            } else {
+                workspace.updateToolbox(document.getElementById('AllColumnsScope'));
+                Blockly.mainWorkspace.clear();
+                var xml = Blockly.Xml.textToDom('<xml xmlns="http://www.w3.org/1999/xhtml"><variables></variables><block type="forloop" id="forloop" x="158" y="99"><field name="variable">i</field><statement name="NAME"><block type="ifthen" id="ifthen"><value name="Action1"><block type="classifycolumn" id="classifycolumn"><field name="columnposition">i+1</field><field name="DataClass">EA</field><field name="confidence">100</field></block></value></block></statement></block></xml>');
+                Blockly.Xml.domToWorkspace(xml, workspace);
+            }
 
-<select id ="ddl" name="ddl" onmousedown="this.value='';" onchange="scope(this.value);">
-  <option value=''>Select Scope</option>
-  <option value='Value'>Value</option>
-  <option value='Column'>Column</option>
-  <option value='AllColumns'>All Columns</option>
-</select>
-    
+        }
+    </script>
+
+    <select id="ddl" name="ddl" onmousedown="this.value='';" onchange="scope(this.value);">
+        <option value=''>Select Scope</option>
+        <option value='Value'>Value</option>
+        <option value='Column'>Column</option>
+        <option value='AllColumns'>All Columns</option>
+    </select>
+
 </body>
 
 </html>
