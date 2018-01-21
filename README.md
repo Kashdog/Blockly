@@ -10,7 +10,7 @@ To run the demo:
 
 Click the Choose File button next to Load Palette and Choose the File DataRuleFunctionsLibrary.xml from the demos folder
 
-This will allow the code to read from the file and generate all the function and test blocks in the pallete
+This will allow the code to read from the file and generate all the function and test blocks in the palette
 
 
 Click the Choose File button next to Generate Blocks and Choose the File DataRuleFunctionsLibrary.xml from the demos folder
