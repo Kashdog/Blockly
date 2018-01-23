@@ -86,13 +86,13 @@ Blockly.Blocks['select'] = {
             itemBlock.initSvg();
             connection.connect(itemBlock.outputConnection);
             if (this.having_ == 1) {
-            connection = itemBlock.getInput('having').connection;
-            var havingBlock = workspace.newBlock('having');
-            havingBlock.initSvg();
-            connection.connect(havingBlock.outputConnection);
+                connection = itemBlock.getInput('having').connection;
+                var havingBlock = workspace.newBlock('having');
+                havingBlock.initSvg();
+                connection.connect(havingBlock.outputConnection);
+            }
         }
-        }
-        
+
 
         var connection = topBlock.getInput('ORDERBY').connection;
         if (this.order_ == 1) {
@@ -305,8 +305,6 @@ Blockly.DataRule['insert'] = function (block) {
     var code = "INSERT INTO " + table_name;
     if (column_names != "") {
         code += " (" + column_names + ")";
-        console.log(column_names);
-        console.log(column_names.length);
     }
     code += "VALUES (" + value_names + ")";
     code += ";";
@@ -357,7 +355,7 @@ Blockly.Blocks['update'] = {
             .setCheck("table")
             .appendField("UPDATE");
         this.appendValueInput("SET0")
-            .setCheck(null)
+            .setCheck('assignment')
             .appendField("SET");
         this.setColour(60);
         this.setInputsInline(false);
@@ -440,7 +438,7 @@ Blockly.Blocks['update'] = {
             }
             if (!this.getInput('SET' + (i + 1))) {
                 var set_name = "SET" + (i + 1);
-                var input = this.appendValueInput(set_name).setCheck(null).appendField("SET");
+                var input = this.appendValueInput(set_name).setCheck('assignment').appendField("SET");
                 this.farthest_int = i + 1;
             }
             if (i == this.itemCount_ - 1) {
@@ -455,7 +453,7 @@ Blockly.Blocks['update'] = {
 Blockly.DataRule['update'] = function (block) {
     // Create a list with any number of elements of any type.
     var elements = new Array(block.itemCount_);
-    for (var i = 0; i < block.itemCount_+1; i++) {
+    for (var i = 0; i < block.itemCount_ + 1; i++) {
         elements[i] = Blockly.DataRule.valueToCode(block, 'SET' + i
             , Blockly.DataRule.ORDER_ATOMIC);
     }
@@ -653,27 +651,135 @@ Blockly.DataRule['table_name'] = function (block) {
     return [code, Blockly.DataRule.ORDER_ATOMIC];
 };
 
-Blockly.Blocks['operator'] = {
-    init: function () {
-        this.appendValueInput("Condition1")
-            .setCheck(null);
-        this.appendDummyInput()
-            .appendField(new Blockly.FieldDropdown([["=", "="], ["<>", "<>"], [">", ">"], ["<", "<"], ["≥ ", ">="], ["≤", "<="], ["BETWEEN", "BETWEEN"], ["LIKE", "LIKE"], ["IN", "IN"]]), "operatorlist");
-        this.appendValueInput("Condition2")
-            .setCheck(null);
-        this.setInputsInline(false);
-        this.setOutput(true, "Boolean");
-        this.setColour(60);
-        this.setTooltip("");
-        this.setHelpUrl("");
+
+Blockly.defineBlocksWithJsonArray([
+  {
+    "type": "operator",
+    "message0": "%1 %2 %3 %4",
+    "args0": [
+      {
+        "type": "input_value",
+        "name": "NUMBER_TO_CHECK",
+        "check": "Number"
+      },
+      {
+        "type": "field_dropdown",
+        "name": "PROPERTY",
+        "options": [
+          ["=", "="],
+          ["<>", "<>"],
+          [">", ">"],
+          ["<", "<"],
+          ["≥", ">="],
+          ["≤", "<="],
+          ["BETWEEN", "BETWEEN"],
+          ["LIKE", "LIKE"],
+          ["IN", "IN"]    
+        ]
+          
+      },
+            {
+      "type": "input_dummy"
+    },
+    {
+      "type": "input_value",
+      "name": "Condition2"
     }
+    ],
+    "inputsInline": false,
+    "output": "Boolean",
+    "colour": "60",
+    "tooltip": "%{BKY_MATH_IS_TOOLTIP}",
+    "mutator": "operator_mutator"
+  }
+]);
+
+
+Blockly.Constants.IS_EQUAL_MUTATOR_MIXIN = {
+  /**
+   * Create XML to represent whether the 'divisorInput' should be present.
+   * @return {Element} XML storage element.
+   * @this Blockly.Block
+   */
+  mutationToDom: function() {
+    var container = document.createElement('mutation');
+    var equalInput = (this.getFieldValue('PROPERTY') == '=');
+    container.setAttribute('equal_input', equalInput);
+    return container;
+  },
+  /**
+   * Parse XML to restore the 'divisorInput'.
+   * @param {!Element} xmlElement XML storage element.
+   * @this Blockly.Block
+   */
+  domToMutation: function(xmlElement) {
+    var equalInput = (xmlElement.getAttribute('equal_input') == 'true');
+    this.updateShape_(equalInput);
+  },
+  /**
+   * Modify this block to have (or not have) an input for 'is divisible by'.
+   * @param {boolean} divisorInput True if this block has a divisor input.
+   * @private
+   * @this Blockly.Block
+   */
+  updateShape_: function(equalInput) {
+    if(equalInput == true){
+        console.log("Both Inputs");
+        this.setOutput(true, ["Boolean", "assignment"]);
+    } else {
+        console.log("One Input");
+        this.setOutput(true, "Boolean");
+    }
+  }
 };
+
+/**
+ * 'math_is_divisibleby_mutator' extension to the 'math_property' block that
+ * can update the block shape (add/remove divisor input) based on whether
+ * property is "divisble by".
+ * @this Blockly.Block
+ * @package
+ */
+Blockly.Constants.IS_EQUAL_MUTATOR_EXTENSION = function() {
+  this.getField('PROPERTY').setValidator(function(option) {
+    var equalInput = (option == '=');
+    this.sourceBlock_.updateShape_(equalInput);
+  });
+};
+
+Blockly.Extensions.registerMutator('operator_mutator',
+    Blockly.Constants.IS_EQUAL_MUTATOR_MIXIN,
+    Blockly.Constants.IS_EQUAL_MUTATOR_EXTENSION);
+
 
 Blockly.DataRule['operator'] = function (block) {
     var value_condition1 = Blockly.DataRule.valueToCode(block, 'Condition1', Blockly.DataRule.ORDER_ATOMIC);
     var dropdown_operatorlist = block.getFieldValue('operatorlist');
     var value_condition2 = Blockly.DataRule.valueToCode(block, 'Condition2', Blockly.DataRule.ORDER_ATOMIC);
     var code = value_condition1 + ' ' + dropdown_operatorlist + ' ' + value_condition2;
+    return [code, Blockly.DataRule.ORDER_ATOMIC];
+};
+
+Blockly.Blocks['assignment'] = {
+    init: function () {
+        this.appendValueInput("Condition1")
+            .setCheck(null);
+        this.appendDummyInput()
+            .appendField("= (Assignment)");
+        this.appendValueInput("Condition2")
+            .setCheck(null);
+        this.setInputsInline(false);
+        this.setOutput(true, "assignment");
+        this.setColour(60);
+        this.setTooltip("");
+        this.setHelpUrl("");
+    }
+};
+
+Blockly.DataRule['assignment'] = function (block) {
+    var value_condition1 = Blockly.DataRule.valueToCode(block, 'Condition1', Blockly.DataRule.ORDER_ATOMIC);
+    var value_condition2 = Blockly.DataRule.valueToCode(block, 'Condition2', Blockly.DataRule.ORDER_ATOMIC);
+    var code = value_condition1 + ' = ' + value_condition2;
     return [code, Blockly.DataRule.ORDER_ATOMIC];
 };
 

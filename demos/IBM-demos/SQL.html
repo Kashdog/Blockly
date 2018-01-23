@@ -41,7 +41,10 @@
             <block type="andor">
                 <mutation items="0"></mutation>
             </block>
-            <block type="operator"></block>
+            <block type="operator">
+                <mutation equal_input="true"></mutation>
+            </block>
+            <block type="assignment"></block>
         </category>
         <category name="values">
             <block type="column_name"></block>
@@ -61,6 +64,13 @@
 
         var xml = Blockly.Xml.textToDom('<xml xmlns="http://www.w3.org/1999/xhtml"><variables></variables></xml>');
         Blockly.Xml.domToWorkspace(xml, workspace);
+
+        function onBlockChange(event) {
+            if (event.type == Blockly.Events.BLOCK_CHANGE) {
+                
+            }
+        }
+        workspace.addChangeListener(onBlockChange);
 
         function myUpdateFunction(event) {
             var code = Blockly.DataRule.workspaceToCode(workspace);
