@@ -455,13 +455,13 @@ Blockly.Blocks['update'] = {
 Blockly.DataRule['update'] = function (block) {
     // Create a list with any number of elements of any type.
     var elements = new Array(block.itemCount_);
-    for (var i = 0; i < block.itemCount_; i++) {
-        elements[i] = Blockly.DataRule.valueToCode(block, 'ADD' + i
-            , Blockly.DataRule.ORDER_COMMA) || 'null';
+    for (var i = 0; i < block.itemCount_+1; i++) {
+        elements[i] = Blockly.DataRule.valueToCode(block, 'SET' + i
+            , Blockly.DataRule.ORDER_ATOMIC);
     }
     var table_name = Blockly.DataRule.valueToCode(block, 'UPDATE', Blockly.DataRule.ORDER_ATOMIC);
     var condition_name = Blockly.DataRule.valueToCode(block, 'WHERE', Blockly.DataRule.ORDER_ATOMIC);
-    var code = 'UPDATE ' + table_name + ' SET' + elements.join(', ') + ' WHERE ' + condition_name;
+    var code = 'UPDATE ' + table_name + ' SET ' + elements.join(', ') + ' WHERE ' + condition_name;
     return [code, Blockly.DataRule.ORDER_ATOMIC];
 };
 
