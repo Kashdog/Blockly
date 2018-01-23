@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Blockly Demo: Toolbox</title>
+    <script src="../../blockly_compressed.js"></script>
+    <script src="../../blocks_compressed.js"></script>
+    <script src="../../datarulegeneration_compressed.js"></script>
+    <script src="./sql.js"></script>
+    <script src="../../msg/js/en.js"></script>
+    <script src="../../colour-gradient.js"></script>
+    <style>
+        body {
+            background-color: #fff;
+            font-family: sans-serif;
+        }
+        
+        h1 {
+            font-weight: normal;
+            font-size: 140%;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="blocklyDiv" style="height: 600px; width: 1400px;"></div>
+    <xml id="toolbox" style="display: none">
+        <category name="SQL">
+            <block type="select">
+                <mutation where="0"></mutation>
+            </block>
+            <block type="andor">
+                <mutation items="0"></mutation>
+            </block>
+            <block type="column_name"></block>
+            <block type="all_columns"></block>
+            <block type="table_name"></block>
+        </category>
+    </xml>
+    <script>
+        var workspace = Blockly.inject('blocklyDiv', {
+            media: '../../media/'
+            , toolbox: document.getElementById('toolbox')
+        });
+
+        var xml = Blockly.Xml.textToDom('<xml xmlns="http://www.w3.org/1999/xhtml"><variables></variables></xml>');
+        Blockly.Xml.domToWorkspace(xml, workspace);
+
+        function myUpdateFunction(event) {
+            var code = Blockly.DataRule.workspaceToCode(workspace);
+            document.getElementById("generatedCode").innerHTML = "Generated Code: " + code;
+
+        }
+        workspace.addChangeListener(myUpdateFunction);
+
+        function showCode() {
+            // Generate JavaScript code and display it.
+            Blockly.DataRule.INFINITE_LOOP_TRAP = null;
+            var code = Blockly.DataRule.workspaceToCode(workspace);
+            alert(code);
+        }
+
+        function downloadXML() {
+            var xml = Blockly.Xml.workspaceToDom(workspace);
+            var xml_text = Blockly.Xml.domToText(xml);
+            alert(xml_text);
+            var dl = document.createElement('a');
+            dl.setAttribute('href', 'data:text/csv;charset=utf-8,' + encodeURIComponent(xml_text));
+            dl.setAttribute('download', 'DataClassificationBlocks.txt');
+            dl.click();
+        }
+    </script>
+    <button onClick="showCode()">Generate Rule</button>
+    <button onClick="downloadXML()">Export the Blocks</button>
+
+    <input type="file" id="fileinput" />
+    <script type="text/javascript">
+        function readSingleFile(evt) {
+            //Retrieve the first (and only!) File from the FileList object
+            var f = evt.target.files[0];
+            if (f) {
+                var r = new FileReader();
+                r.onload = function (e) {
+                    var contents = e.target.result;
+                    alert(contents);
+                    var xml = Blockly.Xml.textToDom(contents);
+                    Blockly.Xml.domToWorkspace(xml, workspace);
+                }
+                r.readAsText(f);
+            } else {
+                alert("Failed to load file");
+            }
+        }
+        document.getElementById('fileinput').addEventListener('change', readSingleFile, false);
+    </script>
+    <br>
+    <br>
+    <div id="generatedCode">Generated code: </div>
+    <div id="ruleToBlocks"></div>
+</body>
+
+</html>
