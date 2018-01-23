@@ -26,16 +26,31 @@
 <body>
     <div id="blocklyDiv" style="height: 600px; width: 1400px;"></div>
     <xml id="toolbox" style="display: none">
-        <category name="SQL">
+        <category name="Commands">
             <block type="select">
-                <mutation where="0"></mutation>
+                <mutation where="0" group="0" order="0"></mutation>
             </block>
+            <block type="insert">
+                <mutation items="0"></mutation>
+            </block>
+            <block type="update">
+                <mutation items="0"></mutation>
+            </block>
+        </category>
+        <category name="operators">
             <block type="andor">
                 <mutation items="0"></mutation>
             </block>
+            <block type="operator"></block>
+        </category>
+        <category name="values">
             <block type="column_name"></block>
             <block type="all_columns"></block>
+            <block type="valueliteral"></block>
             <block type="table_name"></block>
+            <block type="variable"></block>
+            <block type="stringliteral"></block>
+            <block type="numericliteral"></block>
         </category>
     </xml>
     <script>
