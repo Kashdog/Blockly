@@ -1,126 +1,92 @@
 <xml xmlns="http://www.w3.org/1999/xhtml">
     <variables></variables>
-    <block type="ifthenelse" id="ifthenelse" x="85" y="23">
-        <value name="Condition">
-            <block type="not" id="not">
-                <value name="NAME">
-                    <block type="=" id="=">
-                        <value name="Operand1">
-                            <block type="coalesce" id="coalesce">
-                                <value name="input1">
-                                    <block type="subtraction" id="subtraction">
-                                        <value name="operand1">
-                                            <block type="subtraction" id="#]lL{Lz/Eyc/BYNeIDiT">
-                                                <value name="operand1">
-                                                    <block type="addition" id="addition">
-                                                        <value name="operand1">
-                                                            <block type="numericliteral" id="numericliteral">
-                                                                <field name="numericInput">1</field>
-                                                            </block>
-                                                        </value>
-                                                        <value name="operand2">
-                                                            <block type="multiplication" id="multiplication">
-                                                                <value name="operand1">
-                                                                    <block type="numericliteral" id="Pu_E_8$s/UJV8eNbN.5f">
-                                                                        <field name="numericInput">2</field>
-                                                                    </block>
-                                                                </value>
-                                                                <value name="operand2">
-                                                                    <block type="numericliteral" id="Z*cXN5^hCa4={zUqCjm`">
-                                                                        <field name="numericInput">3</field>
-                                                                    </block>
-                                                                </value>
-                                                            </block>
-                                                        </value>
-                                                    </block>
-                                                </value>
-                                                <value name="operand2">
-                                                    <block type="numericliteral" id="*0k?^?ZDdRx2T9zX2~x%">
-                                                        <field name="numericInput">2</field>
-                                                    </block>
-                                                </value>
-                                            </block>
-                                        </value>
-                                        <value name="operand2">
-                                            <block type="addition" id="~?8)iv-omw%x_[!NPyHi">
-                                                <value name="operand1">
-                                                    <block type="multiplication" id="2A3$_,}HdXbJ2Ht@n}Z`">
-                                                        <value name="operand1">
-                                                            <block type="numericliteral" id="?9Pv;/]R%h8Ld]p5Ha.0">
-                                                                <field name="numericInput">3</field>
-                                                            </block>
-                                                        </value>
-                                                        <value name="operand2">
-                                                            <block type="numericliteral" id="TuyeAEW^eqPX~vP]wD33">
-                                                                <field name="numericInput">4</field>
-                                                            </block>
-                                                        </value>
-                                                    </block>
-                                                </value>
-                                                <value name="operand2">
-                                                    <block type="numericliteral" id="KoSz5^vh(0{#eO{8RyOq">
-                                                        <field name="numericInput">5</field>
-                                                    </block>
-                                                </value>
-                                            </block>
-                                        </value>
-                                    </block>
-                                </value>
-                                <value name="input2">
-                                    <block type="numericliteral" id="ev25jj4;c~5UxL%3X4./">
-                                        <field name="numericInput">1</field>
-                                    </block>
-                                </value>
-                            </block>
-                        </value>
-                        <value name="Operand2">
-                            <block type="stringliteral" id="stringliteral">
-                                <field name="stringInput">val</field>
-                            </block>
-                        </value>
-                    </block>
-                </value>
+    <block type="select" id="|Ed]z#sw1+fy.Un(0V5w" x="147" y="62">
+        <mutation where="1" group="0" having="0" orderasc="0" orderdesc="0"></mutation>
+        <statement name="SELECT">
+            <block type="all_columns" id="rA54Iv6?.sjT9EaB{h#@"></block>
+        </statement>
+        <value name="FROM">
+            <block type="table_name" id="|NF?ENP6BvgGW4LnQMaF">
+                <field name="tableName">Customers</field>
             </block>
         </value>
-        <value name="Action">
-            <block type="and" id="and">
+        <value name="WHERE">
+            <block type="andor" id="Yh|if=.mi7ToGtnC-qdn">
+                <mutation items="1"></mutation>
+                <field name="list0">AND</field>
+                <field name="list1">AND</field>
                 <value name="Condition1">
-                    <block type="=" id="$=4-bFT:`@f$MCf/40U|">
-                        <value name="Operand1">
-                            <block type="variable" id="variable">
-                                <field name="variable">variable</field>
+                    <block type="operator" id="HX$0kL@]Ks;G.7!-~5MV">
+                        <mutation equal_input="true"></mutation>
+                        <field name="PROPERTY">=</field>
+                        <value name="Condition1">
+                            <block type="variable" id="YJ~J3Fo:K1=bx,bzbZ)m">
+                                <field name="variable">CustomerID</field>
                             </block>
                         </value>
-                        <value name="Operand2">
-                            <block type="stringliteral" id="gYVB3r+$$Ct-i(rd5Kcf">
-                                <field name="stringInput">val</field>
+                        <value name="Condition2">
+                            <block type="numericliteral" id="oeSA9Lfpth`d6{*DLDoY">
+                                <field name="numericInput">1</field>
                             </block>
                         </value>
                     </block>
                 </value>
                 <value name="Condition2">
-                    <block type="=" id="*/mq:hTX?x~[^/$3JO{@">
-                        <value name="Operand1">
-                            <block type="variable" id="x5OToWC]`5SVp17#2Z;c">
-                                <field name="variable">variable</field>
+                    <block type="operator" id="c^#w5QX2@4FgQ`Q`,L}7">
+                        <mutation equal_input="true"></mutation>
+                        <field name="PROPERTY">=</field>
+                        <value name="Condition1">
+                            <block type="variable" id="Udz^Az5z*O4El(~MZWP}">
+                                <field name="variable">CustomerID</field>
                             </block>
                         </value>
-                        <value name="Operand2">
-                            <block type="stringliteral" id="!(JD_Je(EGgg.:vzGH`]">
-                                <field name="stringInput">val</field>
+                        <value name="Condition2">
+                            <block type="numericliteral" id="3@h@Jo+,)U9$c40IW/a!">
+                                <field name="numericInput">2</field>
+                            </block>
+                        </value>
+                    </block>
+                </value>
+                <value name="Condition3">
+                    <block type="operator" id="!*)xvXfmIWR!A30Ypo$g">
+                        <mutation equal_input="true"></mutation>
+                        <field name="PROPERTY">=</field>
+                        <value name="Condition1">
+                            <block type="variable" id="A#|04#cg-KXjT_mEB@-;">
+                                <field name="variable">CustomerID</field>
+                            </block>
+                        </value>
+                        <value name="Condition2">
+                            <block type="numericliteral" id="vXxL,DETHc]_WeiJ~38W">
+                                <field name="numericInput">3</field>
                             </block>
                         </value>
                     </block>
                 </value>
             </block>
         </value>
-        <value name="AlternateAction">
-            <block type="unique" id="unique">
-                <value name="Operand1">
-                    <block type="variable" id="JLEDm`Q]5B6dYk:94x],">
-                        <field name="variable">variable</field>
-                    </block>
-                </value>
+    </block>
+</xml>
+
+
+<xml xmlns="http://www.w3.org/1999/xhtml">
+    <variables></variables>
+    <block type="select" x="85" y="20">
+        <mutation where="1" group="0" having="0" orderasc="0" orderdesc="0"></mutation>
+        <statement name="SELECT">
+            <block type="all_columns"></block>
+        </statement>
+        <value name="FROM">
+            <block type="table_name">
+                <field name="tableName">Customers</field>
+            </block>
+        </value>
+        <value name="WHERE">
+            <block type="andor">
+                <mutation items="0"></mutation>
+                <value name="Condition1"></value>
+                <field name="list0">AND</field>
+                <value name="Condition2"></value>
             </block>
         </value>
     </block>

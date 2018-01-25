@@ -41,10 +41,10 @@
             <block type="andor">
                 <mutation items="0"></mutation>
             </block>
+            <block type="not"></block>
             <block type="operator">
                 <mutation equal_input="true"></mutation>
             </block>
-            <block type="assignment"></block>
         </category>
         <category name="values">
             <block type="column_name"></block>
@@ -65,12 +65,6 @@
         var xml = Blockly.Xml.textToDom('<xml xmlns="http://www.w3.org/1999/xhtml"><variables></variables></xml>');
         Blockly.Xml.domToWorkspace(xml, workspace);
 
-        function onBlockChange(event) {
-            if (event.type == Blockly.Events.BLOCK_CHANGE) {
-                
-            }
-        }
-        workspace.addChangeListener(onBlockChange);
 
         function myUpdateFunction(event) {
             var code = Blockly.DataRule.workspaceToCode(workspace);
@@ -94,6 +88,213 @@
             dl.setAttribute('href', 'data:text/csv;charset=utf-8,' + encodeURIComponent(xml_text));
             dl.setAttribute('download', 'DataClassificationBlocks.txt');
             dl.click();
+        }
+
+
+
+        function isAStringLiteral(rule) {
+            if (rule.substring(0, 1) === '\'' && rule.substring(rule.length - 1, rule.length) === '\'') {
+                return true;
+            } else {
+                return false
+            }
+        }
+
+        function trimStringLiteral(literal) {
+            literal = literal.substring(1, literal.length - 1)
+            return literal;
+        }
+
+        function fetchCode(value) {
+            var block;
+            switch (true) {
+            case (!isNaN(value)):
+                block = '<block type="numericliteral" id="numericliteral"><field name="numericInput">' + value + '</field></block>';
+                break;
+            case (isAStringLiteral(rule)):
+                block = '<block type="stringliteral" id="stringliteral"><field name="stringInput">' + trimStringLiteral(value) + '</field></block>';
+                break;
+            default:
+                block = '<block type="variable" id="variable"><field name="variable">' + value + '</field></block>';
+            }
+            return block;
+
+        }
+
+        function getOperatorBlocks(operatorexpr) {
+
+        }
+
+
+
+        function sqlToBlocks() {
+
+            var sqlExpression = document.getElementById("sqlExpression").value;
+            sqlExpression = sqlExpression.substring(0, sqlExpression.lastIndexOf(";"));
+            var operators = ['=', '<>', '>', '<', '>=', '<=', 'IN', 'BETWEEN', 'LIKE'];
+            var statements = sqlExpression.split(';');
+            var x_index_of_block = 85;
+            var y_index_of_block = 20;
+            var sqlToBlocks = '<xml xmlns="http://www.w3.org/1999/xhtml"><variables></variables>';
+            [].forEach.call(statements, function (statement, index) {
+                var statement_split = statement.split(" ");
+
+                var select_index = statement_split.indexOf("SELECT");
+                var from_index = statement_split.indexOf("FROM");
+                var where_index = statement_split.indexOf("WHERE");
+                var groupby_index = statement_split.indexOf("GROUP");
+                var having_index = statement_split.indexOf("HAVING");
+                var orderby_index = statement_split.indexOf("ORDER");
+                var index_after_where;
+                var index_after_groupby;
+                var index_after_having;
+
+                if (groupby_index != -1) {
+                    index_after_where = groupby_index;
+                } else if (orderby_index != -1) {
+                    index_after_where = orderby_index;
+                } else {
+                    index_after_where = statement_split.length;
+                }
+
+                if (having_index != -1) {
+                    index_after_groupby = having_index;
+                } else if (orderby_index != -1) {
+                    index_after_groupby = orderby_index;
+                } else {
+                    index_after_groupby = statement_split.length;
+                }
+
+                if (orderby_index != -1) {
+                    index_after_having = orderby_index;
+                } else {
+                    index_after_having = statement_split.length;
+                }
+
+                var where_mutator;
+                var groupby_mutator;
+                var having_mutator;
+                var orderbyasc_mutator;
+                var orderbydesc_mutator;
+
+                if (where_index == -1) {
+                    where_mutator = 0;
+                } else {
+                    where_mutator = 1;
+                }
+
+                if (groupby_index == -1) {
+                    groupby_mutator = 0;
+                } else {
+                    groupby_mutator = 1;
+                }
+
+                if (having_index == -1) {
+                    having_mutator = 0;
+                } else {
+                    having_mutator = 1;
+                }
+
+
+                if (orderby_index == -1) {
+                    orderbyasc_mutator = 0;
+                    orderbydesc_mutator = 0;
+                }
+                if (statement_split.includes("ASC")) {
+                    orderbyasc_mutator = 1;
+                }
+                if (statement_split.includes("DESC")) {
+                    orderbydesc_mutator = 1;
+                }
+
+
+                if (select_index != -1 && from_index != -1) {
+                    sqlToBlocks += '<block type="select" x="' + x_index_of_block + '" y="' + y_index_of_block + '">'
+                    sqlToBlocks += '<mutation where="' + where_mutator + '" group="' + groupby_mutator + '" having="' + having_mutator + '" orderasc="' + orderbyasc_mutator + '" orderdesc="' + orderbydesc_mutator + '"></mutation>'
+                    var select_columns = statement_split.slice(select_index + 1, from_index);
+                    var following_next_block_tags = "";
+                    sqlToBlocks += '<statement name="SELECT">';
+                    [].forEach.call(select_columns, function (column, index) {
+                        var column_name = column;
+                        if (column_name.substring(column_name.length - 1, column_name.length) == ",") {
+                            column_name = column_name.substring(0, column_name.length - 1);
+                        }
+                        if (column_name == "*") {
+                            sqlToBlocks += '<block type="all_columns"></block>';
+                        } else {
+                            if (index == select_columns.length - 1) {
+                                sqlToBlocks += '<block type="column_name" id="7mK.5}O_PX97/!J{bUFf"><field name="columnName">' + column_name + '</field></block>';
+                                y_index_of_block += 40;
+                            } else {
+                                sqlToBlocks += '<block type="column_name"><field name="columnName">' + column_name + '</field><next>';
+                                following_next_block_tags = '</next></block>' + following_next_block_tags;
+                                y_index_of_block += 40;
+                            }
+                        }
+
+                    });
+                    sqlToBlocks += following_next_block_tags;
+                    sqlToBlocks += '</statement>';
+                    var from_table = statement_split[from_index + 1];
+                    sqlToBlocks += '<value name="FROM">';
+                    sqlToBlocks += '<block type="table_name"><field name="tableName">' + from_table + '</field></block>'
+                    sqlToBlocks += '</value>'; // ends the blocks attached to the "FROM" input
+                    //SELECT * FROM Customers WHERE CustomerID=1 AND CustomerID=2;
+                    if (where_index != -1) {
+                        sqlToBlocks += '<value name="WHERE">';
+                        var where_blocks = statement_split.slice(where_index + 1, index_after_where);
+                        var andor_indexes = [];
+                        var and_slash_or = [];
+                        [].forEach.call(where_blocks, function (conditionElement, index) {
+                            if (conditionElement == "AND") {
+                                andor_indexes.push(index);
+                                and_slash_or.push("AND");
+                            } else if (conditionElement == "OR") {
+                                andor_indexes.push(index);
+                                and_slash_or.push("OR");
+                            }
+                        });
+                        if (andor_indexes.length > 0) {
+                            sqlToBlocks += '<block type="andor">';
+                            sqlToBlocks += '<mutation items="' + (andor_indexes.length - 1) + '"></mutation>';
+                            var current_andor = 1;
+                            [].forEach.call(andor_indexes, function (conditionElement, index) {
+                                if (index == 0) {
+                                    sqlToBlocks += '<value name="Condition1">';
+                                    sqlToBlocks += getOperatorBlocks(where_blocks.slice(0, conditionElement));
+                                    console.log(where_blocks.slice(0, conditionElement));
+                                    sqlToBlocks += '</value>';
+                                }  else {
+                                    sqlToBlocks += '<field name="list0">' + and_slash_or[index] + '</field>';
+                                    current_andor++;
+                                    sqlToBlocks += '<value name="Condition' + current_andor + '">';
+                                    sqlToBlocks += getOperatorBlocks(where_blocks.slice(andor_indexes[index - 1] + 1, conditionElement));
+                                    sqlToBlocks += '</value>';
+                                }
+                                
+                                if(index == andor_indexes.length-1) {
+                                    sqlToBlocks += '<field name="list0">' + and_slash_or[index] + '</field>';
+                                    current_andor++;
+                                    sqlToBlocks += '<value name="Condition' + current_andor + '">';
+                                    sqlToBlocks += getOperatorBlocks(where_blocks.slice(andor_indexes[index - 1] + 1));
+                                    console.log(where_blocks.slice(conditionElement + 1));
+                                    sqlToBlocks += '</value>';
+                                }
+                            });
+                            sqlToBlocks += '</block>';
+                        }
+                        sqlToBlocks += '</value>';
+                    }
+                    sqlToBlocks += '</block>'; // Ends the Select Block
+                    y_index_of_block += 40;
+                }
+
+            });
+            sqlToBlocks += '</xml>'
+
+
+            var xml = Blockly.Xml.textToDom(sqlToBlocks);
+            Blockly.Xml.domToWorkspace(xml, workspace);
         }
     </script>
     <button onClick="showCode()">Generate Rule</button>
@@ -119,6 +320,9 @@
         }
         document.getElementById('fileinput').addEventListener('change', readSingleFile, false);
     </script>
+    <input type="text" id="sqlExpression" value="" size="90">
+    <!--Type a SQL Expression Here to Convert to Blocks-->
+    <button onClick="sqlToBlocks()">Convert SQL to Blocks</button>
     <br>
     <br>
     <div id="generatedCode">Generated code: </div>
