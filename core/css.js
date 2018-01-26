@@ -502,7 +502,6 @@ Blockly.Css.CONTENT = [
 
   '.blocklyDropdownMenu {',
     'padding: 0 !important;',
-    'max-height: 300px !important;',
   '}',
 
   /* Override the default Closure URL. */

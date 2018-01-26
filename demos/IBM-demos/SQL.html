@@ -128,7 +128,6 @@
 
 
         function sqlToBlocks() {
-
             var sqlExpression = document.getElementById("sqlExpression").value;
             sqlExpression = sqlExpression.substring(0, sqlExpression.lastIndexOf(";"));
             var operators = ['=', '<>', '>', '<', '>=', '<=', 'IN', 'BETWEEN', 'LIKE'];
@@ -264,17 +263,18 @@
                                     sqlToBlocks += getOperatorBlocks(where_blocks.slice(0, conditionElement));
                                     console.log(where_blocks.slice(0, conditionElement));
                                     sqlToBlocks += '</value>';
-                                }  else {
-                                    sqlToBlocks += '<field name="list0">' + and_slash_or[index] + '</field>';
+                                    current_andor++;
+                                } else {
+                                    sqlToBlocks += '<field name="list' + (current_andor - 2) + '">' + and_slash_or[index] + '</field>';
                                     current_andor++;
                                     sqlToBlocks += '<value name="Condition' + current_andor + '">';
                                     sqlToBlocks += getOperatorBlocks(where_blocks.slice(andor_indexes[index - 1] + 1, conditionElement));
                                     sqlToBlocks += '</value>';
-                                }
-                                
-                                if(index == andor_indexes.length-1) {
-                                    sqlToBlocks += '<field name="list0">' + and_slash_or[index] + '</field>';
                                     current_andor++;
+                                }
+
+                                if (index == andor_indexes.length - 1) {
+                                    sqlToBlocks += '<field name="list' + (current_andor - 2) + '">' + and_slash_or[index] + '</field>';
                                     sqlToBlocks += '<value name="Condition' + current_andor + '">';
                                     sqlToBlocks += getOperatorBlocks(where_blocks.slice(andor_indexes[index - 1] + 1));
                                     console.log(where_blocks.slice(conditionElement + 1));

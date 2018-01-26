@@ -793,92 +793,36 @@ Blockly.defineBlocksWithJsonArray([
         , "args0": [
             {
                 "type": "input_value"
-                , "name": "Condition1"
-            , }
-
-
-
-
-            
-            , {
+                , "name": "Condition1",
+            },
+            {
                 "type": "field_dropdown"
                 , "name": "PROPERTY"
                 , "options": [
-          ["=", "="]
+                    ["=", "="],
+                    ["<>", "<>"],
+                    [">", ">"],
+                    ["<", "<"],
+                    ["≥", ">="],
+                    ["≤", "<="],
+                    ["BETWEEN", "BETWEEN"],
+                    ["LIKE", "LIKE"],
+                    ["IN", "IN"]
+                ]
 
-
-
-
-                    
-                    , ["<>", "<>"]
-
-
-
-
-                    
-                    , [">", ">"]
-
-
-
-
-                    
-                    , ["<", "<"]
-
-
-
-
-                    
-                    , ["≥", ">="]
-
-
-
-
-                    
-                    , ["≤", "<="]
-
-
-
-
-                    
-                    , ["BETWEEN", "BETWEEN"]
-
-
-
-
-                    
-                    , ["LIKE", "LIKE"]
-
-
-
-
-                    
-                    , ["IN", "IN"]
-        ]
-
-      }
-
-
-
-
-            
-            , {
+            },
+            {
                 "type": "input_dummy"
+            }, {
+                "type": "input_value",
+                "name": "Condition2"
     }
-
-
-
-
-            
-            , {
-                "type": "input_value"
-                , "name": "Condition2"
-    }
-    ]
-        , "inputsInline": false
-        , "output": "Boolean"
-        , "colour": "60"
-        , "tooltip": "%{BKY_MATH_IS_TOOLTIP}"
-        , "mutator": "operator_mutator"
+    ],
+        "inputsInline": false,
+        "output": "Boolean",
+        "colour": "60",
+        "tooltip": "%{BKY_MATH_IS_TOOLTIP}",
+        "mutator": "operator_mutator"
   }
 ]);
 

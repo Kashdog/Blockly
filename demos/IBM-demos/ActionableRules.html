@@ -9,7 +9,6 @@
     <script src="../../javascript_compressed.js"></script>
     <script src="./actionablerules.js"></script>
     <script src="../../msg/js/en.js"></script>
-    <script src="./aneesh.js"></script>
     <style>
         body {
             background-color: #fff;
@@ -37,7 +36,9 @@
         </category>
         <category name="Actions">
             <block id="automaticallybinddataruledefinition" type="automaticallybinddataruledefinition"></block>
-            <block id="disabledataqualitydimension" type="disabledataqualitydimension"></block>
+            <block id="disabledataqualitydimension" type="disabledataqualitydimension">
+                <mutation dataclassviolation="true"></mutation>
+            </block>
             <block id="disablealldataqualitydimensions" type="disablealldataqualitydimensions"></block>
             <block id="enabledataqualitydimension" type="enabledataqualitydimension"></block>
             <block id="enablealldataqualitydimensions" type="enablealldataqualitydimensions"></block>
@@ -136,34 +137,7 @@
                         document.getElementById("disablealldataqualitydimensions").setAttribute("disabled", "false");
                         document.getElementById("enablealldataqualitydimensions").setAttribute("disabled", "false");
                     }
-                    if (block_type == "disabledataqualitydimension") { //Block in the Palette
-                       
-                       if(xmlDoc.lastElementChild.getElementsByTagName("block")[xmlDoc.lastElementChild.getElementsByTagName("block").length-1].getElementsByTagName("field")[0].childNodes[0].nodeValue=="DataClassViolation"){
-                         
-                       } 
-                        updateDataQualityDimensionListRemove(xmlDoc.lastElementChild.getElementsByTagName("block")[xmlDoc.lastElementChild.getElementsByTagName("block").length-1].getElementsByTagName("field")[0].childNodes[0].nodeValue);  
-                        
-                    }
                 });
-                
-  
-            }else if(event.type == Blockly.Events.BLOCK_CHANGE){
-                
-                     
-                [].forEach.call(x, function (arrayElement) {
-                    var block_type = arrayElement.getAttribute('type');
-                    if (block_type == "disabledataqualitydimension") { //Block in the Palette
-                       
-                       if(xmlDoc.lastElementChild.getElementsByTagName("block")[xmlDoc.lastElementChild.getElementsByTagName("block").length-1].getAttribute("id")=="disabledataqualitydimension"){
-                           updateDataQualityDimensionListRemove(xmlDoc.lastElementChild.getElementsByTagName("block")[xmlDoc.lastElementChild.getElementsByTagName("block").length-1].getElementsByTagName("field")[0].childNodes[0].nodeValue);
-                       } 
-                        
-                    }
-                });
-                
-                
-
-                
             }
         }
         workspace.addChangeListener(onBlockMove);
