@@ -73,71 +73,140 @@
         });
         var xml = Blockly.Xml.textToDom('<xml xmlns="http://www.w3.org/1999/xhtml"><variables></variables><block type="ifthen" id="Ry{3=B/2LJqhJS(9V?CN" x="33" y="22"><value name="condition"><block type="asset" id="Yl(2~so+o0b`8JrtA=(n"><field name="terms">term1</field></block></value></block></xml>');
         Blockly.Xml.domToWorkspace(xml, workspace);
-        
-        var disableddataqualitydimensionlistString = [
-                "DataClassViolation",
-                "DataTypeViolation",
-                "UniquenessViolation",
-                "Format Violations","FormatViolation",
-                "NonStandardMissingValue",
-                "CaseViolation",
-                "MissingValue",
-                "RuleViolation",
-                "SuspectValues",
-                "SuspectClassifiedValue",
-                "SuspectCorrelatedValue",
-                "ValueRangeViolation"
-                ];
-        
-        function updateDataQualityDimensionListRemove(usedDimension) {
-                    disabledataqualitydimensionlist.splice(disableddataqualitydimensionlistString.indexOf(usedDimension),1);
-                    disableddataqualitydimensionlistString.splice(disableddataqualitydimensionlistString.indexOf(usedDimension),1);
-                    Blockly.Blocks['disabledataqualitydimension'] = {
-                        init: function () {
-                            this.appendDummyInput().appendField("Disable Data Quality Dimension").appendField(new Blockly.FieldDropdown(disabledataqualitydimensionlist), "dataquality");
-                            this.setPreviousStatement(true, null);
-                            this.setNextStatement(true, null);
-                            this.setColour(186);
-                            this.setTooltip("");
-                            this.setHelpUrl("");
-                        }
-                   };
-                }
+
+        function occurrences(string, subString, allowOverlapping) {
+
+            string += "";
+            subString += "";
+            if (subString.length <= 0) return (string.length + 1);
+
+            var n = 0
+                , pos = 0
+                , step = allowOverlapping ? 1 : subString.length;
+
+            while (true) {
+                pos = string.indexOf(subString, pos);
+                if (pos >= 0) {
+                    ++n;
+                    pos += step;
+                } else break;
+            }
+            return n;
+        }
+
+        var numberOfDisabledDimensionBlocks = 0;
 
         function onBlockMove(event) {
             var xml = Blockly.Xml.workspaceToDom(workspace);
-                var xml_text = Blockly.Xml.domToText(xml);
-                if (window.DOMParser) {
-                    parser = new DOMParser();
-                    xmlDoc = parser.parseFromString(xml_text, "text/xml");
-                }
-                else { // Internet Explorer
-                    xmlDoc = new ActiveXObject("Microsoft.XMLDOM");
-                    xmlDoc.async = false;
-                    xmlDoc.loadXML(xml_text);
-                }
-                var x = xmlDoc.getElementsByTagName('block');
-                Array.prototype.forEach.call(x, function (el) {
-                });
-            
-            if (event.type == Blockly.Events.BLOCK_MOVE || event.type == Blockly.Events.BLOCK_DELETE) {
-                
-                
-                
-                
+            var xml_text = Blockly.Xml.domToText(xml);
+            if (window.DOMParser) {
+                parser = new DOMParser();
+                xmlDoc = parser.parseFromString(xml_text, "text/xml");
+            } else { // Internet Explorer
+                xmlDoc = new ActiveXObject("Microsoft.XMLDOM");
+                xmlDoc.async = false;
+                xmlDoc.loadXML(xml_text);
+            }
+            var x = xmlDoc.getElementsByTagName('block');
+
+            if (event.type == Blockly.Events.BLOCK_MOVE || event.type == Blockly.Events.BLOCK_DELETE || event.type == Blockly.Events.BLOCK_CHANGE) {
+                var disabledDqIds = []
+                var disabledDqDims = [];
                 [].forEach.call(x, function (arrayElement) {
                     var block_type = arrayElement.getAttribute('type');
+                    var block_id = arrayElement.id;
                     if (block_type == "disablealldataqualitydimensions") { //Block in the Palette
                         document.getElementById("disabledataqualitydimension").setAttribute("disabled", "true");
                         document.getElementById("disablealldataqualitydimensions").setAttribute("disabled", "true");
                         document.getElementById("enablealldataqualitydimensions").setAttribute("disabled", "true");
-                    }
-                    else {
+                    } else {
                         document.getElementById("disabledataqualitydimension").setAttribute("disabled", "false");
                         document.getElementById("disablealldataqualitydimensions").setAttribute("disabled", "false");
                         document.getElementById("enablealldataqualitydimensions").setAttribute("disabled", "false");
                     }
+                    if (block_type == 'disabledataqualitydimension') {
+                        disabledDqDims.push(arrayElement.getElementsByTagName("field")[0].innerHTML);
+                        disabledDqIds.push(block_id);
+                    }
                 });
+                var disabledDimensionsToBeSpliced = [];
+                console.log(disabledDqDims);
+                var changeInDisableDQDropdown = false;
+                if (disabledDqIds != null) {
+                    for(var i = 0; i < disabledDqIds.length; i++){
+                        if((workspace.getBlockById(disabledDqIds[0]).getFieldValue("DIMENSIONS") != workspace.getBlockById(disabledDqIds[0]).fieldValue)){
+                           changeInDisableDQDropdown = true; 
+                        }
+                    }
+                    
+                }
+
+
+                for (var i = 0; i < disabledDqIds.length; i++) {
+                    disabledDimensionsToBeSpliced = [];
+                    for (var j = 0; j < i; j++) {
+                        disabledDimensionsToBeSpliced.push(disabledDqDims[j]);
+                    }
+                    for (var k = i + 1; k < disabledDqIds.length; k++) {
+                        console.log("K: " + occurrences(disabledDqDims, disabledDqDims[k]));
+                        if (occurrences(disabledDqDims, disabledDqDims[k]) <= 1) {
+                            disabledDimensionsToBeSpliced.push(disabledDqDims[k]);
+                        }
+                    }
+                    console.log(disabledDimensionsToBeSpliced);
+                    console.log(workspace.getBlockById(disabledDqIds[i]).getFieldValue("DIMENSIONS"));
+                    console.log(workspace.getBlockById(disabledDqIds[i]).fieldValue);
+
+                    if ((disabledDqIds.length > numberOfDisabledDimensionBlocks || changeInDisableDQDropdown == true) && disabledDimensionsToBeSpliced != null) {
+                        workspace.getBlockById(disabledDqIds[i]).updateList_(disabledDimensionsToBeSpliced);
+                    }
+                }
+                disabledDqDims = [];
+                disabledDqIds = [];
+                var xml = Blockly.Xml.workspaceToDom(workspace);
+                var xml_text = Blockly.Xml.domToText(xml);
+                if (window.DOMParser) {
+                    parser = new DOMParser();
+                    xmlDoc = parser.parseFromString(xml_text, "text/xml");
+                } else { // Internet Explorer
+                    xmlDoc = new ActiveXObject("Microsoft.XMLDOM");
+                    xmlDoc.async = false;
+                    xmlDoc.loadXML(xml_text);
+                }
+                x = xmlDoc.getElementsByTagName('block');
+                 [].forEach.call(x, function (arrayElement) {
+                    var block_type = arrayElement.getAttribute('type');
+                    var block_id = arrayElement.id;
+                    if (block_type == 'disabledataqualitydimension') {
+                        disabledDqDims.push(arrayElement.getElementsByTagName("field")[0].innerHTML);
+                        disabledDqIds.push(block_id);
+                    }
+                });
+                console.log(disabledDqDims);
+                if(disabledDqIds.length > numberOfDisabledDimensionBlocks){
+                  for (var i = 0; i < disabledDqIds.length; i++) {
+
+                    disabledDimensionsToBeSpliced = [];
+
+                    for (var j = 0; j < i; j++) {
+                        disabledDimensionsToBeSpliced.push(disabledDqDims[j]);
+                    }
+                    for (var k = i + 1; k < disabledDqIds.length; k++) {
+                        if (occurrences(disabledDqDims, disabledDqDims[k]) <= 1) {
+                            disabledDimensionsToBeSpliced.push(disabledDqDims[k]);
+                        }
+                    }
+
+                    if (disabledDqIds.length > numberOfDisabledDimensionBlocks && disabledDimensionsToBeSpliced != null) {
+                        workspace.getBlockById(disabledDqIds[i]).updateList_(disabledDimensionsToBeSpliced);
+                    }
+                }  
+                }
+                
+
+                numberOfDisabledDimensionBlocks = disabledDqIds.length;
+
+
             }
         }
         workspace.addChangeListener(onBlockMove);
@@ -149,10 +218,11 @@
             if (code.substring(code.length - 1, code.length) == ",") code = code.substring(0, code.length - 1);
             code += ']}';
             alert(code);
+            /*
             var dl = document.createElement('a');
             dl.setAttribute('href', 'data:text/csv;charset=utf-8,' + encodeURIComponent(code));
             dl.setAttribute('download', 'ActionableRuleJSON.txt');
-            dl.click();
+            dl.click();*/
             var xml = Blockly.Xml.workspaceToDom(workspace);
             var xml_text = Blockly.Xml.domToText(xml);
             alert(xml_text);
@@ -196,26 +266,21 @@
                                 blockCode += 'automaticallybinddataruledefinition" id=",rrdnr]iq|H$(9c8jl//"><field name="rules">';
                                 getFieldName = getFieldName.substring(getFieldName.indexOf('"value_":"') + 10);
                                 blockCode += getFieldName.substring(0, getFieldName.indexOf('"')) + '</field><next>';
-                            }
-                            else if (getFieldName.substring(0, getFieldName.indexOf('"')) == 'SetDQThreshold') {
+                            } else if (getFieldName.substring(0, getFieldName.indexOf('"')) == 'SetDQThreshold') {
                                 blockCode += 'setdataqualitythreshold" id="$P4Tt|^U4vx`(sW_No@x"><field name="NAME">';
                                 getFieldName = getFieldName.substring(getFieldName.indexOf('"value_":"') + 10);
                                 blockCode += getFieldName.substring(0, getFieldName.indexOf('"')) + '</field><next>';
-                            }
-                            else if (getFieldName.substring(0, getFieldName.indexOf('"')) == 'DisableDQDimension') {
+                            } else if (getFieldName.substring(0, getFieldName.indexOf('"')) == 'DisableDQDimension') {
                                 blockCode += 'disabledataqualitydimension" id="NE/n$9#m{-ki]PxV}Ouj"><field name="dataquality">';
                                 getFieldName = getFieldName.substring(getFieldName.indexOf('"value_":"') + 10);
                                 blockCode += getFieldName.substring(0, getFieldName.indexOf('"')) + '</field><next>';
-                            }
-                            else if (getFieldName.substring(0, getFieldName.indexOf('"')) == 'DisableAllDataQualityDimensions') {
+                            } else if (getFieldName.substring(0, getFieldName.indexOf('"')) == 'DisableAllDataQualityDimensions') {
                                 blockCode += 'disablealldataqualitydimensions" id="baBgxX:^LOAe/)cD;|Of"><next>';
-                            }
-                            else if (getFieldName.substring(0, getFieldName.indexOf('"')) == 'EnableDQDimension') {
+                            } else if (getFieldName.substring(0, getFieldName.indexOf('"')) == 'EnableDQDimension') {
                                 blockCode += 'enabledataqualitydimension" id="yg8FhwepYtY*{[pq0P26"><field name="dataquality">';
                                 getFieldName = getFieldName.substring(getFieldName.indexOf('"value_":"') + 10);
                                 blockCode += getFieldName.substring(0, getFieldName.indexOf('"')) + '</field><next>';
-                            }
-                            else if (getFieldName.substring(0, getFieldName.indexOf('"')) == 'EnableAllDataQualityDmensions') {
+                            } else if (getFieldName.substring(0, getFieldName.indexOf('"')) == 'EnableAllDataQualityDmensions') {
                                 blockCode += 'enablealldataqualitydimensions" id="3IStTQUg$=/|Cz@fabL9"><next>';
                             }
                             trailingblocktags += '</block></next>';
@@ -234,8 +299,7 @@
                     Blockly.Xml.domToWorkspace(xml, workspace);
                 }
                 r.readAsText(f);
-            }
-            else {
+            } else {
                 alert("Failed to load file");
             }
         }

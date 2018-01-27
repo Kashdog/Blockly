@@ -685,7 +685,7 @@
                     var ruleBlocks_condition = "";
                     var ruleBlocks_action = "";
                     var ruleBlocks_alternateaction = "";
-                    var res = document.getElementById("ruleToBlocks").innerHTML.replace('&lt;&gt;', '<>').replace('&lt;', '<').replace('&gt;', '>').replace('&lt;=', '<=').replace('&gt;=', '>=').split(" ");
+                    var res = document.getElementById("ruleExpression").value.replace('&lt;&gt;', '<>').replace('&lt;', '<').replace('&gt;', '>').replace('&lt;=', '<=').replace('&gt;=', '>=').split(" ");
                     var before_condition;
                     var after_condition;
                     var before_action;
@@ -1458,7 +1458,7 @@
     <br>
     <br>
     <div id="generatedCode">Generated code: </div>
-    <div id="ruleToBlocks">IF NOT coalesce((((1+(2*3))-2)-3+4*5),1) = 'val' THEN variable = 'val' AND variable = 'val' ELSE variable unique</div>
+    <input type="text" id="ruleExpression" value="" size="90">
     <!-- IF NOT coalesce((((1+(2*3))-2)-3*4+5),1) = 'val' THEN variable = 'val' AND variable = 'val' ELSE variable = 'val' -->
     <!-- IF NOT coalesce(ascii(var1),var2) = 'val' THEN variable = 'val' AND variable = 'val' ELSE variable = 'val' -->
     <!-- IF NOT coalesce(coalesce(coalesce(var1,var2),var2),vara) = 'val' THEN variable = 'val' AND variable = 'val' ELSE variable = 'val' -->

@@ -91,3 +91,20 @@
         </value>
     </block>
 </xml>
+
+<xml xmlns="http://www.w3.org/1999/xhtml">
+    <variables></variables>
+    <block type="ifthen" id="Ry{3=B/2LJqhJS(9V?CN" deletable="false" x="33" y="22">
+        <value name="condition">
+            <block type="asset" id="Yl(2~so+o0b`8JrtA=(n">
+                <field name="NAME">Term1</field>
+            </block>
+        </value>
+        <statement name="action">
+            <block type="disabledataqualitydimension" id="disabledataqualitydimension">
+                <mutation dataclassviolation="true"></mutation>
+                <field name="DIMENSIONS">DataClassViolation</field>
+            </block>
+        </statement>
+    </block>
+</xml>

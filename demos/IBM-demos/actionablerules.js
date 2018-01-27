@@ -102,51 +102,33 @@ Blockly.Blocks['enablealldataqualitydimensions'] = {
 };
 
 var disabledataqualitydimensionlist = [
-        ["Data Type Violation", "DataTypeViolation"]
-        
-    , ["Duplicate Values", "UniquenessViolation"]
-        
-    , ["Format Violations", "FormatViolation"]
-        
-    , ["Inconsistent missing value representation", "NonStandardMissingValue"]
-        
-    , ["Inconsistent usage of upper and lower cases", "CaseViolation"]
-        
-    , ["Missing Values", "MissingValue"]
-        
-    , ["Rule Violations", "RuleViolation"]
-        
-    , ["Suspect Values", "SuspectValues"]
-        
-    , ["Suspect Values (Classification Violations)", "SuspectClassifiedViolation"]
-        
-    , ["Suspect Values (Correlation Violations)", "SuspectCorrelatedViolation"]
-        
-    , ["Value Range Violations", "ValueRangeViolation"]
-        ];
+    ["Data Class Violation", "DataClassViolation"],
+    ["Data Type Violation", "DataTypeViolation"],
+    ["Duplicate Values", "UniquenessViolation"],
+    ["Format Violations", "FormatViolation"],
+    ["Inconsistent missing value representation", "NonStandardMissingValue"],
+    ["Inconsistent usage of upper and lower cases", "CaseViolation"],
+    ["Missing Values", "MissingValue"],
+    ["Rule Violations", "RuleViolation"],
+    ["Suspect Values", "SuspectValues"],
+    ["Suspect Values (Classification Violations)", "SuspectClassifiedViolation"],
+    ["Suspect Values (Correlation Violations)", "SuspectCorrelatedViolation"],
+    ["Value Range Violations", "ValueRangeViolation"]
+    ];
 
 var disableDQList = [
-        "DataTypeViolation"
-        
-    , "UniquenessViolation"
-        
-    , "FormatViolation"
-        
-    , "NonStandardMissingValue"
-        
-    , "CaseViolation"
-        
-    , "MissingValue"
-        
-    , "RuleViolation"
-        
-    , "SuspectValues"
-        
-    , "SuspectClassifiedViolation"
-        
-    , "SuspectCorrelatedViolation"
-        
-    , "ValueRangeViolation"
+    "DataClassViolation",
+    "DataTypeViolation",
+    "UniquenessViolation",
+    "FormatViolation",
+    "NonStandardMissingValue",
+    "CaseViolation",
+    "MissingValue",
+    "RuleViolation",
+    "SuspectValues",
+    "SuspectClassifiedViolation",
+    "SuspectCorrelatedViolation",
+    "ValueRangeViolation"
         ];
 
 Blockly.defineBlocksWithJsonArray([{
@@ -174,6 +156,7 @@ Blockly.Constants.DISABLE_DQ_DIM_MUTATOR_MIXIN = {
      * @return {Element} XML storage element.
      * @this Blockly.Block
      */
+    fieldValue : "",
 
     mutationToDom: function () {
         var container = document.createElement('mutation');
@@ -188,8 +171,6 @@ Blockly.Constants.DISABLE_DQ_DIM_MUTATOR_MIXIN = {
      */
     domToMutation: function (xmlElement) {
         var has_dataclassviolation = (xmlElement.getAttribute('dataclassviolation') == 'true');
-        console.log(has_dataclassviolation);
-        this.updateList_(has_dataclassviolation);
     }
     , /**
      * Modify this block to have (or not have) an input for 'is divisible by'.
@@ -197,52 +178,60 @@ Blockly.Constants.DISABLE_DQ_DIM_MUTATOR_MIXIN = {
      * @private
      * @this Blockly.Block
      */
-    updateList_: function (has_dataclassviolation) {
-        /*if (this.getInput("DisableDqDimensionsDummyInput")) {
-            this.removeInput("DisableDqDimensionsDummyInput");
-        }
-        if (this.getInput("")) {
-            this.removeInput("");
-        }*/
-        if (has_dataclassviolation == true) {
-            if (!disableDQList.includes("DataClassViolation")) {
-                disabledataqualitydimensionlist.push(["Data Class Violation", "DataClassViolation"]);
-                disableDQList.push("DataClassViolation");
-            }
-        } else if (has_dataclassviolation == false) {
-            console.log("False Block");
-            if (disableDQList.indexOf("DataClassViolation") != -1) {
-                disabledataqualitydimensionlist.splice(disableDQList.indexOf("DataClassViolation"), 1);
-                disableDQList.splice(disableDQList.indexOf("DataClassViolation"), 1);
-            }
-        }
-        //this.appendDummyInput("DisableDqDimensionsDummyInput").appendField("Disable Data Quality Dimension").appendField(new Blockly.FieldDropdown(disabledataqualitydimensionlist), 'DIMENSIONS');
-    }
-    , /**
-     * Modify this block to have (or not have) an input for 'is divisible by'.
-     * @param {boolean} divisorInput True if this block has a divisor input.
-     * @private
-     * @this Blockly.Block
-     */
-    updatePaletteBlock_: function (has_dataclassviolation) {
-        if (has_dataclassviolation == true) {
-            console.log("EWOK");
-            document.getElementById("disabledataqualitydimension").getElementsByTagName("mutation")[0].setAttribute("dataclassviolation", "false");
-        }
-    }
-};
+    updateList_: function (dimensions) {
+        
+        
+        
+        disabledataqualitydimensionlist = [
+            ["Data Class Violation", "DataClassViolation"],
+            ["Data Type Violation", "DataTypeViolation"],
+            ["Duplicate Values", "UniquenessViolation"],
+            ["Format Violations", "FormatViolation"],
+            ["Inconsistent missing value representation", "NonStandardMissingValue"],
+            ["Inconsistent usage of upper and lower cases", "CaseViolation"],
+            ["Missing Values", "MissingValue"],
+            ["Rule Violations", "RuleViolation"],
+            ["Suspect Values", "SuspectValues"],
+            ["Suspect Values (Classification Violations)", "SuspectClassifiedViolation"],
+            ["Suspect Values (Correlation Violations)", "SuspectCorrelatedViolation"],
+            ["Value Range Violations", "ValueRangeViolation"]
+        ];
 
-Blockly.Constants.DISABLE_DQ_DIM_MUTATOR_EXTENSION = function () {
-    this.getField('DIMENSIONS').setValidator(function (option) {
-        var has_dataclassviolation = (option == 'DataClassViolation');
-        console.log(has_dataclassviolation + " Extension");
-        this.sourceBlock_.updatePaletteBlock_(has_dataclassviolation);
+        disableDQList = [
+            "DataClassViolation",
+            "DataTypeViolation",
+            "UniquenessViolation",
+            "FormatViolation",
+            "NonStandardMissingValue",
+            "CaseViolation",
+            "MissingValue",
+            "RuleViolation",
+            "SuspectValues",
+            "SuspectClassifiedViolation",
+            "SuspectCorrelatedViolation",
+            "ValueRangeViolation"
+        ];
+    
+    console.log("UPDATE LIST ");
+        
+    this.fieldValue = this.getFieldValue("DIMENSIONS");
+        
+    [].forEach.call(dimensions, function (dimension, index) {
+        var dimension_index = disableDQList.indexOf(dimension);
+        disabledataqualitydimensionlist.splice(dimension_index,1);
+        disableDQList.splice(dimension_index,1);
     });
+        
+    this.removeInput("");
+    this.appendDummyInput().appendField("Disable Data Quality Dimension").appendField(new Blockly.FieldDropdown(disabledataqualitydimensionlist), "DIMENSIONS");
+    if(disableDQList.indexOf(this.fieldValue) != -1){
+        this.setFieldValue(this.fieldValue, "DIMENSIONS");
+    }
+    }
 };
 
 Blockly.Extensions.registerMutator('disable_dataquality_dimension_mutator'
-    , Blockly.Constants.DISABLE_DQ_DIM_MUTATOR_MIXIN
-    , Blockly.Constants.DISABLE_DQ_DIM_MUTATOR_EXTENSION);
+    , Blockly.Constants.DISABLE_DQ_DIM_MUTATOR_MIXIN);
 
 Blockly.Blocks['disablealldataqualitydimensions'] = {
     init: function () {
@@ -382,7 +371,7 @@ Blockly.JavaScript['enablealldataqualitydimensions'] = function (block) {
 };
 
 Blockly.JavaScript['disabledataqualitydimension'] = function (block) {
-    var dropdown_dataquality = block.getFieldValue('dataquality');
+    var dropdown_dataquality = block.getFieldValue('DIMENSIONS');
     // TODO: Assemble JavaScript into code variable.
     var code = '{"type_":"DisableDQDimension","value_":"' + dropdown_dataquality + '"},';
     return code;
