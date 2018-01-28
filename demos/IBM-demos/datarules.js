@@ -52,9 +52,6 @@ Blockly.Blocks['ifthen'] = {
                 , "stop": this.getColour()
             }, ["Action"]
         );
-        this.gradient.setHorizontalGradient(
-            this, "#5e5ba5", "#5BA58C"
-        );
     }
 };
 
@@ -69,9 +66,18 @@ Blockly.Blocks['ifthenelse'] = {
         this.appendValueInput("AlternateAction")
             .setCheck("Boolean")
             .appendField("ELSE");
-        this.setColour(202);
+        this.gradient = new ColourGradient();
+        this.setColour("#74A55B");
         this.setTooltip("");
         this.setHelpUrl("");
+    }, onchange: function () {
+        /* Adding a vertical gradient to the example block */
+        this.gradient.setVerticalGradient(
+            this, {
+                "start": "#5BA58C"
+                , "stop": this.getColour()
+            }, ["Action"]
+        );
     }
 };
 

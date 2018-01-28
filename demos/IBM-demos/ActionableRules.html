@@ -14,7 +14,7 @@
             background-color: #fff;
             font-family: sans-serif;
         }
-        
+
         h1 {
             font-weight: normal;
             font-size: 140%;
@@ -36,9 +36,7 @@
         </category>
         <category name="Actions">
             <block id="automaticallybinddataruledefinition" type="automaticallybinddataruledefinition"></block>
-            <block id="disabledataqualitydimension" type="disabledataqualitydimension">
-                <mutation dataclassviolation="true"></mutation>
-            </block>
+            <block id="disabledataqualitydimension" type="disabledataqualitydimension"></block>
             <block id="disablealldataqualitydimensions" type="disablealldataqualitydimensions"></block>
             <block id="enabledataqualitydimension" type="enabledataqualitydimension"></block>
             <block id="enablealldataqualitydimensions" type="enablealldataqualitydimensions"></block>
@@ -61,37 +59,18 @@
             , scrollbars: true
             , sounds: true
             , oneBasedIndex: true
-            , zoom: {
-                controls: true
-                , wheel: true
-                , startScale: 1
-                , maxScale: 3
-                , minScale: 0.3
-                , scaleSpeed: 1.2
-            }
             , toolbox: document.getElementById('toolbox')
         });
-        var xml = Blockly.Xml.textToDom('<xml xmlns="http://www.w3.org/1999/xhtml"><variables></variables><block type="ifthen" id="Ry{3=B/2LJqhJS(9V?CN" x="33" y="22"><value name="condition"><block type="asset" id="Yl(2~so+o0b`8JrtA=(n"><field name="terms">term1</field></block></value></block></xml>');
+        var xml = Blockly.Xml.textToDom('<xml xmlns="http://www.w3.org/1999/xhtml"><variables></variables><block type="ifthen" id="Ry{3=B/2LJqhJS(9V?CN" x="33" y="22"><value name="condition"><block type="asset"><field name="terms">term1</field></block></value></block></xml>');
         Blockly.Xml.domToWorkspace(xml, workspace);
 
-        function occurrences(string, subString, allowOverlapping) {
+        function occurrences(array, string) {
 
-            string += "";
-            subString += "";
-            if (subString.length <= 0) return (string.length + 1);
-
-            var n = 0
-                , pos = 0
-                , step = allowOverlapping ? 1 : subString.length;
-
-            while (true) {
-                pos = string.indexOf(subString, pos);
-                if (pos >= 0) {
-                    ++n;
-                    pos += step;
-                } else break;
+            var occurrences = {};
+            for (var i = 0, j = array.length; i < j; i++) {
+                occurrences[array[i]] = (occurrences[array[i]] || 0) + 1;
             }
-            return n;
+            return occurrences[string];
         }
 
         var numberOfDisabledDimensionBlocks = 0;
@@ -129,34 +108,31 @@
                         disabledDqIds.push(block_id);
                     }
                 });
+                if (disabledDqDims.length == 12) {
+                    document.getElementById("disabledataqualitydimension").setAttribute("disabled", "true");
+                } else {
+                    document.getElementById("disabledataqualitydimension").setAttribute("disabled", "false");
+                }
                 var disabledDimensionsToBeSpliced = [];
-                console.log(disabledDqDims);
                 var changeInDisableDQDropdown = false;
                 if (disabledDqIds != null) {
-                    for(var i = 0; i < disabledDqIds.length; i++){
-                        if((workspace.getBlockById(disabledDqIds[0]).getFieldValue("DIMENSIONS") != workspace.getBlockById(disabledDqIds[0]).fieldValue)){
-                           changeInDisableDQDropdown = true; 
+                    for (var i = 0; i < disabledDqIds.length; i++) {
+                        if ((workspace.getBlockById(disabledDqIds[i]).getFieldValue("DIMENSIONS") != workspace.getBlockById(disabledDqIds[i]).fieldValue)) {
+                            changeInDisableDQDropdown = true;
                         }
                     }
-                    
+
                 }
-
-
                 for (var i = 0; i < disabledDqIds.length; i++) {
                     disabledDimensionsToBeSpliced = [];
                     for (var j = 0; j < i; j++) {
                         disabledDimensionsToBeSpliced.push(disabledDqDims[j]);
                     }
                     for (var k = i + 1; k < disabledDqIds.length; k++) {
-                        console.log("K: " + occurrences(disabledDqDims, disabledDqDims[k]));
                         if (occurrences(disabledDqDims, disabledDqDims[k]) <= 1) {
                             disabledDimensionsToBeSpliced.push(disabledDqDims[k]);
                         }
                     }
-                    console.log(disabledDimensionsToBeSpliced);
-                    console.log(workspace.getBlockById(disabledDqIds[i]).getFieldValue("DIMENSIONS"));
-                    console.log(workspace.getBlockById(disabledDqIds[i]).fieldValue);
-
                     if ((disabledDqIds.length > numberOfDisabledDimensionBlocks || changeInDisableDQDropdown == true) && disabledDimensionsToBeSpliced != null) {
                         workspace.getBlockById(disabledDqIds[i]).updateList_(disabledDimensionsToBeSpliced);
                     }
@@ -174,7 +150,7 @@
                     xmlDoc.loadXML(xml_text);
                 }
                 x = xmlDoc.getElementsByTagName('block');
-                 [].forEach.call(x, function (arrayElement) {
+                [].forEach.call(x, function (arrayElement) {
                     var block_type = arrayElement.getAttribute('type');
                     var block_id = arrayElement.id;
                     if (block_type == 'disabledataqualitydimension') {
@@ -182,27 +158,87 @@
                         disabledDqIds.push(block_id);
                     }
                 });
-                console.log(disabledDqDims);
-                if(disabledDqIds.length > numberOfDisabledDimensionBlocks){
-                  for (var i = 0; i < disabledDqIds.length; i++) {
-
-                    disabledDimensionsToBeSpliced = [];
-
-                    for (var j = 0; j < i; j++) {
-                        disabledDimensionsToBeSpliced.push(disabledDqDims[j]);
-                    }
-                    for (var k = i + 1; k < disabledDqIds.length; k++) {
-                        if (occurrences(disabledDqDims, disabledDqDims[k]) <= 1) {
-                            disabledDimensionsToBeSpliced.push(disabledDqDims[k]);
+                var changeInDisableDQDropdown = false;
+                if (disabledDqIds != null) {
+                    for (var i = 0; i < disabledDqIds.length; i++) {
+                        if ((workspace.getBlockById(disabledDqIds[i]).getFieldValue("DIMENSIONS") != workspace.getBlockById(disabledDqIds[i]).fieldValue)) {
+                            changeInDisableDQDropdown = true;
                         }
                     }
 
-                    if (disabledDqIds.length > numberOfDisabledDimensionBlocks && disabledDimensionsToBeSpliced != null) {
-                        workspace.getBlockById(disabledDqIds[i]).updateList_(disabledDimensionsToBeSpliced);
-                    }
-                }  
                 }
-                
+                if (disabledDqIds.length > numberOfDisabledDimensionBlocks) {
+                    for (var i = 0; i < disabledDqIds.length; i++) {
+
+                        disabledDimensionsToBeSpliced = [];
+
+                        for (var j = 0; j < i; j++) {
+                            disabledDimensionsToBeSpliced.push(disabledDqDims[j]);
+                        }
+                        for (var k = i + 1; k < disabledDqIds.length; k++) {
+                            if (occurrences(disabledDqDims, disabledDqDims[k]) <= 1) {
+                                disabledDimensionsToBeSpliced.push(disabledDqDims[k]);
+                            }
+                        }
+                        if ((disabledDqIds.length > numberOfDisabledDimensionBlocks || changeInDisableDQDropdown == true) && disabledDimensionsToBeSpliced != null) {
+                            workspace.getBlockById(disabledDqIds[i]).updateList_(disabledDimensionsToBeSpliced);
+                        }
+                    }
+                }
+
+                disabledataqualitydimensionlist = [
+                    ["Data Class Violation", "DataClassViolation"],
+                    ["Data Type Violation", "DataTypeViolation"],
+                    ["Duplicate Values", "UniquenessViolation"],
+                    ["Format Violations", "FormatViolation"],
+                    ["Inconsistent missing value representation", "NonStandardMissingValue"],
+                    ["Inconsistent usage of upper and lower cases", "CaseViolation"],
+                    ["Missing Values", "MissingValue"],
+                    ["Rule Violations", "RuleViolation"],
+                    ["Suspect Values", "SuspectValues"],
+                    ["Suspect Values (Classification Violations)", "SuspectClassifiedViolation"],
+                    ["Suspect Values (Correlation Violations)", "SuspectCorrelatedViolation"],
+                    ["Value Range Violations", "ValueRangeViolation"]
+                ];
+
+                disableDQList = [
+                    "DataClassViolation",
+                    "DataTypeViolation",
+                    "UniquenessViolation",
+                    "FormatViolation",
+                    "NonStandardMissingValue",
+                    "CaseViolation",
+                    "MissingValue",
+                    "RuleViolation",
+                    "SuspectValues",
+                    "SuspectClassifiedViolation",
+                    "SuspectCorrelatedViolation",
+                    "ValueRangeViolation"
+                ];
+
+                [].forEach.call(disabledDqDims, function (dimension, index) {
+                    var dimension_index = disableDQList.indexOf(dimension);
+                    disabledataqualitydimensionlist.splice(dimension_index, 1);
+                    disableDQList.splice(dimension_index, 1);
+                });
+                Blockly.defineBlocksWithJsonArray([{
+                    "type": "disabledataqualitydimension"
+                    , "message0": "Disable Data Quality Dimension %1"
+                    , "args0": [
+                        {
+                            "type": "field_dropdown"
+                            , "name": "DIMENSIONS"
+                            , "options": disabledataqualitydimensionlist
+                        }
+                    ]
+                    , "previousStatement": null
+                    , "nextStatement": null
+                    , "colour": 186
+                    , "tooltip": ""
+                    , "helpUrl": ""
+                    , "mutator": "disable_dataquality_dimension_mutator"
+                }]);
+
 
                 numberOfDisabledDimensionBlocks = disabledDqIds.length;
 

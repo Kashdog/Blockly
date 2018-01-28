@@ -22,7 +22,8 @@ Blockly.Blocks['select'] = {
      */
     init: function () {
         this.setHelpUrl("");
-        this.setColour(60);
+        this.gradient = new ColourGradient();
+        this.setColour("#6594AB");
         this.appendStatementInput("SELECT")
             .appendField("SELECT")
             .setCheck("column");
@@ -37,6 +38,15 @@ Blockly.Blocks['select'] = {
         this.updateShape_();
         this.setMutator(new Blockly.Mutator(['where', 'groupby', 'having', 'orderByAscending', 'orderByDescending']));
         this.setTooltip("");
+    }
+    , onchange: function () {
+        /* Adding a vertical gradient to the example block */
+        this.gradient.setVerticalGradient(
+            this, {
+                "start": "#8594AB"
+                , "stop": this.getColour()
+            }, ["FROM"]
+        );
     }
     , /**
      * Create XML to represent list inputs.
@@ -552,7 +562,7 @@ Blockly.DataRule['update'] = function (block) {
     }
     var table_name = Blockly.DataRule.valueToCode(block, 'UPDATE', Blockly.DataRule.ORDER_ATOMIC);
     var condition_name = Blockly.DataRule.valueToCode(block, 'WHERE', Blockly.DataRule.ORDER_ATOMIC);
-    var code = 'UPDATE ' + table_name + ' SET ' + elements.join(', ') + ' WHERE ' + condition_name;
+    var code = 'UPDATE ' + table_name + ' SET ' + elements.join(', ') + ' WHERE ' + condition_name + ";";
     return [code, Blockly.DataRule.ORDER_ATOMIC];
 };
 
