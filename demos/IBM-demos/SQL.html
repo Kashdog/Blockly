@@ -28,7 +28,10 @@
     <xml id="toolbox" style="display: none">
         <category name="Commands">
             <block type="select">
-                <mutation where="0" group="0" order="0"></mutation>
+                <mutation where="0"></mutation>
+            </block>
+            <block type="select">
+                <mutation where="1"></mutation>
             </block>
             <block type="insert">
                 <mutation items="0"></mutation>
@@ -111,7 +114,7 @@
             case (!isNaN(value)):
                 block = '<block type="numericliteral" id="numericliteral"><field name="numericInput">' + value + '</field></block>';
                 break;
-            case (isAStringLiteral(rule)):
+            case (isAStringLiteral(value)):
                 block = '<block type="stringliteral" id="stringliteral"><field name="stringInput">' + trimStringLiteral(value) + '</field></block>';
                 break;
             default:
@@ -121,8 +124,23 @@
 
         }
 
-        function getOperatorBlocks(operatorexpr) {
+        var operators = ['=', '<>', '>', '<', '>=', '<=', 'IN', 'BETWEEN', 'LIKE'];
 
+        function getOperatorBlocks(operatorexpr) {
+            var operator_in_expr = "";
+            console.log(operatorexpr);
+            [].forEach.call(operators, function(operator, index) {
+                if(operatorexpr[0].indexOf(operator) != -1){
+                    operator_in_expr = operator;
+                }
+            });
+            var operands = operatorexpr[0].split(operator_in_expr);
+            console.log(operands);
+            var operatorxml = '<block type="operator"><field name="PROPERTY">=</field>'
+                + '<value name="Condition1">' + fetchCode(operands[0]) + '</value>' 
+                + '<value name="Condition2">' + fetchCode(operands[1]) + '</value>'
+                + '</block>';
+            return operatorxml;
         }
 
 
@@ -130,7 +148,6 @@
         function sqlToBlocks() {
             var sqlExpression = document.getElementById("sqlExpression").value;
             sqlExpression = sqlExpression.substring(0, sqlExpression.lastIndexOf(";"));
-            var operators = ['=', '<>', '>', '<', '>=', '<=', 'IN', 'BETWEEN', 'LIKE'];
             var statements = sqlExpression.split(';');
             var x_index_of_block = 85;
             var y_index_of_block = 20;
@@ -261,7 +278,6 @@
                                 if (index == 0) {
                                     sqlToBlocks += '<value name="Condition1">';
                                     sqlToBlocks += getOperatorBlocks(where_blocks.slice(0, conditionElement));
-                                    console.log(where_blocks.slice(0, conditionElement));
                                     sqlToBlocks += '</value>';
                                     current_andor++;
                                 } else {
@@ -276,8 +292,7 @@
                                 if (index == andor_indexes.length - 1) {
                                     sqlToBlocks += '<field name="list' + (current_andor - 2) + '">' + and_slash_or[index] + '</field>';
                                     sqlToBlocks += '<value name="Condition' + current_andor + '">';
-                                    sqlToBlocks += getOperatorBlocks(where_blocks.slice(andor_indexes[index - 1] + 1));
-                                    console.log(where_blocks.slice(conditionElement + 1));
+                                    sqlToBlocks += getOperatorBlocks(where_blocks.slice(conditionElement + 1));
                                     sqlToBlocks += '</value>';
                                 }
                             });

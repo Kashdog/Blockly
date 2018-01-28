@@ -129,60 +129,10 @@
                         disabledDimensionsToBeSpliced.push(disabledDqDims[j]);
                     }
                     for (var k = i + 1; k < disabledDqIds.length; k++) {
-                        if (occurrences(disabledDqDims, disabledDqDims[k]) <= 1) {
                             disabledDimensionsToBeSpliced.push(disabledDqDims[k]);
-                        }
                     }
                     if ((disabledDqIds.length > numberOfDisabledDimensionBlocks || changeInDisableDQDropdown == true) && disabledDimensionsToBeSpliced != null) {
                         workspace.getBlockById(disabledDqIds[i]).updateList_(disabledDimensionsToBeSpliced);
-                    }
-                }
-                disabledDqDims = [];
-                disabledDqIds = [];
-                var xml = Blockly.Xml.workspaceToDom(workspace);
-                var xml_text = Blockly.Xml.domToText(xml);
-                if (window.DOMParser) {
-                    parser = new DOMParser();
-                    xmlDoc = parser.parseFromString(xml_text, "text/xml");
-                } else { // Internet Explorer
-                    xmlDoc = new ActiveXObject("Microsoft.XMLDOM");
-                    xmlDoc.async = false;
-                    xmlDoc.loadXML(xml_text);
-                }
-                x = xmlDoc.getElementsByTagName('block');
-                [].forEach.call(x, function (arrayElement) {
-                    var block_type = arrayElement.getAttribute('type');
-                    var block_id = arrayElement.id;
-                    if (block_type == 'disabledataqualitydimension') {
-                        disabledDqDims.push(arrayElement.getElementsByTagName("field")[0].innerHTML);
-                        disabledDqIds.push(block_id);
-                    }
-                });
-                var changeInDisableDQDropdown = false;
-                if (disabledDqIds != null) {
-                    for (var i = 0; i < disabledDqIds.length; i++) {
-                        if ((workspace.getBlockById(disabledDqIds[i]).getFieldValue("DIMENSIONS") != workspace.getBlockById(disabledDqIds[i]).fieldValue)) {
-                            changeInDisableDQDropdown = true;
-                        }
-                    }
-
-                }
-                if (disabledDqIds.length > numberOfDisabledDimensionBlocks) {
-                    for (var i = 0; i < disabledDqIds.length; i++) {
-
-                        disabledDimensionsToBeSpliced = [];
-
-                        for (var j = 0; j < i; j++) {
-                            disabledDimensionsToBeSpliced.push(disabledDqDims[j]);
-                        }
-                        for (var k = i + 1; k < disabledDqIds.length; k++) {
-                            if (occurrences(disabledDqDims, disabledDqDims[k]) <= 1) {
-                                disabledDimensionsToBeSpliced.push(disabledDqDims[k]);
-                            }
-                        }
-                        if ((disabledDqIds.length > numberOfDisabledDimensionBlocks || changeInDisableDQDropdown == true) && disabledDimensionsToBeSpliced != null) {
-                            workspace.getBlockById(disabledDqIds[i]).updateList_(disabledDimensionsToBeSpliced);
-                        }
                     }
                 }
 
