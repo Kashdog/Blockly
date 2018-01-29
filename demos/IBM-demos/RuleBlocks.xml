@@ -1,141 +1,24 @@
 <xml xmlns="http://www.w3.org/1999/xhtml">
     <variables></variables>
-    <block type="select" id="|Ed]z#sw1+fy.Un(0V5w" x="147" y="62">
-        <mutation where="1" group="0" having="0" orderasc="0" orderdesc="0"></mutation>
-        <statement name="SELECT">
-            <block type="all_columns" id="rA54Iv6?.sjT9EaB{h#@"></block>
-        </statement>
-        <value name="FROM">
-            <block type="table_name" id="|NF?ENP6BvgGW4LnQMaF">
-                <field name="tableName">Customers</field>
+    <block type="ifthen" id="ifthen" x="85" y="23">
+        <value name="Condition">
+            <block type="variable" id="variable">
+                <field name="variable">age
+                    <18</field>
             </block>
         </value>
-        <value name="WHERE">
-            <block type="andor" id="Yh|if=.mi7ToGtnC-qdn">
-                <mutation items="1"></mutation>
-                <field name="list0">AND</field>
-                <field name="list1">AND</field>
+        <value name="Action">
+            <block type="and" id="and">
                 <value name="Condition1">
-                    <block type="operator" id="HX$0kL@]Ks;G.7!-~5MV">
-                        <mutation equal_input="true"></mutation>
-                        <field name="PROPERTY">=</field>
-                        <value name="Condition1">
-                            <block type="variable" id="YJ~J3Fo:K1=bx,bzbZ)m">
-                                <field name="variable">CustomerID</field>
-                            </block>
-                        </value>
-                        <value name="Condition2">
-                            <block type="numericliteral" id="oeSA9Lfpth`d6{*DLDoY">
-                                <field name="numericInput">1</field>
-                            </block>
-                        </value>
+                    <block type="variable" id="variable">
+                        <field name="variable">marital_status='child'</field>
                     </block>
                 </value>
                 <value name="Condition2">
-                    <block type="operator" id="c^#w5QX2@4FgQ`Q`,L}7">
-                        <mutation equal_input="true"></mutation>
-                        <field name="PROPERTY">=</field>
-                        <value name="Condition1">
-                            <block type="variable" id="Udz^Az5z*O4El(~MZWP}">
-                                <field name="variable">CustomerID</field>
-                            </block>
-                        </value>
-                        <value name="Condition2">
-                            <block type="numericliteral" id="3@h@Jo+,)U9$c40IW/a!">
-                                <field name="numericInput">2</field>
-                            </block>
-                        </value>
-                    </block>
-                </value>
-                <value name="Condition3">
-                    <block type="operator" id="!*)xvXfmIWR!A30Ypo$g">
-                        <mutation equal_input="true"></mutation>
-                        <field name="PROPERTY">=</field>
-                        <value name="Condition1">
-                            <block type="variable" id="A#|04#cg-KXjT_mEB@-;">
-                                <field name="variable">CustomerID</field>
-                            </block>
-                        </value>
-                        <value name="Condition2">
-                            <block type="numericliteral" id="vXxL,DETHc]_WeiJ~38W">
-                                <field name="numericInput">3</field>
-                            </block>
-                        </value>
-                    </block>
-                </value>
-            </block>
-        </value>
-    </block>
-</xml>
-
-
-<xml xmlns="http://www.w3.org/1999/xhtml">
-    <variables></variables>
-    <block type="select" x="85" y="20">
-        <mutation where="1" group="0" having="0" orderasc="0" orderdesc="0"></mutation>
-        <statement name="SELECT">
-            <block type="all_columns"></block>
-        </statement>
-        <value name="FROM">
-            <block type="table_name">
-                <field name="tableName">Customers</field>
-            </block>
-        </value>
-        <value name="WHERE">
-            <block type="andor">
-                <mutation items="0"></mutation>
-                <value name="Condition1"></value>
-                <field name="list0">AND</field>
-                <value name="Condition2"></value>
-            </block>
-        </value>
-    </block>
-</xml>
-
-<xml xmlns="http://www.w3.org/1999/xhtml">
-    <variables></variables>
-    <block type="select" id="lX1mp$!YoS)iaQ}`2VDx" x="85" y="20">
-        <mutation where="1" group="0" having="0" orderasc="0" orderdesc="0"></mutation>
-        <statement name="SELECT">
-            <block type="all_columns" id="qrVS.F%D^P|Exmjs`Mxp"></block>
-        </statement>
-        <value name="FROM">
-            <block type="table_name" id="$KGC]r3f@}+bXg*j!IK|">
-                <field name="tableName">Customers</field>
-            </block>
-        </value>
-        <value name="WHERE">
-            <block type="andor" id="X:KE6~FTI6e2}2t3cZ=D">
-                <mutation items="0"></mutation>
-                <field name="list0">AND</field>
-                <value name="Condition1">
-                    <block type="operator" id="5~(eoy%;*`4Oh9/wX3Rs">
-                        <mutation equal_input="true"></mutation>
-                        <field name="PROPERTY">=</field>
-                        <value name="Condition1">
-                            <block type="variable" id="Liq!G,Hh6EoioB1!88dj">
-                                <field name="variable">CustomerID</field>
-                            </block>
-                        </value>
-                        <value name="Condition2">
-                            <block type="numericliteral" id="EUPG-ROK,PtauSWgR1wO">
-                                <field name="numericInput">1</field>
-                            </block>
-                        </value>
-                    </block>
-                </value>
-                <value name="Condition2">
-                    <block type="operator" id="iqsX$Ai#)j_#_15G0wsZ">
-                        <mutation equal_input="true"></mutation>
-                        <field name="PROPERTY">=</field>
-                        <value name="Condition1">
-                            <block type="variable" id="JkTZ}2{n=_dIO!N-bi]/">
-                                <field name="variable">CustomerID</field>
-                            </block>
-                        </value>
-                        <value name="Condition2">
-                            <block type="numericliteral" id="t3(RCpbqiLw8B`t(iBQU">
-                                <field name="numericInput">2</field>
+                    <block type="trim" id="trim">
+                        <value name="input1">
+                            <block type="variable" id="variable">
+                                <field name="variable">credit_card</field>
                             </block>
                         </value>
                     </block>

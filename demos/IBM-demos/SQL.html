@@ -128,13 +128,18 @@
 
         function getOperatorBlocks(operatorexpr) {
             var operator_in_expr = "";
+            if(operatorexpr.length > 1){
+                operatorexpr = operatorexpr.join("");
+            } else{
+                operatorexpr = operatorexpr[0];
+            }
             console.log(operatorexpr);
             [].forEach.call(operators, function(operator, index) {
-                if(operatorexpr[0].indexOf(operator) != -1){
+                if(operatorexpr.indexOf(operator) != -1){
                     operator_in_expr = operator;
                 }
             });
-            var operands = operatorexpr[0].split(operator_in_expr);
+            var operands = operatorexpr.split(operator_in_expr);
             console.log(operands);
             var operatorxml = '<block type="operator"><field name="PROPERTY">=</field>'
                 + '<value name="Condition1">' + fetchCode(operands[0]) + '</value>' 

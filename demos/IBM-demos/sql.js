@@ -387,7 +387,8 @@ Blockly.Blocks['insert'] = {
      */
     init: function () {
         this.setHelpUrl("");
-        this.setColour(60);
+        this.gradient = new ColourGradient();
+        this.setColour("#6594AB");
         this.appendValueInput("INSERT")
             .setCheck("table")
             .appendField("INSERT INTO (table)");
@@ -573,7 +574,8 @@ Blockly.Blocks['andor'] = {
      */
     init: function () {
         this.setHelpUrl("");
-        this.setColour(60);
+        this.gradient = new ColourGradient();
+        this.setColour("#9694AB");
         this.appendValueInput("Condition1")
             .setCheck("Boolean");
         this.appendDummyInput()
@@ -726,7 +728,8 @@ Blockly.Blocks['not'] = {
             .appendField("NOT");
         this.setInputsInline(false);
         this.setOutput(true, "Boolean");
-        this.setColour(60);
+        this.gradient = new ColourGradient();
+        this.setColour("#9694AB");
         this.setTooltip("");
         this.setHelpUrl("");
     }
@@ -830,7 +833,7 @@ Blockly.defineBlocksWithJsonArray([
     ],
         "inputsInline": false,
         "output": "Boolean",
-        "colour": "60",
+        "colour": "#9694AB",
         "tooltip": "%{BKY_MATH_IS_TOOLTIP}",
         "mutator": "operator_mutator"
   }
