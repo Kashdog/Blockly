@@ -687,13 +687,19 @@
                     var ruleBlocks_alternateaction = "";
                     var ruleExpression = document.getElementById("ruleExpression").value.replace('&lt;&gt;', '<>').replace('&lt;', '<').replace('&gt;', '>').replace('&lt;=', '<=').replace('&gt;=', '>=');
                     [].forEach.call(test_names, function (testName, index) {
-                        if(ruleExpression.includes(testName)){
-                            if(ruleExpression.substring(ruleExpression.indexOf(testName)-1,ruleExpression.indexOf(testName)) == " "){
-                                
-                            } else {
-                               ruleExpression = ruleExpression.replace(new RegExp(testName, "g"), " " + testName + " "); 
+                        if (ruleExpression.includes(testName)) {
+                            var hasSpaces = false;
+                            for (var i = 1; i <= occurrences(ruleExpression, testName); i++) {
+                                if (ruleExpression.substring(GetSubstringIndex(ruleExpression, testName, i) - 1, GetSubstringIndex(ruleExpression, testName, i)) == " ") {
+                                    hasSpaces = true;
+                                }
                             }
+                            if (hasSpaces == true){
                             
+                            } else {
+                                ruleExpression = ruleExpression.replace(new RegExp(testName, "g"), " " + testName + " ");
+                            }
+
                         }
                     });
                     console.log(ruleExpression);
@@ -705,15 +711,15 @@
                     var before_alternateaction;
                     var after_alternateaction;
                     var if_index = res.indexOf("IF");
-                    if(if_index == -1){
+                    if (if_index == -1) {
                         if_index = res.indexOf("if");
                     }
                     var then_index = res.indexOf("THEN");
-                    if(then_index == -1){
+                    if (then_index == -1) {
                         then_index = res.indexOf("then");
                     }
                     var else_index = res.indexOf("ELSE");
-                    if(else_index == -1){
+                    if (else_index == -1) {
                         else_index = res.indexOf("else");
                     }
                     var and_is = [false, false, false];
@@ -722,7 +728,7 @@
                         if (GetSubstringIndex(res, "AND", i) != -1 && GetSubstringIndex(res, "AND", i) < then_index) {
                             and_is[0] = true;
                             and_index[0] = GetSubstringIndex(res, "AND", i);
-                        } else if (GetSubstringIndex(res, "AND", i) != -1 && GetSubstringIndex(res, "AND", i) > then_index && else_index == -1 ) {
+                        } else if (GetSubstringIndex(res, "AND", i) != -1 && GetSubstringIndex(res, "AND", i) > then_index && else_index == -1) {
                             and_is[1] = true;
                             and_index[1] = GetSubstringIndex(res, "AND", i);
                         } else if (GetSubstringIndex(res, "AND", i) != -1 && GetSubstringIndex(res, "AND", i) > then_index && GetSubstringIndex(res, "AND", i) < else_index) {
@@ -737,7 +743,7 @@
                         if (GetSubstringIndex(res, "and", i) != -1 && GetSubstringIndex(res, "and", i) < then_index) {
                             and_is[0] = true;
                             and_index[0] = GetSubstringIndex(res, "and", i);
-                        } else if (GetSubstringIndex(res, "and", i) != -1 && GetSubstringIndex(res, "and", i) > then_index && else_index == -1 ) {
+                        } else if (GetSubstringIndex(res, "and", i) != -1 && GetSubstringIndex(res, "and", i) > then_index && else_index == -1) {
                             and_is[1] = true;
                             and_index[1] = GetSubstringIndex(res, "and", i);
                         } else if (GetSubstringIndex(res, "and", i) != -1 && GetSubstringIndex(res, "and", i) > then_index && GetSubstringIndex(res, "and", i) < else_index) {
