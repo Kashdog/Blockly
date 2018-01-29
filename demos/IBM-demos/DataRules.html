@@ -350,8 +350,6 @@
         }
         document.getElementById('loadpalette').addEventListener('change', readSingleFile, false);
     </script>
-    Generate Blocks
-    <input type="file" id="generateBlocks">
     <script type="text/javascript">
         function readSingleFile(evt) {
             //Retrieve the first (and only!) File from the FileList object
@@ -1531,6 +1529,8 @@
     <br>
     <div id="generatedCode">Generated code: </div>
     <input type="text" id="ruleExpression" value="" size="90">
+    Generate Blocks
+    <input type="file" id="generateBlocks">
     <!-- IF NOT coalesce((((1+(2*3))-2)-3*4+5),1) = 'val' THEN variable = 'val' AND variable = 'val' ELSE variable = 'val' -->
     <!-- IF NOT coalesce(ascii(var1),var2) = 'val' THEN variable = 'val' AND variable = 'val' ELSE variable = 'val' -->
     <!-- IF NOT coalesce(coalesce(coalesce(var1,var2),var2),vara) = 'val' THEN variable = 'val' AND variable = 'val' ELSE variable = 'val' -->
