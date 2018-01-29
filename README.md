@@ -8,14 +8,21 @@ To view the Data Rule demo go to https://github.com/Kashdog/Blockly/blob/master/
 
 To run the demo:
 
-Click the Choose File button next to Load Palette and Choose the File DataRuleFunctionsLibrary.xml from the demos folder
+1. Click the Choose File button next to Load Palette and Choose the File DataRuleFunctionsLibrary.xml from the demos folder
 
 This will allow the code to read from the file and generate all the function and test blocks in the palette
 
+Now drag blocks together to create a Rule whose expression will be displayed at the Bottom of the Page
+
+For the Parser:
+
+Follow Step 1
+
+Enter your Rule Expression in the input field
 
 Click the Choose File button next to Generate Blocks and Choose the File DataRuleFunctionsLibrary.xml from the demos folder
 
-This will load the workspace with the Rule listed on the bottom of the page converted into Block Format
+This will load the workspace with the Rule you entered converted into Block Format
 
 
 # Blockly
