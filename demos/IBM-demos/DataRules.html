@@ -1462,8 +1462,8 @@
                     } else if (if_index == -1) {
                         console.log("Error. No If Statement found");
                     }
-
-                    var xml = Blockly.Xml.textToDom(ruletoBlocks_precedent + ruleBlocks_condition + ruleBlocks_action + ruleBlocks_alternateaction + ruletoBlocks_aftercedent);
+                    var ruleBlocks = ruletoBlocks_precedent + ruleBlocks_condition + ruleBlocks_action + ruleBlocks_alternateaction + ruletoBlocks_aftercedent;
+                    var xml = Blockly.Xml.textToDom(ruleBlocks);
                     Blockly.Xml.domToWorkspace(xml, workspace);
 
                 }
