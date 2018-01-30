@@ -81,12 +81,12 @@ Blockly.FieldImage.prototype.init = function() {
   }
   /** @type {SVGElement} */
   this.imageElement_ = Blockly.utils.createSvgElement(
-    'image',
-    {
-      'height': this.height_ + 'px',
-      'width': this.width_ + 'px'
-    },
-    this.fieldGroup_);
+      'image',
+      {
+        'height': this.height_ + 'px',
+        'width': this.width_ + 'px'
+      },
+      this.fieldGroup_);
   this.setValue(this.src_);
   this.sourceBlock_.getSvgRoot().appendChild(this.fieldGroup_);
 
@@ -114,8 +114,8 @@ Blockly.FieldImage.prototype.dispose = function() {
 Blockly.FieldImage.prototype.maybeAddClickHandler_ = function() {
   if (this.clickHandler_) {
     this.mouseDownWrapper_ =
-        Blockly.bindEventWithChecks_(this.fieldGroup_, 'mousedown', this,
-        this.onMouseDown_);
+        Blockly.bindEventWithChecks_(
+            this.fieldGroup_, 'mousedown', this, this.onMouseDown_);
   }
 };
 
@@ -176,11 +176,18 @@ Blockly.FieldImage.prototype.render_ = function() {
 };
 
 /**
+ * Images are fixed width, no need to render even if forced.
+ */
+Blockly.FieldImage.prototype.forceRerender = function() {
+  // NOP
+};
+
+/**
  * Images are fixed width, no need to update.
  * @private
  */
 Blockly.FieldImage.prototype.updateWidth = function() {
- // NOP
+  // NOP
 };
 
 /**

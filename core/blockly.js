@@ -37,7 +37,7 @@ goog.require('Blockly.FieldCheckbox');
 goog.require('Blockly.FieldColour');
 // Date picker commented out since it increases footprint by 60%.
 // Add it only if you need it.
-goog.require('Blockly.FieldDate');
+//goog.require('Blockly.FieldDate');
 goog.require('Blockly.FieldDropdown');
 goog.require('Blockly.FieldImage');
 goog.require('Blockly.FieldTextInput');
@@ -120,8 +120,10 @@ Blockly.hueToRgb = function(hue) {
  * @return {!Object} Contains width and height properties.
  */
 Blockly.svgSize = function(svg) {
-  return {width: svg.cachedWidth_,
-          height: svg.cachedHeight_};
+  return {
+    width: svg.cachedWidth_,
+    height: svg.cachedHeight_
+  };
 };
 
 /**
@@ -306,8 +308,9 @@ Blockly.hideChaff = function(opt_allowToolbox) {
  */
 Blockly.addChangeListener = function(func) {
   // Backwards compatibility from before there could be multiple workspaces.
-  console.warn('Deprecated call to Blockly.addChangeListener, ' +
-               'use workspace.addChangeListener instead.');
+  console.warn(
+      'Deprecated call to Blockly.addChangeListener, ' +
+      'use workspace.addChangeListener instead.');
   return Blockly.getMainWorkspace().addChangeListener(func);
 };
 
@@ -380,12 +383,14 @@ Blockly.defineBlocksWithJsonArray = function(jsonArray) {
   for (var i = 0, elem; elem = jsonArray[i]; i++) {
     var typename = elem.type;
     if (typename == null || typename === '') {
-      console.warn('Block definition #' + i +
-        ' in JSON array is missing a type attribute. Skipping.');
+      console.warn(
+          'Block definition #' + i +
+          ' in JSON array is missing a type attribute. Skipping.');
     } else {
       if (Blockly.Blocks[typename]) {
-        console.warn('Block definition #' + i +
-          ' in JSON array overwrites prior definition of "' + typename + '".');
+        console.warn(
+            'Block definition #' + i + ' in JSON array' +
+            ' overwrites prior definition of "' + typename + '".');
       }
       Blockly.Blocks[typename] = {
         init: Blockly.jsonInitFactory_(elem)
@@ -448,10 +453,9 @@ Blockly.bindEventWithChecks_ = function(node, name, thisObject, func,
         e.preventDefault();
       }
     };
-    for (var i = 0, eventName;
-         eventName = Blockly.Touch.TOUCH_MAP[name][i]; i++) {
-      node.addEventListener(eventName, touchWrapFunc, false);
-      bindData.push([node, eventName, touchWrapFunc]);
+    for (var i = 0, type; type = Blockly.Touch.TOUCH_MAP[name][i]; i++) {
+      node.addEventListener(type, touchWrapFunc, false);
+      bindData.push([node, type, touchWrapFunc]);
     }
   }
   return bindData;
@@ -487,7 +491,7 @@ Blockly.bindEvent_ = function(node, name, thisObject, func) {
   if (name in Blockly.Touch.TOUCH_MAP) {
     var touchWrapFunc = function(e) {
       // Punt on multitouch events.
-      if (e.changedTouches.length == 1) {
+      if (e.changedTouches && e.changedTouches.length == 1) {
         // Map the touch event's properties to the event.
         var touchPoint = e.changedTouches[0];
         e.clientX = touchPoint.clientX;
@@ -498,10 +502,9 @@ Blockly.bindEvent_ = function(node, name, thisObject, func) {
       // Stop the browser from scrolling/zooming the page.
       e.preventDefault();
     };
-    for (var i = 0, eventName;
-         eventName = Blockly.Touch.TOUCH_MAP[name][i]; i++) {
-      node.addEventListener(eventName, touchWrapFunc, false);
-      bindData.push([node, eventName, touchWrapFunc]);
+    for (var i = 0, type; type = Blockly.Touch.TOUCH_MAP[name][i]; i++) {
+      node.addEventListener(type, touchWrapFunc, false);
+      bindData.push([node, type, touchWrapFunc]);
     }
   }
   return bindData;
