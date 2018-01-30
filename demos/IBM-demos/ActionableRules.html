@@ -8,6 +8,7 @@
     <script src="../../blocks_compressed.js"></script>
     <script src="../../javascript_compressed.js"></script>
     <script src="./actionablerules.js"></script>
+    <script src="./field_datalist.js"></script>
     <script src="../../msg/js/en.js"></script>
     <style>
         body {
@@ -131,7 +132,7 @@
                     for (var k = i + 1; k < disabledDqIds.length; k++) {
                         disabledDimensionsToBeSpliced.push(disabledDqDims[k]);
                     }
-                    if ((disabledDqIds.length > numberOfDisabledDimensionBlocks || changeInDisableDQDropdown == true) && disabledDimensionsToBeSpliced != null) {
+                    if ((disabledDqIds.length != numberOfDisabledDimensionBlocks || changeInDisableDQDropdown == true) && disabledDimensionsToBeSpliced != null) {
                         workspace.getBlockById(disabledDqIds[i]).updateList_(disabledDimensionsToBeSpliced);
                     }
                 }
