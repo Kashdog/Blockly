@@ -23,7 +23,7 @@ Click the Choose File button next to Generate Blocks and Choose the File DataRul
 
 This will load the workspace with the Rule you entered converted into Block Format
 
-#SQL Editor
+# SQL Editor
 
 For the SQL Editor open up https://github.com/Kashdog/Blockly/blob/master/demos/IBM-demos/SQL.html
 
