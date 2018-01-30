@@ -10,6 +10,7 @@
     <script src="./datarules.js"></script>
     <script src="../../msg/js/en.js"></script>
     <script src="../../colour-gradient.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <style>
         body {
             background-color: #fff;
@@ -88,10 +89,10 @@
             dl.setAttribute('download', 'DataClassificationBlocks.txt');
             dl.click();
         }
+        
     </script>
     <button onClick="showCode()">Generate Rule</button>
     <button onClick="downloadXML()">Export the Blocks</button>
-
     <input type="file" id="fileinput" />
     <script type="text/javascript">
         function readSingleFile(evt) {
@@ -684,6 +685,7 @@
                     var ruleBlocks_action = "";
                     var ruleBlocks_alternateaction = "";
                     var ruleExpression = document.getElementById("ruleExpression").value.replace('&lt;&gt;', '<>').replace('&lt;', '<').replace('&gt;', '>').replace('&lt;=', '<=').replace('&gt;=', '>=');
+                    ruleExpression = ruleExpression.toLowerCase();
                     [].forEach.call(test_names, function (testName, index) {
                         if (ruleExpression.includes(testName)) {
                             ruleExpression = ruleExpression.replace(new RegExp(testName, "g"), " " + testName + " ");
@@ -698,35 +700,11 @@
                     var after_action;
                     var before_alternateaction;
                     var after_alternateaction;
-                    var if_index = res.indexOf("IF");
-                    if (if_index == -1) {
-                        if_index = res.indexOf("if");
-                    }
-                    var then_index = res.indexOf("THEN");
-                    if (then_index == -1) {
-                        then_index = res.indexOf("then");
-                    }
-                    var else_index = res.indexOf("ELSE");
-                    if (else_index == -1) {
-                        else_index = res.indexOf("else");
-                    }
+                    var if_index = res.indexOf("if");
+                    var then_index = res.indexOf("then");
+                    var else_index = res.indexOf("else");
                     var and_is = [false, false, false];
                     var and_index = [];
-                    for (var i = 1; i <= 3; i++) {
-                        if (GetSubstringIndex(res, "AND", i) != -1 && GetSubstringIndex(res, "AND", i) < then_index) {
-                            and_is[0] = true;
-                            and_index[0] = GetSubstringIndex(res, "AND", i);
-                        } else if (GetSubstringIndex(res, "AND", i) != -1 && GetSubstringIndex(res, "AND", i) > then_index && else_index == -1) {
-                            and_is[1] = true;
-                            and_index[1] = GetSubstringIndex(res, "AND", i);
-                        } else if (GetSubstringIndex(res, "AND", i) != -1 && GetSubstringIndex(res, "AND", i) > then_index && GetSubstringIndex(res, "AND", i) < else_index) {
-                            and_is[1] = true;
-                            and_index[1] = GetSubstringIndex(res, "AND", i);
-                        } else if (GetSubstringIndex(res, "AND", i) != -1 && GetSubstringIndex(res, "AND", i) > else_index) {
-                            and_is[2] = true;
-                            and_index[2] = GetSubstringIndex(res, "AND", i);
-                        }
-                    }
                     for (var i = 1; i <= 3; i++) {
                         if (GetSubstringIndex(res, "and", i) != -1 && GetSubstringIndex(res, "and", i) < then_index) {
                             and_is[0] = true;
@@ -745,21 +723,6 @@
                     var or_is = [false, false, false];
                     var or_index = [];
                     for (var i = 1; i <= 3; i++) {
-                        if (GetSubstringIndex(res, "OR", i) != -1 && GetSubstringIndex(res, "OR", i) < then_index) {
-                            or_is[0] = true;
-                            or_index[0] = GetSubstringIndex(res, "OR", i);
-                        } else if (GetSubstringIndex(res, "OR", i) != -1 && GetSubstringIndex(res, "OR", i) > then_index && else_index == -1) {
-                            or_is[1] = true;
-                            or_index[1] = GetSubstringIndex(res, "OR", i);
-                        } else if (GetSubstringIndex(res, "OR", i) != -1 && GetSubstringIndex(res, "OR", i) > then_index && GetSubstringIndex(res, "OR", i) < else_index) {
-                            or_is[1] = true;
-                            or_index[1] = GetSubstringIndex(res, "OR", i);
-                        } else if (GetSubstringIndex(res, "OR", i) != -1 && GetSubstringIndex(res, "OR", i) > else_index) {
-                            or_is[2] = true;
-                            or_index[2] = GetSubstringIndex(res, "OR", i);
-                        }
-                    }
-                    for (var i = 1; i <= 3; i++) {
                         if (GetSubstringIndex(res, "or", i) != -1 && GetSubstringIndex(res, "or", i) < then_index) {
                             or_is[0] = true;
                             or_index[0] = GetSubstringIndex(res, "or", i);
@@ -776,21 +739,6 @@
                     }
                     var not_is = [false, false, false];
                     var not_index = [];
-                    for (var i = 1; i <= 3; i++) {
-                        if (GetSubstringIndex(res, "NOT", i) != -1 && GetSubstringIndex(res, "NOT", i) < then_index) {
-                            not_is[0] = true;
-                            not_index[0] = GetSubstringIndex(res, "NOT", i);
-                        } else if (GetSubstringIndex(res, "NOT", i) != -1 && GetSubstringIndex(res, "NOT", i) > then_index && else_index == -1) {
-                            not_is[1] = true;
-                            not_index[1] = GetSubstringIndex(res, "NOT", i);
-                        } else if (GetSubstringIndex(res, "NOT", i) != -1 && GetSubstringIndex(res, "NOT", i) > then_index && GetSubstringIndex(res, "NOT", i) < else_index) {
-                            not_is[1] = true;
-                            not_index[1] = GetSubstringIndex(res, "NOT", i);
-                        } else if (GetSubstringIndex(res, "NOT", i) != -1 && GetSubstringIndex(res, "NOT", i) > else_index) {
-                            not_is[2] = true;
-                            not_index[2] = GetSubstringIndex(res, "NOT", i);
-                        }
-                    }
                     for (var i = 1; i <= 3; i++) {
                         if (GetSubstringIndex(res, "not", i) != -1 && GetSubstringIndex(res, "not", i) < then_index) {
                             not_is[0] = true;
@@ -1523,14 +1471,16 @@
                 alert("Failed to load file");
             }
         }
-        document.getElementById('generateBlocks').addEventListener('change', readSingleFile, false);
     </script>
     <br>
     <br>
     <div id="generatedCode">Generated code: </div>
-    Rule Expression to Convert to Blocks: <input type="text" id="ruleExpression" value="" size="90">
-    Generate Blocks
+    Rule Expression to Convert to Blocks:
+    <input type="text" id="ruleExpression" value="" size="90"> Generate Blocks
     <input type="file" id="generateBlocks">
+    <script>
+        document.getElementById('generateBlocks').addEventListener('change', readSingleFile, false);
+    </script>
     <!-- IF NOT coalesce((((1+(2*3))-2)-3*4+5),1) = 'val' THEN variable = 'val' AND variable = 'val' ELSE variable = 'val' -->
     <!-- IF NOT coalesce(ascii(var1),var2) = 'val' THEN variable = 'val' AND variable = 'val' ELSE variable = 'val' -->
     <!-- IF NOT coalesce(coalesce(coalesce(var1,var2),var2),vara) = 'val' THEN variable = 'val' AND variable = 'val' ELSE variable = 'val' -->

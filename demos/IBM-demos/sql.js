@@ -781,6 +781,23 @@ Blockly.DataRule['all_columns'] = function (block) {
     return code;
 };
 
+Blockly.Blocks['distinct'] = {
+    init: function () {
+        this.appendDummyInput()
+            .appendField("DISTINCT");
+        this.setPreviousStatement(true, null);
+        this.setNextStatement(true, null);
+        this.setColour(60);
+        this.setTooltip("");
+        this.setHelpUrl("");
+    }
+};
+
+Blockly.DataRule['distinct'] = function (block) {
+    var code = 'DISTINCT';
+    return code;
+};
+
 Blockly.Blocks['table_name'] = {
     init: function () {
         this.appendDummyInput()
