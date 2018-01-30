@@ -685,7 +685,8 @@
                     var ruleBlocks_action = "";
                     var ruleBlocks_alternateaction = "";
                     var ruleExpression = document.getElementById("ruleExpression").value.replace('&lt;&gt;', '<>').replace('&lt;', '<').replace('&gt;', '>').replace('&lt;=', '<=').replace('&gt;=', '>=');
-                    ruleExpression = ruleExpression.toLowerCase();
+                    ruleExpression = ruleExpression.replace('IF', 'if').replace('THEN', 'then').replace('ELSE', 'else').replace('AND', 'and').replace('OR', 'or').replace('NOT', 'not');
+                    ruleExpression = ruleExpression.trim();
                     [].forEach.call(test_names, function (testName, index) {
                         if (ruleExpression.includes(testName)) {
                             ruleExpression = ruleExpression.replace(new RegExp(testName, "g"), " " + testName + " ");

@@ -242,18 +242,18 @@ Blockly.Blocks['disablealldataqualitydimensions'] = {
 };
 
 var enabledataqualitydimensionlist = [
-    ["Missing Values", "MissingValue"],
-    ["Data Type Violation", "DataTypeViolation"],
     ["Data Class Violation", "DataClassViolation"],
-    ["Value Range Violations", "ValueRangeViolation"],
+    ["Data Type Violation", "DataTypeViolation"],
+    ["Duplicate Values", "UniquenessViolation"],
     ["Format Violations", "FormatViolation"],
-    ["Suspect Values", "SuspectValues"],
     ["Inconsistent missing value representation", "NonStandardMissingValue"],
-    ["Duplicate Values", "UniquenessViolation"], 
-    ["Rule Violations", "RuleViolation"], 
-    ["Inconsistent usage of upper and lower cases", "CaseViolation"], 
-    ["Suspect Values (Correlation Violations)", "SuspectCorrelatedValue"], 
-    ["Suspect Values (Classification Violations)", "SuspectClassifiedValue"]
+    ["Inconsistent usage of upper and lower cases", "CaseViolation"],
+    ["Missing Values", "MissingValue"],
+    ["Rule Violations", "RuleViolation"],
+    ["Suspect Values", "SuspectValues"],
+    ["Suspect Values (Classification Violations)", "SuspectClassifiedViolation"],
+    ["Suspect Values (Correlation Violations)", "SuspectCorrelatedViolation"],
+    ["Value Range Violations", "ValueRangeViolation"]
 ];
 
 Blockly.Blocks['enabledataqualitydimension'] = {

@@ -44,7 +44,9 @@ goog.require('goog.userAgent');
  * @extends {Blockly.Field}
  * @constructor
  */
-Blockly.FieldDatalist = function(menuGenerator, opt_validator) {
+Blockly.FieldDatalist = function(text, menuGenerator, opt_validator) {
+    Blockly.FieldDatalist.superClass_.constructor.call(this, text,
+      opt_validator);
     this.menuGenerator = menuGenerator;
 };
 goog.inherits(Blockly.FieldDatalist, Blockly.Field);
