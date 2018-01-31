@@ -183,7 +183,18 @@ Blockly.FieldDatalist.prototype.showInlineEditor_ = function(quietInput) {
   div.style.fontSize = fontSize;
   htmlInput.style.fontSize = fontSize;
 
+  var datalist = goog.dom.createDom(goog.dom.TagName.DATALIST);
+  for (var i=0; i < this.menuGenerator.length; i++) {
+    var option = goog.dom.createDom(goog.dom.TagName.OPTION);
+    option.setAttribute('value', this.menuGenerator[i][0])
+    datalist.appendChild(option);
+  }
+  datalist.setAttribute('id', 'datalist');
+  htmlInput.setAttribute('size', '20');
+  htmlInput.setAttribute('list', 'datalist');
+
   Blockly.FieldDatalist.htmlInput_ = htmlInput;
+  div.appendChild(datalist);
   div.appendChild(htmlInput);
 
   htmlInput.value = htmlInput.defaultValue = this.text_;

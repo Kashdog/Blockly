@@ -269,6 +269,19 @@ Blockly.Blocks['enabledataqualitydimension'] = {
     }
 };
 
+Blockly.Blocks['dummydatalist'] = {
+    init: function () {
+        this.appendDummyInput()
+            .appendField("Enable Data Quality Dimension")
+            .appendField(new Blockly.FieldDatalist("",enabledataqualitydimensionlist), "dataquality");
+        this.setPreviousStatement(true, null);
+        this.setNextStatement(true, null);
+        this.setColour(186);
+        this.setTooltip("");
+        this.setHelpUrl("");
+    }
+};
+
 Blockly.Blocks['automaticallybinddataruledefinition'] = {
     init: function () {
         this.appendDummyInput()
@@ -369,6 +382,13 @@ Blockly.JavaScript['disablealldataqualitydimensions'] = function (block) {
 };
 
 Blockly.JavaScript['enabledataqualitydimension'] = function (block) {
+    var dropdown_dataquality = block.getFieldValue('dataquality');
+    // TODO: Assemble JavaScript into code variable.
+    var code = '{"type_":"EnableDQDimension","value_":"' + dropdown_dataquality + '"},';
+    return code;
+};
+
+Blockly.JavaScript['dummydatalist'] = function (block) {
     var dropdown_dataquality = block.getFieldValue('dataquality');
     // TODO: Assemble JavaScript into code variable.
     var code = '{"type_":"EnableDQDimension","value_":"' + dropdown_dataquality + '"},';
