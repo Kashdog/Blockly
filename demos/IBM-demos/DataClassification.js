@@ -1646,7 +1646,7 @@ Blockly.Blocks['inferreddataclassis'] = {
   init: function() {
     this.appendDummyInput()
         .appendField("inferred data class of the column is ")
-        .appendField(new Blockly.FieldDropdown([
+        .appendField(new Blockly.FieldDatalist("",[
         ["Email Address","EA"],
         ["Date","D"],
         ["Date of Birth","DOB"],
@@ -1823,7 +1823,7 @@ Blockly.Blocks['inferreddataclassisposition'] = {
         .appendField("inferred data class of the column at position  ")
         .appendField(new Blockly.FieldTextInput("default"), "columnposition")
         .appendField("is")
-        .appendField(new Blockly.FieldDropdown([
+        .appendField(new Blockly.FieldDatalist("",[
         ["Email Address","EA"],
         ["Date","D"],
         ["Date of Birth","DOB"],
@@ -2000,7 +2000,7 @@ Blockly.Blocks['classifycolumn'] = {
         .appendField("Classify the column at position")
         .appendField(new Blockly.FieldTextInput("default"), "columnposition")
         .appendField("as")
-                .appendField(new Blockly.FieldDropdown([
+        .appendField(new Blockly.FieldDatalist("",[
         ["Email Address","EA"],
         ["Date","D"],
         ["Date of Birth","DOB"],

@@ -8,7 +8,6 @@
     <script src="../../blocks_compressed.js"></script>
     <script src="../../javascript_compressed.js"></script>
     <script src="./actionablerules.js"></script>
-    <script src="./field_datalist.js"></script>
     <script src="../../msg/js/en.js"></script>
     <style>
         body {
@@ -130,9 +129,38 @@
                         disabledDimensionsToBeSpliced.push(disabledDqDims[j]);
                     }
                     for (var k = i + 1; k < disabledDqIds.length; k++) {
-                        disabledDimensionsToBeSpliced.push(disabledDqDims[k]);
+                        if(occurrences(disabledDqDims[k]) <= 1){
+                            disabledDimensionsToBeSpliced.push(disabledDqDims[k]);
+                        } 
                     }
-                    if ((disabledDqIds.length != numberOfDisabledDimensionBlocks || changeInDisableDQDropdown == true) && disabledDimensionsToBeSpliced != null) {
+                    if ((disabledDqIds.length != numberOfDisabledDimensionBlocks || changeInDisableDQDropdown == true) && disabledDimensionsToBeSpliced[0] != null) {
+                        workspace.getBlockById(disabledDqIds[i]).updateList_(disabledDimensionsToBeSpliced);
+                    }
+                }
+
+                x = xmlDoc.getElementsByTagName('block');
+                var disabledDqIds = []
+                var disabledDqDims = [];
+                [].forEach.call(x, function (arrayElement) {
+                    var block_type = arrayElement.getAttribute('type');
+                    var block_id = arrayElement.id;
+                    if (block_type == 'disabledataqualitydimension') {
+                        disabledDqDims.push(arrayElement.getElementsByTagName("field")[0].innerHTML);
+                        disabledDqIds.push(block_id);
+                    }
+                });
+
+                for (var i = 0; i < disabledDqIds.length; i++) {
+                    disabledDimensionsToBeSpliced = [];
+                    for (var j = 0; j < i; j++) {
+                        disabledDimensionsToBeSpliced.push(disabledDqDims[j]);
+                    }
+                    for (var k = i + 1; k < disabledDqIds.length; k++) {
+                        if(occurrences(disabledDqDims[k]) <= 1){
+                            disabledDimensionsToBeSpliced.push(disabledDqDims[k]);
+                        } 
+                    }
+                    if ((disabledDqIds.length != numberOfDisabledDimensionBlocks || changeInDisableDQDropdown == true) && disabledDimensionsToBeSpliced[0] != null) {
                         workspace.getBlockById(disabledDqIds[i]).updateList_(disabledDimensionsToBeSpliced);
                     }
                 }
