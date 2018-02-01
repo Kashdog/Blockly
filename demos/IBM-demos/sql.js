@@ -858,32 +858,17 @@ Blockly.defineBlocksWithJsonArray([
 
 
 Blockly.Constants.IS_EQUAL_MUTATOR_MIXIN = {
-    /**
-     * Create XML to represent whether the 'divisorInput' should be present.
-     * @return {Element} XML storage element.
-     * @this Blockly.Block
-     */
+
     mutationToDom: function () {
         var container = document.createElement('mutation');
         var equalInput = (this.getFieldValue('PROPERTY') == '=');
         container.setAttribute('equal_input', equalInput);
         return container;
-    }
-    , /**
-     * Parse XML to restore the 'divisorInput'.
-     * @param {!Element} xmlElement XML storage element.
-     * @this Blockly.Block
-     */
+    },
     domToMutation: function (xmlElement) {
         var equalInput = (xmlElement.getAttribute('equal_input') == 'true');
         this.updateShape_(equalInput);
-    }
-    , /**
-     * Modify this block to have (or not have) an input for 'is divisible by'.
-     * @param {boolean} divisorInput True if this block has a divisor input.
-     * @private
-     * @this Blockly.Block
-     */
+    }, 
     updateShape_: function (equalInput) {
         if (equalInput == true) {
             this.setOutput(true, ["Boolean", "assignment"]);
@@ -912,6 +897,8 @@ Blockly.DataRule['operator'] = function (block) {
     var code = value_condition1 + dropdown_operatorlist + value_condition2;
     return [code, Blockly.DataRule.ORDER_ATOMIC];
 };
+
+
 
 Blockly.Blocks['variable'] = {
     init: function () {

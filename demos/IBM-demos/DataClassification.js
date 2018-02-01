@@ -1468,7 +1468,8 @@ Blockly.Blocks['dataclass'] = {
   init: function() {
     this.appendDummyInput()
         .appendField("Data Class")
-        .appendField(new Blockly.FieldDropdown([
+        .appendField(new Blockly.FieldDatalist("",
+        [
         ["Email Address","EA"],
         ["Date","D"],
         ["Date of Birth","DOB"],
@@ -1630,7 +1631,9 @@ Blockly.Blocks['dataclass'] = {
         ["Hobby/Leisure Activity","HOBBY"],
         ["Relationship","RELATIONSHIP"],
         ["Language Code or Name","LANG"], 
-        ["Employment Status","EMPLOYMENTSTATUS"]]),
+        ["Employment Status","EMPLOYMENTSTATUS"]
+      ]
+    ),
         "DataClass");
     this.setOutput(true,"Value");
     this.setColour(230);

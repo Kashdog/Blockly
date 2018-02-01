@@ -269,19 +269,6 @@ Blockly.Blocks['enabledataqualitydimension'] = {
     }
 };
 
-Blockly.Blocks['dummydatalist'] = {
-    init: function () {
-        this.appendDummyInput()
-            .appendField("Enable Data Quality Dimension")
-            .appendField(new Blockly.FieldDatalist("",enabledataqualitydimensionlist), "dataquality");
-        this.setPreviousStatement(true, null);
-        this.setNextStatement(true, null);
-        this.setColour(186);
-        this.setTooltip("");
-        this.setHelpUrl("");
-    }
-};
-
 Blockly.Blocks['automaticallybinddataruledefinition'] = {
     init: function () {
         this.appendDummyInput()

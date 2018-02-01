@@ -19,14 +19,14 @@
  */
 
 /**
- * @fileoverview Text input field.
- * @author fraser@google.com (Neil Fraser)
+ * @fileoverview Typeahead input field
+ * @author Aneesh Kashalikar
  */
 'use strict';
 
 goog.provide('Blockly.FieldDatalist');
 
-goog.require('Blockly.Field');
+goog.require('Blockly.FieldSuperDatalist');
 goog.require('Blockly.Msg');
 goog.require('goog.asserts');
 goog.require('goog.dom');
@@ -49,7 +49,7 @@ Blockly.FieldDatalist = function(text, menuGenerator, opt_validator) {
       opt_validator);
     this.menuGenerator = menuGenerator;
 };
-goog.inherits(Blockly.FieldDatalist, Blockly.Field);
+goog.inherits(Blockly.FieldDatalist, Blockly.FieldSuperDatalist);
 
 /**
  * Point size of text.  Should match blocklyText's font-size in CSS.
@@ -190,7 +190,6 @@ Blockly.FieldDatalist.prototype.showInlineEditor_ = function(quietInput) {
     datalist.appendChild(option);
   }
   datalist.setAttribute('id', 'datalist');
-  htmlInput.setAttribute('size', '20');
   htmlInput.setAttribute('list', 'datalist');
 
   Blockly.FieldDatalist.htmlInput_ = htmlInput;
@@ -314,7 +313,7 @@ Blockly.FieldDatalist.prototype.validate_ = function() {
 Blockly.FieldDatalist.prototype.resizeEditor_ = function() {
   var div = Blockly.WidgetDiv.DIV;
   var bBox = this.getScaledBBox_();
-  div.style.width = bBox.right - bBox.left + 'px';
+  div.style.width = bBox.right - bBox.left + 20 + 'px';
   div.style.height = bBox.bottom - bBox.top + 'px';
 
   // In RTL mode block fields and LTR input fields the left edge moves,
