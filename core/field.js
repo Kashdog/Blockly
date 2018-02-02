@@ -331,7 +331,7 @@ Blockly.Field.prototype.updateWidth = function() {
     this.borderRect_.setAttribute('width',
         width + Blockly.BlockSvg.SEP_SPACE_X);
   }
-  this.size_.width = width + 20;
+  this.size_.width = width;
 };
 
 /**

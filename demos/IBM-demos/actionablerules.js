@@ -214,10 +214,11 @@ Blockly.Constants.DISABLE_DQ_DIM_MUTATOR_MIXIN = {
 
         [].forEach.call(dimensions, function (dimension, index) {
             var dimension_index = disableDQList.indexOf(dimension);
-            disabledataqualitydimensionlist.splice(dimension_index, 1);
-            disableDQList.splice(dimension_index, 1);
+            if (dimension_index != -1) {
+                disabledataqualitydimensionlist.splice(dimension_index, 1);
+                disableDQList.splice(dimension_index, 1);
+            }
         });
-
         this.removeInput("");
         this.appendDummyInput().appendField("Disable Data Quality Dimension").appendField(new Blockly.FieldDropdown(disabledataqualitydimensionlist), "DIMENSIONS");
         if (disableDQList.indexOf(this.fieldValue) != -1) {

@@ -508,7 +508,7 @@
             } else {
                 workspace.updateToolbox(document.getElementById('AllColumnsScope'));
                 Blockly.mainWorkspace.clear();
-                var xml = Blockly.Xml.textToDom('<xml xmlns="http://www.w3.org/1999/xhtml"><variables></variables><block type="forloop" id="forloop" x="158" y="99"><field name="variable">i</field><statement name="NAME"><block type="ifthen" id="ifthen"><value name="Action1"><block type="classifycolumn" id="classifycolumn"><field name="columnposition">i+1</field><field name="DataClass">EA</field><field name="confidence">100</field></block></value></block></statement></block></xml>');
+                var xml = Blockly.Xml.textToDom('<xml xmlns="http://www.w3.org/1999/xhtml"><variables></variables><block type="forloop" id="forloop" x="158" y="99"><field name="variable">i</field><statement name="NAME"><block type="ifthen" id="ifthen"><value name="Action1"><block type="classifycolumn" id="classifycolumn"><field name="columnposition">i+1</field><field name="DataClass">Email Address</field><field name="confidence">100</field></block></value></block></statement></block></xml>');
                 Blockly.Xml.domToWorkspace(xml, workspace);
             }
 
