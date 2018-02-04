@@ -3,20 +3,19 @@
 
 <head>
     <meta charset="utf-8">
-    <title>Blockly Demo: Toolbox</title>
+    <title>Blockly Demo: SQL</title>
     <script src="../../blockly_compressed.js"></script>
     <script src="../../blocks_compressed.js"></script>
     <script src="../../datarulegeneration_compressed.js"></script>
     <script src="./sql.js"></script>
     <script src="../../msg/js/en.js"></script>
     <script src="../../colour-gradient.js"></script>
-    <script src="./field_datalist.js"></script>
     <style>
         body {
             background-color: #fff;
             font-family: sans-serif;
         }
-        
+
         h1 {
             font-weight: normal;
             font-size: 140%;
@@ -113,14 +112,14 @@
         function fetchCode(value) {
             var block;
             switch (true) {
-            case (!isNaN(value)):
-                block = '<block type="numericliteral" id="numericliteral"><field name="numericInput">' + value + '</field></block>';
-                break;
-            case (isAStringLiteral(value)):
-                block = '<block type="stringliteral" id="stringliteral"><field name="stringInput">' + trimStringLiteral(value) + '</field></block>';
-                break;
-            default:
-                block = '<block type="variable" id="variable"><field name="variable">' + value + '</field></block>';
+                case (!isNaN(value)):
+                    block = '<block type="numericliteral" id="numericliteral"><field name="numericInput">' + value + '</field></block>';
+                    break;
+                case (isAStringLiteral(value)):
+                    block = '<block type="stringliteral" id="stringliteral"><field name="stringInput">' + trimStringLiteral(value) + '</field></block>';
+                    break;
+                default:
+                    block = '<block type="variable" id="variable"><field name="variable">' + value + '</field></block>';
             }
             return block;
 
@@ -130,27 +129,27 @@
 
         function getOperatorBlocks(operatorexpr) {
             var operator_in_expr = "";
-            if(operatorexpr.length > 1){
+            if (operatorexpr.length > 1) {
                 operatorexpr = operatorexpr.join("");
-            } else{
+            } else {
                 operatorexpr = operatorexpr[0];
             }
             console.log(operatorexpr);
-            [].forEach.call(operators, function(operator, index) {
-                if(operatorexpr.indexOf(operator) != -1){
+            [].forEach.call(operators, function (operator, index) {
+                if (operatorexpr.indexOf(operator) != -1) {
                     operator_in_expr = operator;
                 }
             });
             var operands = operatorexpr.split(operator_in_expr);
             console.log(operands);
             var operatorxml = '<block type="operator"><field name="PROPERTY">=</field>'
-                + '<value name="Condition1">' + fetchCode(operands[0]) + '</value>' 
+                + '<value name="Condition1">' + fetchCode(operands[0]) + '</value>'
                 + '<value name="Condition2">' + fetchCode(operands[1]) + '</value>'
                 + '</block>';
             return operatorxml;
         }
 
-
+        
 
         function sqlToBlocks() {
             var sqlExpression = document.getElementById("sqlExpression").value;
@@ -160,36 +159,59 @@
             var y_index_of_block = 20;
             var sqlToBlocks = '<xml xmlns="http://www.w3.org/1999/xhtml"><variables></variables>';
             [].forEach.call(statements, function (statement, index) {
-                var statement_split = statement.split(" ");
+                var statement_withoutcommas = statement.replace(",","");
+                var statement_split = statement_withoutcommas.split(" ");
 
                 var select_index = statement_split.indexOf("SELECT");
                 var from_index = statement_split.indexOf("FROM");
                 var where_index = statement_split.indexOf("WHERE");
                 var groupby_index = statement_split.indexOf("GROUP");
                 var having_index = statement_split.indexOf("HAVING");
-                var orderby_index = statement_split.indexOf("ORDER");
+                var orderby_firstindex = statement_split.indexOf("ORDER");
+                var first_orderby_order;
+                var last_orderby_order;
+                var two_orderbys = false;
+                if((statement_split.indexOf("ASC") < statement_split.indexOf("DESC")) && (statement_split.indexOf("DESC") != -1 && statement_split.indexOf("ASC") != -1)){
+                    var orderby_firstorder = statement_split.indexOf("ASC");
+                    var orderby_lastorder = statement_split.indexOf("DESC");
+                    first_orderby_order = "ASCENDING";
+                    last_orderby_order = "DESCENDING";
+                    two_orderbys = true;
+                } else if((statement_split.indexOf("ASC") > statement_split.indexOf("DESC")) && (statement_split.indexOf("DESC") != -1 && statement_split.indexOf("ASC") != -1)){
+                    var orderby_firstorder = statement_split.indexOf("DESC");
+                    var orderby_lastorder = statement_split.indexOf("ASC");
+                    first_orderby_order = "DESCENDING";
+                    last_orderby_order = "ASCENDING";
+                    two_orderbys = true;
+                } else if(statement_split.indexOf("ASC") != -1){
+                    var orderby_firstorder = statement_split.indexOf("ASC");
+                } else if(statement_split.indexOf("DESC") != -1){
+                    var orderby_firstorder = statement_split.indexOf("DESC");
+                } 
+                
                 var index_after_where;
                 var index_after_groupby;
                 var index_after_having;
+                var index_after_firstorder;
 
                 if (groupby_index != -1) {
                     index_after_where = groupby_index;
-                } else if (orderby_index != -1) {
-                    index_after_where = orderby_index;
+                } else if (orderby_firstindex != -1) {
+                    index_after_where = orderby_firstindex;
                 } else {
                     index_after_where = statement_split.length;
                 }
 
                 if (having_index != -1) {
                     index_after_groupby = having_index;
-                } else if (orderby_index != -1) {
-                    index_after_groupby = orderby_index;
+                } else if (orderby_firstindex != -1) {
+                    index_after_groupby = orderby_firstindex;
                 } else {
                     index_after_groupby = statement_split.length;
                 }
 
-                if (orderby_index != -1) {
-                    index_after_having = orderby_index;
+                if (orderby_firstindex != -1) {
+                    index_after_having = orderby_firstindex;
                 } else {
                     index_after_having = statement_split.length;
                 }
@@ -219,7 +241,7 @@
                 }
 
 
-                if (orderby_index == -1) {
+                if (orderby_firstindex == -1) {
                     orderbyasc_mutator = 0;
                     orderbydesc_mutator = 0;
                 }
@@ -232,6 +254,7 @@
 
 
                 if (select_index != -1 && from_index != -1) {
+                    console.log(y_index_of_block);
                     sqlToBlocks += '<block type="select" x="' + x_index_of_block + '" y="' + y_index_of_block + '">'
                     sqlToBlocks += '<mutation where="' + where_mutator + '" group="' + groupby_mutator + '" having="' + having_mutator + '" orderasc="' + orderbyasc_mutator + '" orderdesc="' + orderbydesc_mutator + '"></mutation>'
                     var select_columns = statement_split.slice(select_index + 1, from_index);
@@ -244,6 +267,7 @@
                         }
                         if (column_name == "*") {
                             sqlToBlocks += '<block type="all_columns"></block>';
+                            y_index_of_block += 40;
                         } else {
                             if (index == select_columns.length - 1) {
                                 sqlToBlocks += '<block type="column_name" id="7mK.5}O_PX97/!J{bUFf"><field name="columnName">' + column_name + '</field></block>';
@@ -263,6 +287,7 @@
                     sqlToBlocks += '<block type="table_name"><field name="tableName">' + from_table + '</field></block>'
                     sqlToBlocks += '</value>'; // ends the blocks attached to the "FROM" input
                     //SELECT * FROM Customers WHERE CustomerID=1 AND CustomerID=2;
+                    y_index_of_block += 40;
                     if (where_index != -1) {
                         sqlToBlocks += '<value name="WHERE">';
                         var where_blocks = statement_split.slice(where_index + 1, index_after_where);
@@ -287,13 +312,14 @@
                                     sqlToBlocks += getOperatorBlocks(where_blocks.slice(0, conditionElement));
                                     sqlToBlocks += '</value>';
                                     current_andor++;
+                                    y_index_of_block += 80;
                                 } else {
-                                    sqlToBlocks += '<field name="list' + (current_andor - 2) + '">' + and_slash_or[index] + '</field>';
+                                    sqlToBlocks += '<field name="list' + (current_andor - 2) + '">' + and_slash_or[index - 1] + '</field>';
                                     current_andor++;
-                                    sqlToBlocks += '<value name="Condition' + current_andor + '">';
+                                    sqlToBlocks += '<value name="Condition' + (current_andor - 1) + '">';
                                     sqlToBlocks += getOperatorBlocks(where_blocks.slice(andor_indexes[index - 1] + 1, conditionElement));
                                     sqlToBlocks += '</value>';
-                                    current_andor++;
+                                    y_index_of_block += 80;
                                 }
 
                                 if (index == andor_indexes.length - 1) {
@@ -301,11 +327,121 @@
                                     sqlToBlocks += '<value name="Condition' + current_andor + '">';
                                     sqlToBlocks += getOperatorBlocks(where_blocks.slice(conditionElement + 1));
                                     sqlToBlocks += '</value>';
+                                    y_index_of_block += 80;
                                 }
                             });
                             sqlToBlocks += '</block>';
                         }
                         sqlToBlocks += '</value>';
+                    }
+                    if (groupby_index != -1) {
+                        var groupby_columns = statement_split.slice(groupby_index + 2, index_after_groupby);
+                        var following_next_block_tags = "";
+                        sqlToBlocks += '<statement name="GROUPBY">';
+                        [].forEach.call(groupby_columns, function (column, index) {
+                            var column_name = column;
+                            if (column_name.substring(column_name.length - 1, column_name.length) == ",") {
+                                column_name = column_name.substring(0, column_name.length - 1);
+                            }
+                            if (index == select_columns.length - 1) {
+                                sqlToBlocks += '<block type="column_name" id="7mK.5}O_PX97/!J{bUFf"><field name="columnName">' + column_name + '</field></block>';
+                                y_index_of_block += 40;
+                            } else {
+                                sqlToBlocks += '<block type="column_name"><field name="columnName">' + column_name + '</field><next>';
+                                following_next_block_tags = '</next></block>' + following_next_block_tags;
+                                y_index_of_block += 40;
+                            }
+
+                        });
+                        sqlToBlocks += following_next_block_tags;
+                        sqlToBlocks += '</statement>';
+                    }
+                    if (having_index != -1) {
+                        sqlToBlocks += '<value name="HAVING">';
+                        var having_blocks = statement_split.slice(having_index + 1, index_after_having);
+                        var andor_indexes = [];
+                        var and_slash_or = [];
+                        [].forEach.call(having_blocks, function (conditionElement, index) {
+                            if (conditionElement == "AND") {
+                                andor_indexes.push(index);
+                                and_slash_or.push("AND");
+                            } else if (conditionElement == "OR") {
+                                andor_indexes.push(index);
+                                and_slash_or.push("OR");
+                            }
+                        });
+                        if (andor_indexes.length > 0) {
+                            sqlToBlocks += '<block type="andor">';
+                            sqlToBlocks += '<mutation items="' + (andor_indexes.length - 1) + '"></mutation>';
+                            var current_andor = 1;
+                            [].forEach.call(andor_indexes, function (conditionElement, index) {
+                                if (index == 0) {
+                                    sqlToBlocks += '<value name="Condition1">';
+                                    sqlToBlocks += getOperatorBlocks(having_blocks.slice(0, conditionElement));
+                                    sqlToBlocks += '</value>';
+                                    current_andor++;
+                                } else {
+                                    sqlToBlocks += '<field name="list' + (current_andor - 2) + '">' + and_slash_or[index - 1] + '</field>';
+                                    current_andor++;
+                                    sqlToBlocks += '<value name="Condition' + (current_andor - 1) + '">';
+                                    sqlToBlocks += getOperatorBlocks(having_blocks.slice(andor_indexes[index - 1] + 1, conditionElement));
+                                    sqlToBlocks += '</value>';
+                                }
+
+                                if (index == andor_indexes.length - 1) {
+                                    sqlToBlocks += '<field name="list' + (current_andor - 2) + '">' + and_slash_or[index] + '</field>';
+                                    sqlToBlocks += '<value name="Condition' + current_andor + '">';
+                                    sqlToBlocks += getOperatorBlocks(having_blocks.slice(conditionElement + 1));
+                                    sqlToBlocks += '</value>';
+                                }
+                            });
+                            sqlToBlocks += '</block>';
+                        }
+                        sqlToBlocks += '</value>';
+                    }
+                    if (orderby_firstindex != -1) {
+                        var orderbyfirst_columns = statement_split.slice(orderby_firstindex + 2, orderby_firstorder);
+                        var following_next_block_tags = "";
+                        sqlToBlocks += '<statement name="ORDERBY' + first_orderby_order + '">';
+                        [].forEach.call(orderbyfirst_columns, function (column, index) {
+                            var column_name = column;
+                            if (column_name.substring(column_name.length - 1, column_name.length) == ",") {
+                                column_name = column_name.substring(0, column_name.length - 1);
+                            }
+                            if (index == select_columns.length - 1) {
+                                sqlToBlocks += '<block type="column_name" id="7mK.5}O_PX97/!J{bUFf"><field name="columnName">' + column_name + '</field></block>';
+                                y_index_of_block += 40;
+                            } else {
+                                sqlToBlocks += '<block type="column_name"><field name="columnName">' + column_name + '</field><next>';
+                                following_next_block_tags = '</next></block>' + following_next_block_tags;
+                                y_index_of_block += 40;
+                            }
+
+                        });
+                        sqlToBlocks += following_next_block_tags;
+                        sqlToBlocks += '</statement>';
+                    }
+                    if (two_orderbys == true) {
+                        var orderbyfirst_columns = statement_split.slice(orderby_firstorder + 1, orderby_lastorder);
+                        var following_next_block_tags = "";
+                        sqlToBlocks += '<statement name="ORDERBY'+ last_orderby_order + '">';
+                        [].forEach.call(orderbyfirst_columns, function (column, index) {
+                            var column_name = column;
+                            if (column_name.substring(column_name.length - 1, column_name.length) == ",") {
+                                column_name = column_name.substring(0, column_name.length - 1);
+                            }
+                            if (index == select_columns.length - 1) {
+                                sqlToBlocks += '<block type="column_name" id="7mK.5}O_PX97/!J{bUFf"><field name="columnName">' + column_name + '</field></block>';
+                                y_index_of_block += 40;
+                            } else {
+                                sqlToBlocks += '<block type="column_name"><field name="columnName">' + column_name + '</field><next>';
+                                following_next_block_tags = '</next></block>' + following_next_block_tags;
+                                y_index_of_block += 40;
+                            }
+
+                        });
+                        sqlToBlocks += following_next_block_tags;
+                        sqlToBlocks += '</statement>';
                     }
                     sqlToBlocks += '</block>'; // Ends the Select Block
                     y_index_of_block += 40;

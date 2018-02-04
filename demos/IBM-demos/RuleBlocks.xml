@@ -1,29 +1,16 @@
 <xml xmlns="http://www.w3.org/1999/xhtml">
     <variables></variables>
-    <block type="ifthen" id="ifthen" x="85" y="23">
-        <value name="Condition">
-            <block type="variable" id="variable">
-                <field name="variable">age
-                    <18</field>
+    <block type="select" id="4yCl(VM0=Q,)$$Dv*xdw" x="68" y="14">
+        <mutation where="0" group="0" having="0" orderasc="1" orderdesc="1"></mutation>
+        <statement name="ORDERBYASCENDING">
+            <block type="column_name" id="0Gm]v2YPdw7el2Q[zj{*">
+                <field name="columnName">column_name</field>
             </block>
-        </value>
-        <value name="Action">
-            <block type="and" id="and">
-                <value name="Condition1">
-                    <block type="variable" id="variable">
-                        <field name="variable">marital_status='child'</field>
-                    </block>
-                </value>
-                <value name="Condition2">
-                    <block type="trim" id="trim">
-                        <value name="input1">
-                            <block type="variable" id="variable">
-                                <field name="variable">credit_card</field>
-                            </block>
-                        </value>
-                    </block>
-                </value>
+        </statement>
+        <statement name="ORDERBYDESCENDING">
+            <block type="column_name" id="K)3h*=V*TIq-%8]@@hKv">
+                <field name="columnName">column_name</field>
             </block>
-        </value>
+        </statement>
     </block>
 </xml>

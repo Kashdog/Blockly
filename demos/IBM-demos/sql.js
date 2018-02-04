@@ -31,12 +31,13 @@ Blockly.Blocks['select'] = {
             .setCheck("table")
             .appendField("FROM");
         this.whereCount_ = 0;
+        this.join_ = 0;
         this.group_ = 0;
         this.having_ = 0;
         this.orderasc_ = 0;
         this.orderdesc_ = 0;
         this.updateShape_();
-        this.setMutator(new Blockly.Mutator(['where', 'groupby', 'having', 'orderByAscending', 'orderByDescending']));
+        this.setMutator(new Blockly.Mutator(['where', 'join', 'groupby', 'having', 'orderByAscending', 'orderByDescending']));
         this.setTooltip("");
     }
     , onchange: function () {
@@ -56,6 +57,7 @@ Blockly.Blocks['select'] = {
     mutationToDom: function () {
         var container = document.createElement('mutation');
         container.setAttribute('where', this.whereCount_);
+        container.setAttribute('join', this.join_);
         container.setAttribute('group', this.group_);
         container.setAttribute('having', this.having_);
         container.setAttribute('orderasc', this.orderasc_);
@@ -69,6 +71,7 @@ Blockly.Blocks['select'] = {
      */
     domToMutation: function (xmlElement) {
         this.whereCount_ = parseInt(xmlElement.getAttribute('where'), 10);
+        this.join_ = parseInt(xmlElement.getAttribute('join'), 10);
         this.group_ = parseInt(xmlElement.getAttribute('group'), 10);
         this.having_ = parseInt(xmlElement.getAttribute('having'), 10);
         this.orderasc_ = parseInt(xmlElement.getAttribute('orderasc'), 10);
@@ -88,6 +91,13 @@ Blockly.Blocks['select'] = {
         var connection = topBlock.getInput('WHERE').connection;
         if (this.whereCount_ == 1) {
             var itemBlock = workspace.newBlock('where');
+            itemBlock.initSvg();
+            connection.connect(itemBlock.outputConnection);
+        }
+
+        var connection = topBlock.getInput('JOIN').connection;
+        if (this.join_ == 1) {
+            var itemBlock = workspace.newBlock('join');
             itemBlock.initSvg();
             connection.connect(itemBlock.outputConnection);
         }
@@ -133,6 +143,12 @@ Blockly.Blocks['select'] = {
         } else {
             this.whereCount_ = 0;
         }
+        itemBlock = topBlock.getInputTargetBlock('JOIN');
+        if (itemBlock == "JOIN") {
+            this.join_ = 1;
+        } else {
+            this.join_ = 0;
+        }
 
         itemBlock = topBlock.getInputTargetBlock('GROUPBY');
         if (itemBlock != null && itemBlock.toString().includes("GROUP BY")) {
@@ -176,6 +192,12 @@ Blockly.Blocks['select'] = {
         if (this.getInputTargetBlock('WHERE') != null) {
             var where_value_block_connection = this.getInputTargetBlock('WHERE').outputConnection;
         }
+        if (this.getInputTargetBlock('JOIN') != null) {
+            var join_value_block_connection = this.getInputTargetBlock('JOIN').outputConnection;
+        }
+        if (this.getInputTargetBlock('ON') != null) {
+            var on_value_block_connection = this.getInputTargetBlock('ON').outputConnection;
+        }
         if (this.getInputTargetBlock('GROUPBY') != null) {
             var groupby_value_block_connection = this.getInputTargetBlock('GROUPBY').previousConnection;
         }
@@ -192,6 +214,12 @@ Blockly.Blocks['select'] = {
         if (this.getInput('WHERE')) {
             this.removeInput('WHERE');
         }
+        if (this.getInput('JOIN')) {
+            this.removeInput('JOIN');
+        }
+        if (this.getInput('ON')) {
+            this.removeInput('ON');
+        }
         if (this.getInput('GROUPBY')) {
             this.removeInput('GROUPBY');
         }
@@ -201,13 +229,13 @@ Blockly.Blocks['select'] = {
         if (this.getInput('ORDERBYASCENDING')) {
             this.removeInput('ORDERBYASCENDING');
         }
-        if(this.getInput('DUMMYASC')){
+        if (this.getInput('DUMMYASC')) {
             this.removeInput('DUMMYASC');
         }
         if (this.getInput('ORDERBYDESCENDING')) {
             this.removeInput('ORDERBYDESCENDING');
         }
-        if(this.getInput('DUMMYDESC')){
+        if (this.getInput('DUMMYDESC')) {
             this.removeInput('DUMMYDESC');
         }
 
@@ -220,6 +248,21 @@ Blockly.Blocks['select'] = {
             }
         } else if (this.whereCount_ == 0) {
             this.removeInput('WHERE');
+        }
+        if (this.join_ == 1 && !this.getInput('JOIN')) {
+            var input = this.appendValueInput("JOIN").setCheck(null).appendField(new Blockly.FieldDropdown([["INNER JOIN", "INNER JOIN"], ["LEFT JOIN", "LEFT JOIN"], ["RIGHT JOIN", "RIGHT JOIN"], ["FULL JOIN", "FULL OUTER JOIN"] ]), "JOINS");
+            input = this.appendValueInput("ON").setCheck(null).appendField("ON");
+            var join_input = this.getInput('JOIN').connection;
+            var on_input = this.getInput('ON').connection;
+            if (join_value_block_connection != null) {
+                join_input.connect(join_value_block_connection);
+            }
+            if (on_value_block_connection != null) {
+                on_input.connect(on_value_block_connection);
+            }
+        } else if (this.join_ == 0) {
+            this.removeInput('JOIN');
+            this.removeInput('ON');
         }
 
         if (this.group_ == 1 && !this.getInput('GROUPBY')) {
@@ -289,11 +332,14 @@ Blockly.DataRule['select'] = function (block) {
         var condition_having = Blockly.DataRule.valueToCode(block, 'HAVING', Blockly.DataRule.ORDER_ATOMIC);
         code += " HAVING " + condition_having;
     }
-    if (this.getInput('ORDERBYASCENDING')) {
+    if (this.getInput('ORDERBYASCENDING') && this.getInput('ORDERBYDESCENDING')) {
+        var column_names_orderbyascending = Blockly.DataRule.statementToCode(block, 'ORDERBYASCENDING');
+        var column_names_orderbydescending = Blockly.DataRule.statementToCode(block, 'ORDERBYDESCENDING');
+        code += " ORDER BY " + column_names_orderbyascending + " ASC, " + column_names_orderbydescending + " DESC";
+    } else if (this.getInput('ORDERBYASCENDING')) {
         var column_names_orderbyascending = Blockly.DataRule.statementToCode(block, 'ORDERBYASCENDING');
         code += " ORDER BY " + column_names_orderbyascending + " ASC";
-    }
-    if (this.getInput('ORDERBYDESCENDING')) {
+    } else if (this.getInput('ORDERBYDESCENDING')) {
         var column_names_orderbydescending = Blockly.DataRule.statementToCode(block, 'ORDERBYDESCENDING');
         code += " ORDER BY " + column_names_orderbydescending + " DESC";
     }
@@ -308,6 +354,9 @@ Blockly.Blocks.container = {
         this.appendValueInput("WHERE")
             .setCheck("where")
             .appendField("WHERE");
+        this.appendValueInput("JOIN")
+            .setCheck("join")
+            .appendField("JOIN");
         this.appendValueInput("GROUPBY")
             .setCheck("groupby")
             .appendField("GROUP BY");
@@ -328,6 +377,17 @@ Blockly.Blocks.where = {
         this.appendDummyInput()
             .appendField("WHERE");
         this.setOutput(true, "where");
+        this.setTooltip("");
+        this.contextMenu = !1
+    }
+};
+
+Blockly.Blocks.join = {
+    init: function () {
+        this.setColour(60);
+        this.appendDummyInput()
+            .appendField("JOIN");
+        this.setOutput(true, "join");
         this.setTooltip("");
         this.contextMenu = !1
     }
@@ -671,22 +731,22 @@ Blockly.Blocks['andor'] = {
 Blockly.DataRule['andor'] = function (block) {
     // Create a list with any number of elements of any type.
     var elements = new Array(block.itemCount_ + 2);
-    var dropdown_elements = new Array(block.itemCount_+1);
+    var dropdown_elements = new Array(block.itemCount_ + 1);
     var code = "";
     for (var i = 0; i < block.itemCount_ + 2; i++) {
-        elements[i] = Blockly.DataRule.valueToCode(block, 'Condition' + (i+1)
+        elements[i] = Blockly.DataRule.valueToCode(block, 'Condition' + (i + 1)
             , Blockly.DataRule.ORDER_ATOMIC);
     }
     for (var i = 0; i < block.itemCount_ + 1; i++) {
         dropdown_elements[i] = block.getFieldValue('list' + i);
     }
-    for(var i = 0; i < block.itemCount_ + 1; i++){
+    for (var i = 0; i < block.itemCount_ + 1; i++) {
         code += elements[i] + " " + dropdown_elements[i] + " ";
-        if(i == block.itemCount_){
-            code += elements[block.itemCount_+1];
+        if (i == block.itemCount_) {
+            code += elements[block.itemCount_ + 1];
         }
     }
-    
+
     return [code, Blockly.DataRule.ORDER_ATOMIC];
 };
 
@@ -823,37 +883,67 @@ Blockly.defineBlocksWithJsonArray([
         , "args0": [
             {
                 "type": "input_value"
-                , "name": "Condition1",
-            },
-            {
+                , "name": "Condition1"
+            , }
+
+
+            
+            , {
                 "type": "field_dropdown"
                 , "name": "PROPERTY"
                 , "options": [
-                    ["=", "="],
-                    ["<>", "<>"],
-                    [">", ">"],
-                    ["<", "<"],
-                    ["≥", ">="],
-                    ["≤", "<="],
-                    ["BETWEEN", "BETWEEN"],
-                    ["LIKE", "LIKE"],
-                    ["IN", "IN"]
+                    ["=", "="]
+
+
+                    
+                    , ["<>", "<>"]
+
+
+                    
+                    , [">", ">"]
+
+
+                    
+                    , ["<", "<"]
+
+
+                    
+                    , ["≥", ">="]
+
+
+                    
+                    , ["≤", "<="]
+
+
+                    
+                    , ["BETWEEN", "BETWEEN"]
+
+
+                    
+                    , ["LIKE", "LIKE"]
+
+
+                    
+                    , ["IN", "IN"]
                 ]
 
-            },
-            {
+            }
+
+
+            
+            , {
                 "type": "input_dummy"
             }, {
-                "type": "input_value",
-                "name": "Condition2"
+                "type": "input_value"
+                , "name": "Condition2"
+            }
+        ]
+        , "inputsInline": false
+        , "output": "Boolean"
+        , "colour": "#9694AB"
+        , "tooltip": "%{BKY_MATH_IS_TOOLTIP}"
+        , "mutator": "operator_mutator"
     }
-    ],
-        "inputsInline": false,
-        "output": "Boolean",
-        "colour": "#9694AB",
-        "tooltip": "%{BKY_MATH_IS_TOOLTIP}",
-        "mutator": "operator_mutator"
-  }
 ]);
 
 
@@ -864,12 +954,12 @@ Blockly.Constants.IS_EQUAL_MUTATOR_MIXIN = {
         var equalInput = (this.getFieldValue('PROPERTY') == '=');
         container.setAttribute('equal_input', equalInput);
         return container;
-    },
-    domToMutation: function (xmlElement) {
+    }
+    , domToMutation: function (xmlElement) {
         var equalInput = (xmlElement.getAttribute('equal_input') == 'true');
         this.updateShape_(equalInput);
-    }, 
-    updateShape_: function (equalInput) {
+    }
+    , updateShape_: function (equalInput) {
         if (equalInput == true) {
             this.setOutput(true, ["Boolean", "assignment"]);
         } else {
