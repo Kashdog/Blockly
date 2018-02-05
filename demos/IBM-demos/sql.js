@@ -258,7 +258,7 @@ Blockly.Blocks['select'] = {
         if (this.join_ == 1 && !this.getInput('JOIN')) {
             var input = this.appendValueInput("JOIN").setCheck("table").appendField(new Blockly.FieldDropdownX([["INNER JOIN", "INNER JOIN"], ["LEFT JOIN", "LEFT JOIN"], ["RIGHT JOIN", "RIGHT JOIN"], ["FULL OUTER JOIN", "FULL OUTER JOIN"]]), "JOINS");
             input = this.appendValueInput("ON_COLUMN1").setCheck(null).appendField("ON      COLUMN 1: ");
-            input = this.appendValueInput("ON_COLUMN2").setCheck(null).appendField("           COLUMN 2: ");
+            input = this.appendValueInput("ON_COLUMN2").setCheck(null).appendField("=         COLUMN 2: ");
             var join_input = this.getInput('JOIN').connection;
             var on_input1 = this.getInput('ON_COLUMN1').connection;
             var on_input2 = this.getInput('ON_COLUMN2').connection;

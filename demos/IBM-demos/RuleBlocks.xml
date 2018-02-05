@@ -1,16 +1,21 @@
 <xml xmlns="http://www.w3.org/1999/xhtml">
     <variables></variables>
-    <block type="select" id="4yCl(VM0=Q,)$$Dv*xdw" x="68" y="14">
-        <mutation where="0" group="0" having="0" orderasc="1" orderdesc="1"></mutation>
-        <statement name="ORDERBYASCENDING">
-            <block type="column_name" id="0Gm]v2YPdw7el2Q[zj{*">
-                <field name="columnName">column_name</field>
-            </block>
+    <block type="select" id="Qw1,MM|w#QEH{RzD!Jpf" x="98" y="93">
+        <mutation where="1" join="1" group="0" having="0" orderasc="0" orderdesc="0"></mutation>
+        <field name="JOINS">INNER JOIN</field>
+        <statement name="SELECT">
+            <block type="all_columns" id="+K]rhBZNj2(~MR:81huT"></block>
         </statement>
-        <statement name="ORDERBYDESCENDING">
-            <block type="column_name" id="K)3h*=V*TIq-%8]@@hKv">
-                <field name="columnName">column_name</field>
+        <value name="FROM">
+            <block type="table_name" id="O2Khf5FDZ1!#??d+Jeht">
+                <field name="tableName">table_name</field>
             </block>
-        </statement>
+        </value>
+        <value name="WHERE">
+            <block type="andor" id="(8Jb$#heflr3p.J53}Ea">
+                <mutation items="0"></mutation>
+                <field name="list0">AND</field>
+            </block>
+        </value>
     </block>
 </xml>
