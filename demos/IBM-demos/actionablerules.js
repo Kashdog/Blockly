@@ -210,6 +210,21 @@ Blockly.Constants.DISABLE_DQ_DIM_MUTATOR_MIXIN = {
             "ValueRangeViolation"
         ];
 
+        var disableDQListX = [
+            "Data Class Violation",
+            "Data Type Violation",
+            "Duplicate Values",
+            "Format Violations",
+            "Inconsistent missing value representation",
+            "Inconsistent usage of upper and lower cases",
+            "Missing Values",
+            "Rule Violations",
+            "Suspect Values",
+            "Suspect Values (Classification Violations)",
+            "Suspect Values (Correlation Violations)",
+            "Value Range Violations"
+        ];
+
         this.fieldValue = this.getFieldValue("DIMENSIONS");
 
         [].forEach.call(dimensions, function (dimension, index) {

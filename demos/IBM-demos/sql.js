@@ -195,8 +195,11 @@ Blockly.Blocks['select'] = {
         if (this.getInputTargetBlock('JOIN') != null) {
             var join_value_block_connection = this.getInputTargetBlock('JOIN').outputConnection;
         }
-        if (this.getInputTargetBlock('ON') != null) {
-            var on_value_block_connection = this.getInputTargetBlock('ON').outputConnection;
+        if (this.getInputTargetBlock('ON_COLUMN1') != null) {
+            var on_value_block_connection1 = this.getInputTargetBlock('ON_COLUMN1').outputConnection;
+        }
+        if (this.getInputTargetBlock('ON_COLUMN2') != null) {
+            var on_value_block_connection2 = this.getInputTargetBlock('ON_COLUMN2').outputConnection;
         }
         if (this.getInputTargetBlock('GROUPBY') != null) {
             var groupby_value_block_connection = this.getInputTargetBlock('GROUPBY').previousConnection;
@@ -217,8 +220,11 @@ Blockly.Blocks['select'] = {
         if (this.getInput('JOIN')) {
             this.removeInput('JOIN');
         }
-        if (this.getInput('ON')) {
-            this.removeInput('ON');
+        if (this.getInput('ON_COLUMN1')) {
+            this.removeInput('ON_COLUMN1');
+        }
+        if (this.getInput('ON_COLUMN2')) {
+            this.removeInput('ON_COLUMN2');
         }
         if (this.getInput('GROUPBY')) {
             this.removeInput('GROUPBY');
@@ -250,19 +256,25 @@ Blockly.Blocks['select'] = {
             this.removeInput('WHERE');
         }
         if (this.join_ == 1 && !this.getInput('JOIN')) {
-            var input = this.appendValueInput("JOIN").setCheck(null).appendField(new Blockly.FieldDropdown([["INNER JOIN", "INNER JOIN"], ["LEFT JOIN", "LEFT JOIN"], ["RIGHT JOIN", "RIGHT JOIN"], ["FULL JOIN", "FULL OUTER JOIN"] ]), "JOINS");
-            input = this.appendValueInput("ON").setCheck(null).appendField("ON");
+            var input = this.appendValueInput("JOIN").setCheck("table").appendField(new Blockly.FieldDropdownX([["INNER JOIN", "INNER JOIN"], ["LEFT JOIN", "LEFT JOIN"], ["RIGHT JOIN", "RIGHT JOIN"], ["FULL OUTER JOIN", "FULL OUTER JOIN"]]), "JOINS");
+            input = this.appendValueInput("ON_COLUMN1").setCheck(null).appendField("ON      COLUMN 1: ");
+            input = this.appendValueInput("ON_COLUMN2").setCheck(null).appendField("           COLUMN 2: ");
             var join_input = this.getInput('JOIN').connection;
-            var on_input = this.getInput('ON').connection;
+            var on_input1 = this.getInput('ON_COLUMN1').connection;
+            var on_input2 = this.getInput('ON_COLUMN2').connection;
             if (join_value_block_connection != null) {
                 join_input.connect(join_value_block_connection);
             }
-            if (on_value_block_connection != null) {
-                on_input.connect(on_value_block_connection);
+            if (on_value_block_connection1 != null) {
+                on_input1.connect(on_value_block_connection1);
+            }
+            if (on_value_block_connection2 != null) {
+                on_input2.connect(on_value_block_connection2);
             }
         } else if (this.join_ == 0) {
             this.removeInput('JOIN');
-            this.removeInput('ON');
+            this.removeInput('ON_COLUMN1');
+            this.removeInput('ON_COLUMN2');
         }
 
         if (this.group_ == 1 && !this.getInput('GROUPBY')) {
@@ -323,6 +335,13 @@ Blockly.DataRule['select'] = function (block) {
     if (this.getInput('WHERE')) {
         var condition_where = Blockly.DataRule.valueToCode(block, 'WHERE', Blockly.DataRule.ORDER_ATOMIC);
         code += " WHERE " + condition_where;
+    }
+    if (this.getInput('JOIN')) {
+        var condition_join = Blockly.DataRule.valueToCode(block, 'JOIN', Blockly.DataRule.ORDER_ATOMIC);
+        var column1 = Blockly.DataRule.valueToCode(block, 'ON_COLUMN1', Blockly.DataRule.ORDER_ATOMIC);
+        var column2 = Blockly.DataRule.valueToCode(block, 'ON_COLUMN2', Blockly.DataRule.ORDER_ATOMIC);
+        var type_of_join = block.getFieldValue("JOINS");
+        code += " " + type_of_join + " " + condition_join + " ON " + column1 + " = " + column2;
     }
     if (this.getInput('GROUPBY')) {
         var column_names_groupby = Blockly.DataRule.statementToCode(block, 'GROUPBY');
@@ -733,7 +752,16 @@ Blockly.DataRule['andor'] = function (block) {
     var elements = new Array(block.itemCount_ + 2);
     var dropdown_elements = new Array(block.itemCount_ + 1);
     var code = "";
+    var andor_within_andor = false;
     for (var i = 0; i < block.itemCount_ + 2; i++) {
+        if(block.outputConnection.targetConnection != null){
+            console.log(block.outputConnection.targetConnection.sourceBlock_.type);
+            if(block.outputConnection.targetConnection.sourceBlock_.type === "andor"){
+                andor_within_andor = true;
+            }
+        } else {
+            console.log("null");
+        }
         elements[i] = Blockly.DataRule.valueToCode(block, 'Condition' + (i + 1)
             , Blockly.DataRule.ORDER_ATOMIC);
     }
@@ -746,8 +774,12 @@ Blockly.DataRule['andor'] = function (block) {
             code += elements[block.itemCount_ + 1];
         }
     }
-
-    return [code, Blockly.DataRule.ORDER_ATOMIC];
+    if(andor_within_andor){
+        return [code, Blockly.DataRule.ORDER_NONE];
+    } else {
+        return [code, Blockly.DataRule.ORDER_ATOMIC];
+    }
+    
 };
 
 Blockly.Blocks['containerList'] = {
@@ -884,10 +916,11 @@ Blockly.defineBlocksWithJsonArray([
             {
                 "type": "input_value"
                 , "name": "Condition1"
-            , }
+                ,
+            }
 
 
-            
+
             , {
                 "type": "field_dropdown"
                 , "name": "PROPERTY"
@@ -895,42 +928,42 @@ Blockly.defineBlocksWithJsonArray([
                     ["=", "="]
 
 
-                    
+
                     , ["<>", "<>"]
 
 
-                    
+
                     , [">", ">"]
 
 
-                    
+
                     , ["<", "<"]
 
 
-                    
+
                     , ["≥", ">="]
 
 
-                    
+
                     , ["≤", "<="]
 
 
-                    
+
                     , ["BETWEEN", "BETWEEN"]
 
 
-                    
+
                     , ["LIKE", "LIKE"]
 
 
-                    
+
                     , ["IN", "IN"]
                 ]
 
             }
 
 
-            
+
             , {
                 "type": "input_dummy"
             }, {
